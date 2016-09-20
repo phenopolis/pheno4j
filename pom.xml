@@ -83,7 +83,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.sajid.hpo.Dispatcher</mainClass>
+							<mainClass>com.graph.db.Dispatcher</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

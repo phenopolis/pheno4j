@@ -1,12 +1,12 @@
-package com.sajid.hpo;
+package com.graph.db;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.sajid.hpo.file.annotation.ExacToVariant;
-import com.sajid.hpo.file.annotation.GeneToVariant;
-import com.sajid.hpo.file.vcf.VcfParser;
+import com.graph.db.file.annotation.ExacToVariant;
+import com.graph.db.file.annotation.GeneToVariant;
+import com.graph.db.file.vcf.VcfParser;
 
 public class Dispatcher {
 

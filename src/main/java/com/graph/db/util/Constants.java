@@ -1,4 +1,4 @@
-package com.sajid.hpo.util;
+package com.graph.db.util;
 
 public final class Constants {
 

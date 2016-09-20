@@ -1,6 +1,6 @@
-package com.sajid.hpo.util;
+package com.graph.db.util;
 
-import static com.sajid.hpo.util.Constants.POISON_PILL;
+import static com.graph.db.util.Constants.POISON_PILL;
 
 import java.io.BufferedWriter;
 import java.io.File;

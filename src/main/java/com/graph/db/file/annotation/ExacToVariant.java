@@ -1,12 +1,12 @@
-package com.sajid.hpo.file.annotation;
+package com.graph.db.file.annotation;
 
-import static com.sajid.hpo.util.Constants.COMMA;
-import static com.sajid.hpo.util.Constants.DOUBLE_QUOTE;
-import static com.sajid.hpo.util.Constants.POISON_PILL;
-import static com.sajid.hpo.util.FileUtil.getAllJsonFiles;
-import static com.sajid.hpo.util.FileUtil.getTransformedVariantId;
-import static com.sajid.hpo.util.FileUtil.logLineNumber;
-import static com.sajid.hpo.util.FileUtil.writeOutCsvFile;
+import static com.graph.db.util.Constants.COMMA;
+import static com.graph.db.util.Constants.DOUBLE_QUOTE;
+import static com.graph.db.util.Constants.POISON_PILL;
+import static com.graph.db.util.FileUtil.getAllJsonFiles;
+import static com.graph.db.util.FileUtil.getTransformedVariantId;
+import static com.graph.db.util.FileUtil.logLineNumber;
+import static com.graph.db.util.FileUtil.writeOutCsvFile;
 
 import java.io.File;
 import java.io.FileReader;
@@ -29,8 +29,8 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sajid.hpo.Processor;
-import com.sajid.hpo.util.QueueToFileConsumer;
+import com.graph.db.Processor;
+import com.graph.db.util.QueueToFileConsumer;
 
 public class ExacToVariant implements Processor {
 	

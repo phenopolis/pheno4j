@@ -1,4 +1,4 @@
-package com.sajid.hpo;
+package com.graph.db;
 
 public interface Processor {
 

@@ -1,12 +1,12 @@
-package com.sajid.hpo.file.vcf;
+package com.graph.db.file.vcf;
 
-import static com.sajid.hpo.util.Constants.COMMA;
-import static com.sajid.hpo.util.Constants.DOUBLE_QUOTE;
-import static com.sajid.hpo.util.Constants.POISON_PILL;
-import static com.sajid.hpo.util.Constants.TAB;
-import static com.sajid.hpo.util.Constants.UNDERSCORE;
-import static com.sajid.hpo.util.FileUtil.logLineNumber;
-import static com.sajid.hpo.util.FileUtil.writeOutCsvFile;
+import static com.graph.db.util.Constants.COMMA;
+import static com.graph.db.util.Constants.DOUBLE_QUOTE;
+import static com.graph.db.util.Constants.POISON_PILL;
+import static com.graph.db.util.Constants.TAB;
+import static com.graph.db.util.Constants.UNDERSCORE;
+import static com.graph.db.util.FileUtil.logLineNumber;
+import static com.graph.db.util.FileUtil.writeOutCsvFile;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,8 +27,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sajid.hpo.Processor;
-import com.sajid.hpo.util.QueueToFileConsumer;
+import com.graph.db.Processor;
+import com.graph.db.util.QueueToFileConsumer;
 
 /**
  * Writes data to the file as it is available
