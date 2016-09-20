@@ -2,10 +2,10 @@ package com.graph.db.file.vcf;
 
 import static com.graph.db.util.Constants.COMMA;
 import static com.graph.db.util.Constants.DOUBLE_QUOTE;
-import static com.graph.db.util.Constants.POISON_PILL;
 import static com.graph.db.util.Constants.TAB;
 import static com.graph.db.util.Constants.UNDERSCORE;
 import static com.graph.db.util.FileUtil.logLineNumber;
+import static com.graph.db.util.FileUtil.sendPoisonPillToQueue;
 import static com.graph.db.util.FileUtil.writeOutCsvFile;
 
 import java.io.FileInputStream;
@@ -106,9 +106,8 @@ public class VcfParser implements Processor {
 					}
 				}
 			}
-			
-			variantIdsBlockingQueue.put(POISON_PILL);
-			variantToPersonBlockingQueue.put(POISON_PILL);
+			sendPoisonPillToQueue(variantIdsBlockingQueue);
+			sendPoisonPillToQueue(variantToPersonBlockingQueue);
 		} catch (IOException | InterruptedException e) {
 			throw new RuntimeException(e);
 		}

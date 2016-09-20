@@ -2,6 +2,7 @@ package com.graph.db.util;
 
 import static com.graph.db.util.Constants.DOUBLE_QUOTE;
 import static com.graph.db.util.Constants.HYPHEN;
+import static com.graph.db.util.Constants.POISON_PILL;
 import static com.graph.db.util.Constants.UNDERSCORE;
 
 import java.io.File;
@@ -9,6 +10,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Collection;
+import java.util.concurrent.BlockingQueue;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +22,7 @@ import com.google.gson.JsonElement;
 public final class FileUtil {
 	
     private static final Logger LOGGER = LoggerFactory.getLogger(FileUtil.class);
-	
+    
 	private FileUtil() {}
 	
 	public static void writeOutCsvFile(String outputFolder, String fileName, Collection<String> collection) {
@@ -39,11 +41,14 @@ public final class FileUtil {
 	}
 	
 	public static void logLineNumber(LineNumberReader reader, int threshold) {
-		if (reader.getLineNumber() % threshold == 0) {
+		if ((reader.getLineNumber() % threshold) == 0) {
 			LOGGER.info("Processed {} lines", reader.getLineNumber());
 		}
 	}
 	
+	/**
+	 * Convert hyphen delimited Variant Id to underscore delimited
+	 */
 	public static String getTransformedVariantId(JsonElement jsonElement, String fileName) {
 		String variantIdWithHyphens = jsonElement.getAsString();
 		int matches = StringUtils.countMatches(variantIdWithHyphens, HYPHEN);
@@ -52,5 +57,15 @@ public final class FileUtil {
 		}
 		return DOUBLE_QUOTE + StringUtils.replace(variantIdWithHyphens, HYPHEN, UNDERSCORE) + DOUBLE_QUOTE;
 	}
-
+	
+	/**
+	 * Consumer of the queue will terminate when it processes the "poison pill"
+	 */
+	public static void sendPoisonPillToQueue(BlockingQueue<String> queue) {
+		try {
+			queue.put(POISON_PILL);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

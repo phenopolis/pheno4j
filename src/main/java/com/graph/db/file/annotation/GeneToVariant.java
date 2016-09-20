@@ -1,10 +1,10 @@
 package com.graph.db.file.annotation;
 
 import static com.graph.db.util.Constants.COMMA;
-import static com.graph.db.util.Constants.POISON_PILL;
 import static com.graph.db.util.FileUtil.getAllJsonFiles;
 import static com.graph.db.util.FileUtil.getTransformedVariantId;
 import static com.graph.db.util.FileUtil.logLineNumber;
+import static com.graph.db.util.FileUtil.sendPoisonPillToQueue;
 import static com.graph.db.util.FileUtil.writeOutCsvFile;
 
 import java.io.File;
@@ -57,8 +57,7 @@ public class GeneToVariant implements Processor {
 				while ((line = reader.readLine()) != null) {
 					logLineNumber(reader, 1000);
 					JsonObject jsonObject = jsonParser.parse(line).getAsJsonObject();
-					JsonElement variantIdJsonElement = jsonObject.get("variant_id");
-					String variantId = getTransformedVariantId(variantIdJsonElement, jsonFile.getName());
+					String variantId = getVariantId(jsonFile, jsonObject);
 					JsonArray genesArray = jsonObject.get("genes").getAsJsonArray();
 					for (JsonElement jsonElement : genesArray) {
 						String gene = jsonElement.getAsString();
@@ -71,12 +70,13 @@ public class GeneToVariant implements Processor {
 			}
 		}
 		
-		try {
-			geneToVariantBlockingQueue.put(POISON_PILL);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		sendPoisonPillToQueue(geneToVariantBlockingQueue);
 		writeOutCsvFile(outputFolder, "Gene.csv", genes);
+	}
+
+	private String getVariantId(File jsonFile, JsonObject jsonObject) {
+		JsonElement variantIdJsonElement = jsonObject.get("variant_id");
+		return getTransformedVariantId(variantIdJsonElement, jsonFile.getName());
 	}
 
 	public static void main(String[] args) {

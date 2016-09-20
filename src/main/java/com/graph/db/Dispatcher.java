@@ -21,11 +21,11 @@ public class Dispatcher {
 		if (args.length < 1) {
 			throw new RuntimeException("Specify one of: " + ENTRY_POINTS.keySet());
 		}
-		final Class<?> entryPoint = ENTRY_POINTS.get(args[0]);
+		Class<?> entryPoint = ENTRY_POINTS.get(args[0]);
 		if (entryPoint == null) {
 			throw new RuntimeException("Entry point does not exist; specify one of: " + ENTRY_POINTS.keySet());
 		}
-		final String[] argsCopy = args.length > 1 ? Arrays.copyOfRange(args, 1, args.length) : new String[0];
+		String[] argsCopy = args.length > 1 ? Arrays.copyOfRange(args, 1, args.length) : new String[0];
 		entryPoint.getMethod("main", String[].class).invoke(null, (Object) argsCopy);
 	}
 }
