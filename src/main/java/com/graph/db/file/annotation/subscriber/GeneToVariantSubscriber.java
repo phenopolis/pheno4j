@@ -9,8 +9,8 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.common.eventbus.Subscribe;
 import com.graph.db.file.annotation.domain.Annotation;
-import com.graph.db.file.annotation.domain.OutputFile;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
+import com.graph.db.file.annotation.output.OutputFile;
 
 public class GeneToVariantSubscriber implements AutoCloseable {
 	
