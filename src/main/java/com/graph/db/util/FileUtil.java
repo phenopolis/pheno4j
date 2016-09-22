@@ -1,9 +1,6 @@
 package com.graph.db.util;
 
-import static com.graph.db.util.Constants.DOUBLE_QUOTE;
-import static com.graph.db.util.Constants.HYPHEN;
 import static com.graph.db.util.Constants.POISON_PILL;
-import static com.graph.db.util.Constants.UNDERSCORE;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -13,11 +10,8 @@ import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.gson.JsonElement;
 
 public final class FileUtil {
 	
@@ -36,7 +30,7 @@ public final class FileUtil {
 	
 	public static File[] getAllJsonFiles(String folder) {
 		File dir = new File(folder);
-		FilenameFilter filter = (directory, name) -> !directory.isDirectory() && name.toLowerCase().endsWith(".json");
+		FilenameFilter filter = (directory, name) -> name.toLowerCase().endsWith(".json");
 		return dir.listFiles(filter);
 	}
 	
@@ -44,18 +38,6 @@ public final class FileUtil {
 		if ((reader.getLineNumber() % threshold) == 0) {
 			LOGGER.info("Processed {} lines", reader.getLineNumber());
 		}
-	}
-	
-	/**
-	 * Convert hyphen delimited Variant Id to underscore delimited
-	 */
-	public static String getTransformedVariantId(JsonElement jsonElement, String fileName) {
-		String variantIdWithHyphens = jsonElement.getAsString();
-		int matches = StringUtils.countMatches(variantIdWithHyphens, HYPHEN);
-		if (matches != 3) {
-			throw new RuntimeException(variantIdWithHyphens + " does not have 3 hyphens in file: " + fileName);
-		}
-		return DOUBLE_QUOTE + StringUtils.replace(variantIdWithHyphens, HYPHEN, UNDERSCORE) + DOUBLE_QUOTE;
 	}
 	
 	/**

@@ -4,17 +4,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.graph.db.file.annotation.ExacToVariant;
-import com.graph.db.file.annotation.GeneToVariant;
+import com.graph.db.file.annotation.AnnotationParser;
 import com.graph.db.file.vcf.VcfParser;
 
 public class Dispatcher {
 
 	private static final Map<String, Class<?>> ENTRY_POINTS = new HashMap<String, Class<?>>();
 	static {
-		ENTRY_POINTS.put("ExacToVariant", ExacToVariant.class);
-		ENTRY_POINTS.put("GeneToVariant", GeneToVariant.class);
 		ENTRY_POINTS.put("VcfParser", VcfParser.class);
+		ENTRY_POINTS.put("AnnotationParser", AnnotationParser.class);
 	}
 
 	public static void main(final String[] args) throws Exception {
