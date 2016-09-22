@@ -1,6 +1,6 @@
 package com.graph.db.file.annotation.output;
 
-public enum OutputFile implements Header {
+public enum OutputFileType implements Header {
 
 	GENE {
 		@Override
