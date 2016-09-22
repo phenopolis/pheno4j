@@ -14,7 +14,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.graph.db.file.annotation.domain.Annotation;
-import com.graph.db.file.annotation.domain.Exac;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 
 public class CustomJsonDeserializer implements JsonDeserializer<Annotation> {
@@ -28,7 +27,6 @@ public class CustomJsonDeserializer implements JsonDeserializer<Annotation> {
 		
 		updateVariantIdOnAnnotation(annotation, transformedVariantId);
 		updateVariantIdOnTranscriptConsequences(annotation.getTranscript_consequences(), transformedVariantId);
-		updateVariantIdOnExac(transformedVariantId, annotation.getEXAC());
 		
 		return annotation;
 	}
@@ -52,12 +50,6 @@ public class CustomJsonDeserializer implements JsonDeserializer<Annotation> {
 			String transformedVariantId) {
 		for (TranscriptConsequence consequence : transcriptConsequences) {
 			consequence.setVariant_id(transformedVariantId);
-		}
-	}
-	
-	private void updateVariantIdOnExac(String transformedVariantId, Exac exac) {
-		if (exac != null) {
-			exac.setVariant_id(transformedVariantId);
 		}
 	}
 }

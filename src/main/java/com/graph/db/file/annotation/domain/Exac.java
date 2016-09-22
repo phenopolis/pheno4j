@@ -92,7 +92,6 @@ public class Exac {
 	private String ReadPosRankSum;
 	private String REF;
 	private String VQSLOD;
-	private String variant_id;
 	
 	public String getAC() {
 		return AC;
@@ -440,14 +439,6 @@ public class Exac {
 
 	public String getVQSLOD() {
 		return VQSLOD;
-	}
-	
-	public String getVariant_id() {
-		return variant_id;
-	}
-
-	public void setVariant_id(String variant_id) {
-		this.variant_id = variant_id;
 	}
 
 	@Override

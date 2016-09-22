@@ -13,7 +13,7 @@ import com.graph.db.file.annotation.output.OutputFileType;
 
 public abstract class AbstractSubscriber implements AutoCloseable {
 	
-	private CsvDozerBeanWriter beanWriter;
+	protected CsvDozerBeanWriter beanWriter;
 
 	public AbstractSubscriber(String outputFolder) {
 		try {
@@ -22,10 +22,12 @@ public abstract class AbstractSubscriber implements AutoCloseable {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		beanWriter.configureBeanMapping(Annotation.class, getOutputFileType().getHeader());
+		beanWriter.configureBeanMapping(getBeanClass(), getOutputFileType().getHeader());
 	}
 	
 	protected abstract String getOutputFileName();
+	
+	protected abstract Class<?> getBeanClass();
 	
 	protected abstract OutputFileType getOutputFileType();
 	

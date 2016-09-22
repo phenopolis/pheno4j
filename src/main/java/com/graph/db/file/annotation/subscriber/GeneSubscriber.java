@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.supercsv.io.dozer.CsvDozerBeanWriter;
-
 import com.google.common.eventbus.Subscribe;
 import com.graph.db.file.annotation.domain.Annotation;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
@@ -13,8 +11,6 @@ import com.graph.db.file.annotation.output.OutputFileType;
 
 public class GeneSubscriber extends AbstractSubscriber {
 	
-	private CsvDozerBeanWriter beanWriter;
-
 	private final Set<TranscriptConsequence> genes = ConcurrentHashMap.newKeySet();
 	
 	public GeneSubscriber(String outputFolder) {
@@ -24,6 +20,11 @@ public class GeneSubscriber extends AbstractSubscriber {
 	@Override
 	protected String getOutputFileName() {
 		return "Gene.csv";
+	}
+	
+	@Override
+	protected Class<?> getBeanClass() {
+		return TranscriptConsequence.class;
 	}
 
 	@Override
