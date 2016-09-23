@@ -10,11 +10,6 @@ public class AnnotationToVariantSubscriber extends AbstractSubscriber {
 	}
 
 	@Override
-	protected String getOutputFileName() {
-		return "AnnotationToVariant.csv";
-	}
-
-	@Override
 	protected Class<?> getBeanClass() {
 		return Annotation.class;
 	}

@@ -13,11 +13,6 @@ public class GeneToVariantSubscriber extends AbstractSubscriber {
 	}
 
 	@Override
-	protected String getOutputFileName() {
-		return "GeneToVariant.csv";
-	}
-	
-	@Override
 	protected Class<?> getBeanClass() {
 		return TranscriptConsequence.class;
 	}

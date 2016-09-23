@@ -18,11 +18,6 @@ public class GeneSubscriber extends AbstractSubscriber {
 	}
 	
 	@Override
-	protected String getOutputFileName() {
-		return "Gene.csv";
-	}
-	
-	@Override
 	protected Class<?> getBeanClass() {
 		return TranscriptConsequence.class;
 	}
@@ -43,8 +38,7 @@ public class GeneSubscriber extends AbstractSubscriber {
 	@Override
 	public void close() {
 		try {
-			//TODO move header writer somewhere else
-			//beanWriter.writeHeader(OutputFileType.GENE.getHeader());
+			beanWriter.writeHeader(OutputFileType.GENE.getHeader());
 			for (TranscriptConsequence transcriptConsequence : genes) {
 				beanWriter.write(transcriptConsequence);
 			}

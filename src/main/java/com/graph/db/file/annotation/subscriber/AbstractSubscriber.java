@@ -16,16 +16,15 @@ public abstract class AbstractSubscriber implements AutoCloseable {
 	protected CsvDozerBeanWriter beanWriter;
 
 	public AbstractSubscriber(String outputFolder) {
+		OutputFileType outputFileType = getOutputFileType();
 		try {
-			FileWriter writer = new FileWriter(outputFolder + File.separator + getOutputFileName());
+			FileWriter writer = new FileWriter(outputFolder + File.separator + outputFileType.getFileTag() + ".csv");
 			beanWriter = new CsvDozerBeanWriter(writer, CsvPreference.STANDARD_PREFERENCE);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		beanWriter.configureBeanMapping(getBeanClass(), getOutputFileType().getHeader());
+		beanWriter.configureBeanMapping(getBeanClass(), outputFileType.getHeader());
 	}
-	
-	protected abstract String getOutputFileName();
 	
 	protected abstract Class<?> getBeanClass();
 	

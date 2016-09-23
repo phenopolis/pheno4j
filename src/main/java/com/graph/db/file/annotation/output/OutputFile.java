@@ -1,6 +1,8 @@
 package com.graph.db.file.annotation.output;
 
-public interface Header {
+public interface OutputFile {
 
 	String[] getHeader();
+	
+	String getFileTag();
 }

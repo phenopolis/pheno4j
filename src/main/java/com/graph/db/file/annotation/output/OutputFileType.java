@@ -1,6 +1,6 @@
 package com.graph.db.file.annotation.output;
 
-public enum OutputFileType implements Header {
+public enum OutputFileType implements OutputFile {
 
 	GENE {
 		@Override
@@ -10,6 +10,10 @@ public enum OutputFileType implements Header {
 					"gene_symbol"
 					};
 		}
+		@Override
+		public String getFileTag() {
+			return "Gene";
+		}
 	},
 	GENE_TO_VARIANT {
 		@Override
@@ -18,6 +22,10 @@ public enum OutputFileType implements Header {
 					"gene_id",
 					"variant_id"
 					};
+		}
+		@Override
+		public String getFileTag() {
+			return "GeneToVariant";
 		}
 	},
 	ANNOTATION_TO_VARIANT {
@@ -117,6 +125,10 @@ public enum OutputFileType implements Header {
 					"EXAC.REF",
 					"EXAC.VQSLOD"
 					};
+		}
+		@Override
+		public String getFileTag() {
+			return "AnnotationToVariant";
 		}
 	};
 }
