@@ -1,4 +1,4 @@
-package com.graph.db.file.annotation.subscriber;
+package com.graph.db.file;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -8,10 +8,9 @@ import org.supercsv.io.dozer.CsvDozerBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
 import com.google.common.eventbus.Subscribe;
-import com.graph.db.file.annotation.domain.Annotation;
 import com.graph.db.file.annotation.output.OutputFileType;
 
-public abstract class AbstractSubscriber implements AutoCloseable {
+public abstract class AbstractSubscriber<T> implements AutoCloseable {
 	
 	protected CsvDozerBeanWriter beanWriter;
 
@@ -29,9 +28,9 @@ public abstract class AbstractSubscriber implements AutoCloseable {
 	protected abstract OutputFileType getOutputFileType();
 	
     @Subscribe
-    public void processAnnotation(Annotation annotation) {
+    public void processAnnotation(T object) {
     	try {
-			beanWriter.write(annotation);
+			beanWriter.write(object);
     	} catch (IOException e) {
     		throw new RuntimeException(e);
     	}

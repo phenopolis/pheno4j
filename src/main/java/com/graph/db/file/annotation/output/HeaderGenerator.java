@@ -9,19 +9,20 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.graph.db.file.annotation.domain.Annotation;
+import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.domain.Exac;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.util.Constants;
 
 public class HeaderGenerator {
 	
-	public void generateHeaders(String outputFolder) {
-		for (OutputFileType outputFileType : OutputFileType.values()) {
+	public void generateHeaders(String outputFolder, Set<OutputFileType> set) {
+		for (OutputFileType outputFileType : set) {
 			String joinedHeaders = StringUtils.join(outputFileType.getHeader(), Constants.COMMA);
 			joinedHeaders = relabelIdColumns(outputFileType, joinedHeaders);
 			joinedHeaders = relabelNonStringTypes(joinedHeaders);
@@ -32,19 +33,22 @@ public class HeaderGenerator {
 
 	private String relabelIdColumns(OutputFileType outputFileType, String joinedHeaders) {
 		switch(outputFileType) {
-		case ANNOTATION:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", "variantId:ID(Annotation)");
+		case ANNOTATED_VARIANT:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", "variantId:ID(AnnotatedVariant)");
 			break;
-		case VARIANT_TO_ANNOTATION:
+		case VARIANT_TO_ANNOTATED_VARIANT:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":START_ID(Variant)");
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":END_ID(Annotation)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":END_ID(AnnotatedVariant)");
+			break;
+		case ANNOTATED_GENE:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", "geneId:ID(AnnotatedGene)");
+			break;
+		case ANNOTATED_GENE_TO_VARIANT:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", ":START_ID(AnnotatedGene)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":END_ID(Variant)");
 			break;
 		case GENE:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", "geneId:ID(Gene)");
-			break;
-		case GENE_TO_VARIANT:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", ":START_ID(Gene)");
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":END_ID(Variant)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene", "geneSymbol:ID(Gene)");
 			break;
 		default:
 			throw new IllegalStateException();
@@ -64,7 +68,7 @@ public class HeaderGenerator {
 	//currently only handles ints everything else will be a string
 	private Map<String, String> createMapFromJavaTypeToGraphType() {
 		Map<String, String> nameToGraphType = new HashMap<>();
-		for (Class<?> c : Arrays.asList(Annotation.class, Exac.class, TranscriptConsequence.class)) {
+		for (Class<?> c : Arrays.asList(AnnotatedVariant.class, Exac.class, TranscriptConsequence.class)) {
 			for (Field field : c.getDeclaredFields()) {
 				String name = field.getName();
 				switch(field.getType().getName()) {

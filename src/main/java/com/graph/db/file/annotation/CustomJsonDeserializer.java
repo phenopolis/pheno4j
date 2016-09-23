@@ -13,22 +13,22 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.graph.db.file.annotation.domain.Annotation;
+import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 
-public class CustomJsonDeserializer implements JsonDeserializer<Annotation> {
+public class CustomJsonDeserializer implements JsonDeserializer<AnnotatedVariant> {
 	
 	@Override
-	public Annotation deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+	public AnnotatedVariant deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 			throws JsonParseException {
-		Annotation annotation = new Gson().fromJson(json, Annotation.class);
+		AnnotatedVariant annotatedVariant = new Gson().fromJson(json, AnnotatedVariant.class);
 		
-		String transformedVariantId = getTransformedVariantId(annotation.getVariant_id());
+		String transformedVariantId = getTransformedVariantId(annotatedVariant.getVariant_id());
 		
-		updateVariantIdOnAnnotation(annotation, transformedVariantId);
-		updateVariantIdOnTranscriptConsequences(annotation.getTranscript_consequences(), transformedVariantId);
+		updateVariantIdOnAnnotatedVariant(annotatedVariant, transformedVariantId);
+		updateVariantIdOnTranscriptConsequences(annotatedVariant.getTranscript_consequences(), transformedVariantId);
 		
-		return annotation;
+		return annotatedVariant;
 	}
 	
 	/**
@@ -42,8 +42,8 @@ public class CustomJsonDeserializer implements JsonDeserializer<Annotation> {
 		return StringUtils.replace(variantIdWithHyphens, HYPHEN, UNDERSCORE);
 	}
 
-	private void updateVariantIdOnAnnotation(Annotation annotation, String transformedVariantId) {
-		annotation.setVariant_id(transformedVariantId);
+	private void updateVariantIdOnAnnotatedVariant(AnnotatedVariant annotatedVariant, String transformedVariantId) {
+		annotatedVariant.setVariant_id(transformedVariantId);
 	}
 	
 	private void updateVariantIdOnTranscriptConsequences(Collection<TranscriptConsequence> transcriptConsequences,

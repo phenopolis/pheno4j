@@ -1,16 +1,11 @@
 package com.graph.db.file.annotation.domain;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.LineNumberReader;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.google.gson.Gson;
-
-public class Annotation {
+public class AnnotatedVariant {
 	
 	private String variant_id;
 	private Exac EXAC;
@@ -56,18 +51,5 @@ public class Annotation {
 	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-	}
-
-	public static void main(String[] args) {
-		try (LineNumberReader reader = new LineNumberReader(new FileReader("src/test/resources/testJson.json"));) {
-			String line;
-			while (( line = reader.readLine()) != null) {
-				Gson gson = new Gson();
-				Annotation response = gson.fromJson(line, Annotation.class);
-				System.out.println(response);
-			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 }

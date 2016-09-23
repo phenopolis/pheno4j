@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.graph.db.Processor;
-import com.graph.db.util.QueueToFileConsumer;
 
 /**
  * Writes data to the file as it is available
@@ -167,7 +166,7 @@ public class VcfParser implements Processor {
 		if ((args != null) && (args.length != 2)) {
 			throw new RuntimeException("Incorrect args: $1=vcfFile, $2=outputFolder");
 		}
-		new VcfParser(args[0], args[1]);
+		new VcfParser(args[0], args[1]).execute();;
 		LOGGER.info("Finished");
 	}
 

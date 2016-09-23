@@ -1,11 +1,21 @@
 package com.graph.db.file.annotation.output;
 
-import com.graph.db.file.annotation.domain.Annotation;
+import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
+import com.graph.db.file.gene.domain.Gene;
 
 public enum OutputFileType implements OutputFile {
 
-	GENE("Gene", TranscriptConsequence.class) {
+	
+	GENE("Gene", Gene.class) {
+		@Override
+		public String[] getHeader() {
+			return new String[] {
+					"gene"
+					};
+		}
+	},
+	ANNOTATED_GENE("AnnotatedGene", TranscriptConsequence.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {
@@ -14,7 +24,7 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
-	GENE_TO_VARIANT("GeneToVariant", TranscriptConsequence.class) {
+	ANNOTATED_GENE_TO_VARIANT("AnnotatedGeneToVariant", TranscriptConsequence.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {
@@ -23,7 +33,7 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
-	ANNOTATION("Annotation", Annotation.class) {
+	ANNOTATED_VARIANT("AnnotatedVariant", AnnotatedVariant.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {
@@ -122,7 +132,7 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
-	VARIANT_TO_ANNOTATION("VariantToAnnotation", Annotation.class){
+	VARIANT_TO_ANNOTATED_VARIANT("VariantToAnnotatedVariant", AnnotatedVariant.class){
 		@Override
 		public String[] getHeader() {
 			return new String[] {

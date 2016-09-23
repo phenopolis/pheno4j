@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.util.EnumSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -19,10 +20,11 @@ import com.google.common.eventbus.EventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.graph.db.Processor;
-import com.graph.db.file.annotation.domain.Annotation;
+import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.output.HeaderGenerator;
-import com.graph.db.file.annotation.subscriber.AnnotationSubscriber;
-import com.graph.db.file.annotation.subscriber.GeneSubscriber;
+import com.graph.db.file.annotation.output.OutputFileType;
+import com.graph.db.file.annotation.subscriber.AnnotatedGeneSubscriber;
+import com.graph.db.file.annotation.subscriber.AnnotatedVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneToVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.VariantToAnnotationSubscriber;
 
@@ -37,11 +39,10 @@ public class AnnotationParser implements Processor {
 	
 	private final ExecutorService threadPool;
 	private final EventBus eventBus;
-	private final GeneSubscriber geneSubscriber;
+	private final AnnotatedGeneSubscriber annotatedGeneSubscriber;
 	private final GeneToVariantSubscriber geneToVariantSubscriber;
-	private final AnnotationSubscriber annotationSubscriber;
+	private final AnnotatedVariantSubscriber annotatedVariantSubscriber;
 	private final VariantToAnnotationSubscriber variantToAnnotationSubscriber;
-
 
 	public AnnotationParser(String inputFolder, String outputFolder) {
 		this.inputFolder = inputFolder;
@@ -51,15 +52,15 @@ public class AnnotationParser implements Processor {
         
 		threadPool = Executors.newFixedThreadPool(10);
 		eventBus = new AsyncEventBus(threadPool);
-        geneSubscriber = new GeneSubscriber(outputFolder);
+        annotatedGeneSubscriber = new AnnotatedGeneSubscriber(outputFolder);
         geneToVariantSubscriber = new GeneToVariantSubscriber(outputFolder);
-        annotationSubscriber = new AnnotationSubscriber(outputFolder);
+        annotatedVariantSubscriber = new AnnotatedVariantSubscriber(outputFolder);
         variantToAnnotationSubscriber = new VariantToAnnotationSubscriber(outputFolder);
 	}
 
 	private Gson createGson() {
 		GsonBuilder b = new GsonBuilder();
-        b.registerTypeAdapter(Annotation.class, new CustomJsonDeserializer());
+        b.registerTypeAdapter(AnnotatedVariant.class, new CustomJsonDeserializer());
         return b.create();
 	}
 	
@@ -78,8 +79,8 @@ public class AnnotationParser implements Processor {
 				while (( line = reader.readLine()) != null) {
 					logLineNumber(reader, 1000);
 					
-					Annotation annotation = gson.fromJson(line, Annotation.class);
-					eventBus.post(annotation);
+					AnnotatedVariant annotatedVariant = gson.fromJson(line, AnnotatedVariant.class);
+					eventBus.post(annotatedVariant);
 				}
 			} catch (IOException e) {
 				throw new RuntimeException(e);
@@ -93,9 +94,9 @@ public class AnnotationParser implements Processor {
 	}
 
 	private void registerSubscribers() {
-		eventBus.register(geneSubscriber);
+		eventBus.register(annotatedGeneSubscriber);
 		eventBus.register(geneToVariantSubscriber);
-		eventBus.register(annotationSubscriber);
+		eventBus.register(annotatedVariantSubscriber);
 		eventBus.register(variantToAnnotationSubscriber);
 	}
 
@@ -109,14 +110,16 @@ public class AnnotationParser implements Processor {
 	}
 	
 	private void closeSubscribers() {
-		geneSubscriber.close();
+		annotatedGeneSubscriber.close();
 		geneToVariantSubscriber.close();
-		annotationSubscriber.close();
+		annotatedVariantSubscriber.close();
 		variantToAnnotationSubscriber.close();
 	}
-	
+
 	private void generateHeaderFiles() {
-		new HeaderGenerator().generateHeaders(outputFolder);
+		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.ANNOTATED_VARIANT, OutputFileType.VARIANT_TO_ANNOTATED_VARIANT,
+				OutputFileType.ANNOTATED_GENE, OutputFileType.ANNOTATED_GENE_TO_VARIANT);
+		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
 
 	public static void main(String[] args) {

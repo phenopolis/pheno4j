@@ -1,4 +1,4 @@
-package com.graph.db.util;
+package com.graph.db.file.vcf;
 
 import static com.graph.db.util.Constants.POISON_PILL;
 
