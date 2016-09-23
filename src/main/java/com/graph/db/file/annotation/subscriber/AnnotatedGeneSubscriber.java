@@ -40,11 +40,7 @@ public class AnnotatedGeneSubscriber extends AbstractSubscriber<AnnotatedVariant
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} finally {
-			try {
-				beanWriter.close();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+			super.close();
 		}
 	}
 

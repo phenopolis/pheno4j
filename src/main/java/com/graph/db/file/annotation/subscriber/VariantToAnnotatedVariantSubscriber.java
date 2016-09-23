@@ -3,9 +3,9 @@ package com.graph.db.file.annotation.subscriber;
 import com.graph.db.file.AbstractSubscriber;
 import com.graph.db.file.annotation.output.OutputFileType;
 
-public class VariantToAnnotationSubscriber extends AbstractSubscriber<Object> {
+public class VariantToAnnotatedVariantSubscriber extends AbstractSubscriber<Object> {
 
-	public VariantToAnnotationSubscriber(String outputFolder) {
+	public VariantToAnnotatedVariantSubscriber(String outputFolder) {
 		super(outputFolder);
 	}
 

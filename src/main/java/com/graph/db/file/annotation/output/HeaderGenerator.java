@@ -47,6 +47,10 @@ public class HeaderGenerator {
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", ":START_ID(AnnotatedGene)");
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":END_ID(Variant)");
 			break;
+		case GENE_TO_ANNOTATED_GENE:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_symbol", ":START_ID(Gene)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_symbol", ":END_ID(AnnotatedGene)");
+			break;
 		case GENE:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene", "geneSymbol:ID(Gene)");
 			break;

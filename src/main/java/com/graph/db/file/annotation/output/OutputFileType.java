@@ -1,6 +1,7 @@
 package com.graph.db.file.annotation.output;
 
 import com.graph.db.file.annotation.domain.AnnotatedVariant;
+import com.graph.db.file.annotation.domain.GeneToAnnotatedGene;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.file.gene.domain.Gene;
 import com.graph.db.file.gene.domain.GeneToTerm;
@@ -25,6 +26,17 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
+	
+	GENE_TO_ANNOTATED_GENE("GeneToAnnotatedGene", GeneToAnnotatedGene.class) {
+		@Override
+		public String[] getHeader() {
+			return new String[] {
+					"geneSymbol",
+					"annotatedGeneSymbol"
+					};
+		}
+	},
+	
 	ANNOTATED_GENE("AnnotatedGene", TranscriptConsequence.class) {
 		@Override
 		public String[] getHeader() {
