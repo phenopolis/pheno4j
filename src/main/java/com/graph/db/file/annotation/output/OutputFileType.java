@@ -23,11 +23,10 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
-	VARIANT_TO_ANNOTATION("AnnotationToVariant", Annotation.class) {
+	ANNOTATION("Annotation", Annotation.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {
-					"variant_id",
 					"variant_id",
 					"HET_COUNT",
 					"WT_COUNT",
@@ -121,6 +120,15 @@ public enum OutputFileType implements OutputFile {
 					"EXAC.REF",
 					"EXAC.VQSLOD"
 					};
+		}
+	},
+	VARIANT_TO_ANNOTATION("VariantToAnnotation", Annotation.class){
+		@Override
+		public String[] getHeader() {
+			return new String[] {
+					"variant_id",
+					"variant_id"
+			};
 		}
 	};
 	

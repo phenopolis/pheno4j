@@ -21,6 +21,7 @@ import com.google.gson.GsonBuilder;
 import com.graph.db.Processor;
 import com.graph.db.file.annotation.domain.Annotation;
 import com.graph.db.file.annotation.output.HeaderGenerator;
+import com.graph.db.file.annotation.subscriber.AnnotationSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneToVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.VariantToAnnotationSubscriber;
@@ -38,7 +39,9 @@ public class AnnotationParser implements Processor {
 	private final EventBus eventBus;
 	private final GeneSubscriber geneSubscriber;
 	private final GeneToVariantSubscriber geneToVariantSubscriber;
+	private final AnnotationSubscriber annotationSubscriber;
 	private final VariantToAnnotationSubscriber variantToAnnotationSubscriber;
+
 
 	public AnnotationParser(String inputFolder, String outputFolder) {
 		this.inputFolder = inputFolder;
@@ -50,6 +53,7 @@ public class AnnotationParser implements Processor {
 		eventBus = new AsyncEventBus(threadPool);
         geneSubscriber = new GeneSubscriber(outputFolder);
         geneToVariantSubscriber = new GeneToVariantSubscriber(outputFolder);
+        annotationSubscriber = new AnnotationSubscriber(outputFolder);
         variantToAnnotationSubscriber = new VariantToAnnotationSubscriber(outputFolder);
 	}
 
@@ -91,6 +95,7 @@ public class AnnotationParser implements Processor {
 	private void registerSubscribers() {
 		eventBus.register(geneSubscriber);
 		eventBus.register(geneToVariantSubscriber);
+		eventBus.register(annotationSubscriber);
 		eventBus.register(variantToAnnotationSubscriber);
 	}
 
@@ -106,6 +111,7 @@ public class AnnotationParser implements Processor {
 	private void closeSubscribers() {
 		geneSubscriber.close();
 		geneToVariantSubscriber.close();
+		annotationSubscriber.close();
 		variantToAnnotationSubscriber.close();
 	}
 	

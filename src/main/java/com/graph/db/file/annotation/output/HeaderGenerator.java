@@ -32,6 +32,9 @@ public class HeaderGenerator {
 
 	private String relabelIdColumns(OutputFileType outputFileType, String joinedHeaders) {
 		switch(outputFileType) {
+		case ANNOTATION:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", "variantId:ID(Annotation)");
+			break;
 		case VARIANT_TO_ANNOTATION:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":START_ID(Variant)");
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":END_ID(Annotation)");
