@@ -17,6 +17,7 @@ import com.graph.db.file.annotation.output.HeaderGenerator;
 import com.graph.db.file.annotation.output.OutputFileType;
 import com.graph.db.file.gene.domain.Gene;
 import com.graph.db.file.gene.subscriber.GeneSubscriber;
+import com.graph.db.file.gene.subscriber.GeneToTermSubscriber;
 
 public class GeneParser implements Processor {
 	
@@ -28,6 +29,7 @@ public class GeneParser implements Processor {
 	private final Gson gson = new Gson();
 	private final EventBus eventBus;
 	private final GeneSubscriber geneSubscriber;
+	private final GeneToTermSubscriber geneToTermSubscriber;
 	
 	public GeneParser(String fileName, String outputFolder) {
 		this.fileName = fileName;
@@ -35,6 +37,7 @@ public class GeneParser implements Processor {
 		
 		eventBus = new EventBus();
 		geneSubscriber = new GeneSubscriber(outputFolder);
+		geneToTermSubscriber = new GeneToTermSubscriber(outputFolder);
 	}
 	
 	@Override
@@ -52,7 +55,6 @@ public class GeneParser implements Processor {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		
 		closeSubscribers();
 		
 		generateHeaderFiles();
@@ -60,14 +62,16 @@ public class GeneParser implements Processor {
 
 	private void registerSubscribers() {
 		eventBus.register(geneSubscriber);
+		eventBus.register(geneToTermSubscriber);
 	}
 
 	private void closeSubscribers() {
 		geneSubscriber.close();
+		geneToTermSubscriber.close();
 	}
 
 	private void generateHeaderFiles() {
-		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE);
+		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE, OutputFileType.GENE_TO_TERM);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
 

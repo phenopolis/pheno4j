@@ -3,6 +3,7 @@ package com.graph.db.file.annotation.output;
 import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.file.gene.domain.Gene;
+import com.graph.db.file.gene.domain.GeneToTerm;
 
 public enum OutputFileType implements OutputFile {
 
@@ -12,6 +13,15 @@ public enum OutputFileType implements OutputFile {
 		public String[] getHeader() {
 			return new String[] {
 					"gene"
+					};
+		}
+	},
+	GENE_TO_TERM("GeneToTerm", GeneToTerm.class){
+		@Override
+		public String[] getHeader() {
+			return new String[] {
+					"geneSymbol",
+					"termId"
 					};
 		}
 	},

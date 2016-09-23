@@ -50,6 +50,10 @@ public class HeaderGenerator {
 		case GENE:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene", "geneSymbol:ID(Gene)");
 			break;
+		case GENE_TO_TERM:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "geneSymbol", ":START_ID(Gene)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "termId", ":END_ID(Term)");
+			break;
 		default:
 			throw new IllegalStateException();
 		}
