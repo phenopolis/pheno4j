@@ -1,8 +1,11 @@
 package com.graph.db.file.annotation.output;
 
+import com.graph.db.file.annotation.domain.Annotation;
+import com.graph.db.file.annotation.domain.TranscriptConsequence;
+
 public enum OutputFileType implements OutputFile {
 
-	GENE {
+	GENE("Gene", TranscriptConsequence.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {
@@ -10,12 +13,8 @@ public enum OutputFileType implements OutputFile {
 					"gene_symbol"
 					};
 		}
-		@Override
-		public String getFileTag() {
-			return "Gene";
-		}
 	},
-	GENE_TO_VARIANT {
+	GENE_TO_VARIANT("GeneToVariant", TranscriptConsequence.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {
@@ -23,15 +22,12 @@ public enum OutputFileType implements OutputFile {
 					"variant_id"
 					};
 		}
-		@Override
-		public String getFileTag() {
-			return "GeneToVariant";
-		}
 	},
-	ANNOTATION_TO_VARIANT {
+	VARIANT_TO_ANNOTATION("AnnotationToVariant", Annotation.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {
+					"variant_id",
 					"variant_id",
 					"HET_COUNT",
 					"WT_COUNT",
@@ -126,9 +122,23 @@ public enum OutputFileType implements OutputFile {
 					"EXAC.VQSLOD"
 					};
 		}
-		@Override
-		public String getFileTag() {
-			return "AnnotationToVariant";
-		}
 	};
+	
+	private final String fileTag;
+	private final Class<?> beanClass;
+
+	private OutputFileType(String fileTag, Class<?> beanClass) {
+		this.fileTag = fileTag;
+		this.beanClass = beanClass;
+	}
+	
+	@Override
+	public String getFileTag() {
+		return fileTag;
+	}
+
+	@Override
+	public Class<?> getBeanClass() {
+		return beanClass;
+	}
 }

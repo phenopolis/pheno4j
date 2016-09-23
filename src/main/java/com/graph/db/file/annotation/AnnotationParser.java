@@ -20,7 +20,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.graph.db.Processor;
 import com.graph.db.file.annotation.domain.Annotation;
-import com.graph.db.file.annotation.subscriber.AnnotationToVariantSubscriber;
+import com.graph.db.file.annotation.output.HeaderGenerator;
+import com.graph.db.file.annotation.subscriber.VariantToAnnotationSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneToVariantSubscriber;
 
@@ -29,6 +30,7 @@ public class AnnotationParser implements Processor {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationParser.class);
 	
 	private final String inputFolder;
+	private final String outputFolder;
 
 	private final Gson gson;
 	
@@ -36,10 +38,12 @@ public class AnnotationParser implements Processor {
 	private final EventBus eventBus;
 	private final GeneSubscriber geneSubscriber;
 	private final GeneToVariantSubscriber geneToVariantSubscriber;
-	private final AnnotationToVariantSubscriber annotationToVariantSubscriber;
+	private final VariantToAnnotationSubscriber variantToAnnotationSubscriber;
+
 
 	public AnnotationParser(String inputFolder, String outputFolder) {
 		this.inputFolder = inputFolder;
+		this.outputFolder = outputFolder;
 		
 		gson = createGson();
         
@@ -47,7 +51,7 @@ public class AnnotationParser implements Processor {
 		eventBus = new AsyncEventBus(threadPool);
         geneSubscriber = new GeneSubscriber(outputFolder);
         geneToVariantSubscriber = new GeneToVariantSubscriber(outputFolder);
-        annotationToVariantSubscriber = new AnnotationToVariantSubscriber(outputFolder);
+        variantToAnnotationSubscriber = new VariantToAnnotationSubscriber(outputFolder);
 	}
 
 	private Gson createGson() {
@@ -81,12 +85,14 @@ public class AnnotationParser implements Processor {
 		
 		shutDownThreadPool();
 		closeSubscribers();
+		
+		new HeaderGenerator().generateHeaders(outputFolder);
 	}
 
 	private void registerSubscribers() {
 		eventBus.register(geneSubscriber);
 		eventBus.register(geneToVariantSubscriber);
-		eventBus.register(annotationToVariantSubscriber);
+		eventBus.register(variantToAnnotationSubscriber);
 	}
 
 	private void shutDownThreadPool() {
@@ -101,7 +107,7 @@ public class AnnotationParser implements Processor {
 	private void closeSubscribers() {
 		geneSubscriber.close();
 		geneToVariantSubscriber.close();
-		annotationToVariantSubscriber.close();
+		variantToAnnotationSubscriber.close();
 	}
 
 	public static void main(String[] args) {

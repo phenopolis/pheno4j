@@ -23,10 +23,8 @@ public abstract class AbstractSubscriber implements AutoCloseable {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		beanWriter.configureBeanMapping(getBeanClass(), outputFileType.getHeader());
+		beanWriter.configureBeanMapping(outputFileType.getBeanClass(), outputFileType.getHeader());
 	}
-	
-	protected abstract Class<?> getBeanClass();
 	
 	protected abstract OutputFileType getOutputFileType();
 	

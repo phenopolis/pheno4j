@@ -13,11 +13,6 @@ public class GeneToVariantSubscriber extends AbstractSubscriber {
 	}
 
 	@Override
-	protected Class<?> getBeanClass() {
-		return TranscriptConsequence.class;
-	}
-
-	@Override
 	protected OutputFileType getOutputFileType() {
 		return OutputFileType.GENE_TO_VARIANT;
 	}
