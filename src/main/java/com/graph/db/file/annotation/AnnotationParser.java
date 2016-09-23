@@ -21,9 +21,9 @@ import com.google.gson.GsonBuilder;
 import com.graph.db.Processor;
 import com.graph.db.file.annotation.domain.Annotation;
 import com.graph.db.file.annotation.output.HeaderGenerator;
-import com.graph.db.file.annotation.subscriber.VariantToAnnotationSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneToVariantSubscriber;
+import com.graph.db.file.annotation.subscriber.VariantToAnnotationSubscriber;
 
 public class AnnotationParser implements Processor {
 	
@@ -39,7 +39,6 @@ public class AnnotationParser implements Processor {
 	private final GeneSubscriber geneSubscriber;
 	private final GeneToVariantSubscriber geneToVariantSubscriber;
 	private final VariantToAnnotationSubscriber variantToAnnotationSubscriber;
-
 
 	public AnnotationParser(String inputFolder, String outputFolder) {
 		this.inputFolder = inputFolder;
@@ -86,7 +85,7 @@ public class AnnotationParser implements Processor {
 		shutDownThreadPool();
 		closeSubscribers();
 		
-		new HeaderGenerator().generateHeaders(outputFolder);
+		generateHeaderFiles();
 	}
 
 	private void registerSubscribers() {
@@ -108,6 +107,10 @@ public class AnnotationParser implements Processor {
 		geneSubscriber.close();
 		geneToVariantSubscriber.close();
 		variantToAnnotationSubscriber.close();
+	}
+	
+	private void generateHeaderFiles() {
+		new HeaderGenerator().generateHeaders(outputFolder);
 	}
 
 	public static void main(String[] args) {
