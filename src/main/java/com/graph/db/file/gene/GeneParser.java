@@ -77,7 +77,7 @@ public class GeneParser implements Processor {
 
 	public static void main(String[] args) {
 		if ((args != null) && (args.length != 2)) {
-			throw new RuntimeException("Incorrect args: $1=vcfFile, $2=outputFolder");
+			throw new RuntimeException("Incorrect args: $1=geneFile, $2=outputFolder");
 		}
 		new GeneParser(args[0], args[1]).execute();
 		LOGGER.info("Finished");

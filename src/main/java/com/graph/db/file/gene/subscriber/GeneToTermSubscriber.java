@@ -29,5 +29,4 @@ public class GeneToTermSubscriber extends GenericSubscriber<Gene> {
     		throw new RuntimeException(e);
     	}
     }
-	
 }
