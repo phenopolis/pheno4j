@@ -5,23 +5,18 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.common.eventbus.Subscribe;
-import com.graph.db.file.AbstractSubscriber;
+import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.file.annotation.output.OutputFileType;
 
-public class AnnotatedGeneSubscriber extends AbstractSubscriber<AnnotatedVariant> {
+public class AnnotatedGeneSubscriber extends GenericSubscriber<AnnotatedVariant> {
 	
+	public AnnotatedGeneSubscriber(String outputFolder, OutputFileType outputFileType) {
+		super(outputFolder, outputFileType);
+	}
+
 	private final Set<TranscriptConsequence> genes = ConcurrentHashMap.newKeySet();
-	
-	public AnnotatedGeneSubscriber(String outputFolder) {
-		super(outputFolder);
-	}
-	
-	@Override
-	protected OutputFileType getOutputFileType() {
-		return OutputFileType.ANNOTATED_GENE;
-	}
 	
     @Override
 	@Subscribe

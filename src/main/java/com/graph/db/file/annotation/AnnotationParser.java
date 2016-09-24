@@ -20,14 +20,13 @@ import com.google.common.eventbus.EventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.graph.db.Processor;
+import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.output.HeaderGenerator;
 import com.graph.db.file.annotation.output.OutputFileType;
 import com.graph.db.file.annotation.subscriber.AnnotatedGeneSubscriber;
-import com.graph.db.file.annotation.subscriber.AnnotatedVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneToAnnotatedGeneSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneToVariantSubscriber;
-import com.graph.db.file.annotation.subscriber.VariantToAnnotatedVariantSubscriber;
 
 public class AnnotationParser implements Processor {
 	
@@ -42,8 +41,8 @@ public class AnnotationParser implements Processor {
 	private final EventBus eventBus;
 	private final AnnotatedGeneSubscriber annotatedGeneSubscriber;
 	private final GeneToVariantSubscriber geneToVariantSubscriber;
-	private final AnnotatedVariantSubscriber annotatedVariantSubscriber;
-	private final VariantToAnnotatedVariantSubscriber variantToAnnotatedVariantSubscriber;
+	private final GenericSubscriber<Object> annotatedVariantSubscriber;
+	private final GenericSubscriber<Object> variantToAnnotatedVariantSubscriber;
 	private final GeneToAnnotatedGeneSubscriber geneToAnnotatedGeneSubscriber;
 
 	public AnnotationParser(String inputFolder, String outputFolder) {
@@ -54,11 +53,11 @@ public class AnnotationParser implements Processor {
         
 		threadPool = Executors.newFixedThreadPool(10);
 		eventBus = new AsyncEventBus(threadPool);
-        annotatedGeneSubscriber = new AnnotatedGeneSubscriber(outputFolder);
-        geneToVariantSubscriber = new GeneToVariantSubscriber(outputFolder);
-        annotatedVariantSubscriber = new AnnotatedVariantSubscriber(outputFolder);
-        variantToAnnotatedVariantSubscriber = new VariantToAnnotatedVariantSubscriber(outputFolder);
-        geneToAnnotatedGeneSubscriber = new GeneToAnnotatedGeneSubscriber(outputFolder);
+        annotatedGeneSubscriber = new AnnotatedGeneSubscriber(outputFolder, OutputFileType.ANNOTATED_GENE);
+        geneToVariantSubscriber = new GeneToVariantSubscriber(outputFolder, OutputFileType.ANNOTATED_GENE_TO_VARIANT);
+        annotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, OutputFileType.ANNOTATED_VARIANT);
+        variantToAnnotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, OutputFileType.VARIANT_TO_ANNOTATED_VARIANT);
+        geneToAnnotatedGeneSubscriber = new GeneToAnnotatedGeneSubscriber(outputFolder, OutputFileType.GENE_TO_ANNOTATED_GENE);
 	}
 
 	private Gson createGson() {

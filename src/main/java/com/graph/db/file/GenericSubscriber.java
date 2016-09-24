@@ -10,12 +10,11 @@ import org.supercsv.prefs.CsvPreference;
 import com.google.common.eventbus.Subscribe;
 import com.graph.db.file.annotation.output.OutputFileType;
 
-public abstract class AbstractSubscriber<T> implements AutoCloseable {
+public class GenericSubscriber<T> implements AutoCloseable {
 	
 	protected CsvDozerBeanWriter beanWriter;
 
-	public AbstractSubscriber(String outputFolder) {
-		OutputFileType outputFileType = getOutputFileType();
+	public GenericSubscriber(String outputFolder, OutputFileType outputFileType) {
 		try {
 			FileWriter writer = new FileWriter(outputFolder + File.separator + outputFileType.getFileTag() + ".csv");
 			beanWriter = new CsvDozerBeanWriter(writer, CsvPreference.STANDARD_PREFERENCE);
@@ -24,8 +23,6 @@ public abstract class AbstractSubscriber<T> implements AutoCloseable {
 		}
 		beanWriter.configureBeanMapping(outputFileType.getBeanClass(), outputFileType.getHeader());
 	}
-	
-	protected abstract OutputFileType getOutputFileType();
 	
     @Subscribe
     public void processAnnotation(T object) {

@@ -8,7 +8,6 @@ import com.graph.db.file.gene.domain.GeneToTerm;
 
 public enum OutputFileType implements OutputFile {
 
-	
 	GENE("Gene", Gene.class) {
 		@Override
 		public String[] getHeader() {

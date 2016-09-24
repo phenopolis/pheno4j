@@ -4,25 +4,20 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.graph.db.file.AbstractSubscriber;
+import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.domain.GeneToAnnotatedGene;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.file.annotation.output.OutputFileType;
 
-public class GeneToAnnotatedGeneSubscriber extends AbstractSubscriber<AnnotatedVariant> {
+public class GeneToAnnotatedGeneSubscriber extends GenericSubscriber<AnnotatedVariant> {
 	
 	private final Set<GeneToAnnotatedGene> set = ConcurrentHashMap.newKeySet();
 
-	public GeneToAnnotatedGeneSubscriber(String outputFolder) {
-		super(outputFolder);
+	public GeneToAnnotatedGeneSubscriber(String outputFolder, OutputFileType outputFileType) {
+		super(outputFolder, outputFileType);
 	}
 
-	@Override
-	protected OutputFileType getOutputFileType() {
-		return OutputFileType.GENE_TO_ANNOTATED_GENE;
-	}
-	
 	@Override
 	public void processAnnotation(AnnotatedVariant annotatedVariant) {
     	for (TranscriptConsequence transcriptConsequence : annotatedVariant.getTranscript_consequences()) {

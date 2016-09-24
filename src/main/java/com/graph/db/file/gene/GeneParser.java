@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 import com.google.common.eventbus.EventBus;
 import com.google.gson.Gson;
 import com.graph.db.Processor;
+import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.output.HeaderGenerator;
 import com.graph.db.file.annotation.output.OutputFileType;
 import com.graph.db.file.gene.domain.Gene;
-import com.graph.db.file.gene.subscriber.GeneSubscriber;
 import com.graph.db.file.gene.subscriber.GeneToTermSubscriber;
 
 public class GeneParser implements Processor {
@@ -28,7 +28,7 @@ public class GeneParser implements Processor {
 	
 	private final Gson gson = new Gson();
 	private final EventBus eventBus;
-	private final GeneSubscriber geneSubscriber;
+	private final GenericSubscriber<Object> geneSubscriber;
 	private final GeneToTermSubscriber geneToTermSubscriber;
 	
 	public GeneParser(String fileName, String outputFolder) {
@@ -36,8 +36,8 @@ public class GeneParser implements Processor {
 		this.outputFolder = outputFolder;
 		
 		eventBus = new EventBus();
-		geneSubscriber = new GeneSubscriber(outputFolder);
-		geneToTermSubscriber = new GeneToTermSubscriber(outputFolder);
+		geneSubscriber = new GenericSubscriber<Object>(outputFolder, OutputFileType.GENE);
+		geneToTermSubscriber = new GeneToTermSubscriber(outputFolder, OutputFileType.GENE_TO_TERM);
 	}
 	
 	@Override
