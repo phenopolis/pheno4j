@@ -88,19 +88,18 @@ public class TermParser implements Processor {
 			List<String> is = new ArrayList<>();
 			for (String line : subList) {
 				if (StringUtils.isNotBlank(line)) {
-					String[] split = line.split(COLON);
-					String key = split[0];
-					
+					String key = StringUtils.substringBefore(line, COLON);
 					switch (key) {
 					case "id":
-						termId = StringUtils.trim(split[1] + COLON + split[2]);
+						termId = StringUtils.trim(StringUtils.substringAfter(line, COLON));
 						break;
 					case "is_a":
-						String isA = split[1] + COLON + split[2].split(" ")[0];
+						String isA = StringUtils.substringBetween(line, COLON, "!");
 						is.add(StringUtils.trim(isA));
 						break;
 					case "name":
-						name = StringUtils.trim(split[1]);
+						name = StringUtils.trim(StringUtils.substringAfter(line, COLON));
+						name = StringUtils.replace(name, "\"", "\"\"");
 						break;
 					}
 				}
