@@ -2,6 +2,7 @@ package com.graph.db.file.person;
 
 import static com.graph.db.util.Constants.COMMA;
 import static com.graph.db.util.Constants.DOUBLE_QUOTE;
+import static com.graph.db.util.Constants.SEMI_COLON;
 import static com.graph.db.util.FileUtil.getLines;
 
 import java.util.Arrays;
@@ -49,17 +50,17 @@ public class PersonParser implements Processor {
 			String nonObservedTermsField = fields[3];
 			String genesField = fields[4];
 			
-			splitAndAddToMap(personToObservedTerm, personId, observedTermsField);
-			splitAndAddToMap(personToNonObservedTerm, personId, nonObservedTermsField);
-			splitAndAddToMap(personToGene, personId, genesField);
+			splitAndAddToSet(personToObservedTerm, personId, observedTermsField);
+			splitAndAddToSet(personToNonObservedTerm, personId, nonObservedTermsField);
+			splitAndAddToSet(personToGene, personId, genesField);
 		}
 		writeOutHeaderAndRows("PersonToObservedTerm", "Term", personToObservedTerm);
 		writeOutHeaderAndRows("PersonToNonObservedTerm", "Term", personToNonObservedTerm);
 		writeOutHeaderAndRows("PersonToGene", "Gene", personToGene);
 	}
 
-	private void splitAndAddToMap(Set<String> map, String personId, String field) {
-		String[] fields = StringUtils.split(field, COMMA);
+	private void splitAndAddToSet(Set<String> map, String personId, String field) {
+		String[] fields = StringUtils.split(field, SEMI_COLON);
 		for (String cell : fields) {
 			String wrappedCell = StringUtils.wrap(cell, DOUBLE_QUOTE);
 			map.add(StringUtils.join(Arrays.asList(personId, wrappedCell), COMMA));
