@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.graph.db.file.annotation.AnnotationParser;
 import com.graph.db.file.gene.GeneParser;
+import com.graph.db.file.person.PersonParser;
 import com.graph.db.file.vcf.VcfParser;
 
 public class Dispatcher {
@@ -15,6 +16,7 @@ public class Dispatcher {
 		ENTRY_POINTS.put("VcfParser", VcfParser.class);
 		ENTRY_POINTS.put("AnnotationParser", AnnotationParser.class);
 		ENTRY_POINTS.put("GeneParser", GeneParser.class);
+		ENTRY_POINTS.put("PersonParser", PersonParser.class);
 	}
 
 	public static void main(final String[] args) throws Exception {

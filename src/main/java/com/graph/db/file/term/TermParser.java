@@ -3,14 +3,12 @@ package com.graph.db.file.term;
 import static com.graph.db.util.Constants.COLON;
 import static com.graph.db.util.Constants.COMMA;
 import static com.graph.db.util.Constants.DOUBLE_QUOTE;
+import static com.graph.db.util.FileUtil.getLines;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -35,21 +33,12 @@ public class TermParser implements Processor {
 
 	@Override
 	public void execute() {
-		List<String> lines = getLines();
+		List<String> lines = getLines(fileName);
 		List<Pair<Integer, Integer>> pairs = getPairsOfIndexes(lines);
 		List<RawTerm> rawTerms = getRawTerms(lines, pairs);
 		
 		writeOutTerms(rawTerms);
 		writeOutTermRelationships(rawTerms);
-	}
-	
-	@SuppressWarnings("unchecked")
-	private List<String> getLines() {
-		try {
-			return FileUtils.readLines(new File(fileName));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 	
 	private List<Pair<Integer, Integer>> getPairsOfIndexes(List<String> lines) {

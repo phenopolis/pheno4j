@@ -7,6 +7,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.commons.io.FileUtils;
@@ -47,6 +48,15 @@ public final class FileUtil {
 		try {
 			queue.put(POISON_PILL);
 		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<String> getLines(String fileName) {
+		try {
+			return FileUtils.readLines(new File(fileName));
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
