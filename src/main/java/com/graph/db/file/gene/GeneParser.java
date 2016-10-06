@@ -12,14 +12,14 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.eventbus.EventBus;
 import com.google.gson.Gson;
-import com.graph.db.Processor;
+import com.graph.db.Parser;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.output.HeaderGenerator;
 import com.graph.db.file.annotation.output.OutputFileType;
 import com.graph.db.file.gene.domain.Gene;
 import com.graph.db.file.gene.subscriber.GeneToTermSubscriber;
 
-public class GeneParser implements Processor {
+public class GeneParser implements Parser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeneParser.class);
 

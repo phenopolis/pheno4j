@@ -7,9 +7,9 @@ import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.file.annotation.output.OutputFileType;
 
-public class GeneToVariantSubscriber extends GenericSubscriber<AnnotatedVariant> {
+public class AnnotatedGeneToVariantSubscriber extends GenericSubscriber<AnnotatedVariant> {
 	
-	public GeneToVariantSubscriber(String outputFolder, OutputFileType outputFileType) {
+	public AnnotatedGeneToVariantSubscriber(String outputFolder, OutputFileType outputFileType) {
 		super(outputFolder, outputFileType);
 	}
 

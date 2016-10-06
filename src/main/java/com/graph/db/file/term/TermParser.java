@@ -15,11 +15,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.graph.db.Processor;
+import com.graph.db.Parser;
 import com.graph.db.file.term.domain.RawTerm;
 import com.graph.db.util.FileUtil;
 
-public class TermParser implements Processor {
+public class TermParser implements Parser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TermParser.class);
 	

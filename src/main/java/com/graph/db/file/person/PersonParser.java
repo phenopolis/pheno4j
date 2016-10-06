@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.graph.db.Processor;
+import com.graph.db.Parser;
 import com.graph.db.util.FileUtil;
 
 /**
@@ -24,7 +24,7 @@ import com.graph.db.util.FileUtil;
  * Person to Non Observed Term
  * Person to Gene
  */
-public class PersonParser implements Processor {
+public class PersonParser implements Parser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(PersonParser.class);
 	

@@ -1,6 +1,6 @@
 package com.graph.db;
 
-public interface Processor {
+public interface Parser {
 
 	void execute();
 }

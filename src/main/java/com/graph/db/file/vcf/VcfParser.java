@@ -27,14 +27,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.graph.db.Processor;
+import com.graph.db.Parser;
 
 /**
  * Writes data to the file as it is available
  * Reads the compressed file
  * Processes each row in a fork join pool
  */
-public class VcfParser implements Processor {
+public class VcfParser implements Parser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(VcfParser.class);
 	
