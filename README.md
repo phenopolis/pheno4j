@@ -17,11 +17,6 @@ Below is the list of the Parsers, and the Nodes and Relationships that each one 
 | ------------- |:---------------:|
 | Person        | VariantToPerson |
 | Variant       |                 |
-#### Nodes
-Person
-Variant
-#### Relationships
-VariantToPerson
 ### AnnotationParser
 #### Nodes
 AnnotatedGene
