@@ -21,22 +21,34 @@ java -jar graph-db.jar VcfParser $vcfFile $outputFolder
 | Person  | VariantToPerson |
 | Variant |  |
 ### AnnotationParser
+```
+java -jar graph-db.jar AnnotationParser $inputFolderWithJsonFiles $outputFolder
+```
 | Nodes | Relationships |
 | --- | --- |
 | AnnotatedGene | AnnotatedGeneToVariant |
 | AnnotatedVariant | VariantToAnnotatedVariant |
 |  | GeneToAnnotatedGene |
 ### GeneParser
+```
+java -jar graph-db.jar GeneParser $geneFile $outputFolder
+```
 | Nodes | Relationships |
 | --- | --- |
 | Gene | GeneToTerm |
 ### PersonParser
+```
+java -jar graph-db.jar PersonParser $personFile $outputFolder
+```
 | Nodes | Relationships |
 | --- | --- |
 |  | PersonToObservedTerm |
 |  | PersonToNonObservedTerm |
 |  | PersonToGene |
 ### TermParser
+```
+java -jar graph-db.jar TermParser $termFile $outputFolder
+```
 | Nodes | Relationships |
 | --- | --- |
 | Term | TermToTerm |
