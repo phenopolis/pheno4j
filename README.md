@@ -53,6 +53,7 @@ java -jar graph-db.jar TermParser $termFile $outputFolder
 | --- | --- |
 | Term | TermToTerm |
 # Running the neo4j Bulk Csv Import Tool
+1. generate the database using the csv's
 ```
 bin/neo4j-import   --into /generatedGraphOutputFolder/graph.db --id-type string --bad-tolerance 50000  --skip-bad-relationships true \
 --nodes:Person /folder/Person-header.csv,/folder/Person-mainset_July2016.csv \
@@ -71,6 +72,27 @@ bin/neo4j-import   --into /generatedGraphOutputFolder/graph.db --id-type string 
 --relationships:HAS_NON_OBSERVED_TERM /folder/PersonToNonObservedTerm-header.csv,/folder/PersonToNonObservedTerm.csv \
 --relationships:HAS_OBSERVED_TERM /folder/PersonToObservedTerm-header.csv,/folder/PersonToObservedTerm.csv > /folder/neo4j-log.txt &
 ```
+2. Create the symlink to the generated graph
+```
+cd $NEO4J_HOME/data/databases
+ln -s /generatedGraphOutputFolder/graph.db graph.db 
+
+```
+1. Start neo4j
+```
+cd $NEO4J_HOME/bin
+./neo4j start
+```
+2. Create the constraints
+```
+CREATE CONSTRAINT ON (p:Variant) ASSERT p.variantId IS UNIQUE;
+CREATE CONSTRAINT ON (p:Person) ASSERT p.personId IS UNIQUE;
+CREATE CONSTRAINT ON (p:AnnotatedGene) ASSERT p.geneId IS UNIQUE;
+CREATE CONSTRAINT ON (p:AnnotatedVariant) ASSERT p.variantId IS UNIQUE;
+CREATE CONSTRAINT ON (p:Term) ASSERT p.termId IS UNIQUE;
+CREATE CONSTRAINT ON (p:geneSymbol) ASSERT p.termId IS UNIQUE;
+```
+
 
 # Example Cypher Queries
 
