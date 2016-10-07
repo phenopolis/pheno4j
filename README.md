@@ -24,20 +24,19 @@ Below is the list of the Parsers, and the Nodes and Relationships that each one 
 | AnnotatedVariant | VariantToAnnotatedVariant |
 |                  | GeneToAnnotatedGene       |
 ### GeneParser
-#### Nodes
-Gene
-#### Relationships
-GeneToTerm
+| Nodes | Relationships |
+| --- |:---:|
+| Gene | GeneToTerm |
 ### PersonParser
-#### Relationships
-PersonToObservedTerm
-PersonToNonObservedTerm
-PersonToGene
+| Nodes | Relationships |
+| --- |:---:|
+|  | PersonToObservedTerm |
+|  | PersonToNonObservedTerm |
+|  | PersonToGene |
 ### TermParser
-#### Nodes
-Term
-#### Relationships
-TermToTerm
+| Nodes | Relationships |
+| --- |:---:|
+| Term | TermToTerm |
 
 
 
