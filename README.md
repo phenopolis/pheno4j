@@ -78,12 +78,17 @@ cd $NEO4J_HOME/data/databases
 ln -s /generatedGraphOutputFolder/graph.db graph.db 
 
 ```
-1. Start neo4j
+3. Start neo4j
 ```
 cd $NEO4J_HOME/bin
 ./neo4j start
 ```
-2. Create the constraints
+1. Run 'warmup' query
+This query will basically hit the entire graph, the result will be all the data stored on the disk will be loaded into memory.
+```
+//TODO
+```
+4. Create the constraints
 ```
 CREATE CONSTRAINT ON (p:Variant) ASSERT p.variantId IS UNIQUE;
 CREATE CONSTRAINT ON (p:Person) ASSERT p.personId IS UNIQUE;
@@ -92,7 +97,43 @@ CREATE CONSTRAINT ON (p:AnnotatedVariant) ASSERT p.variantId IS UNIQUE;
 CREATE CONSTRAINT ON (p:Term) ASSERT p.termId IS UNIQUE;
 CREATE CONSTRAINT ON (p:geneSymbol) ASSERT p.termId IS UNIQUE;
 ```
-
-
 # Example Cypher Queries
-
+## All Variants for an individual
+```
+MATCH (root:Variant)-[rels:PRESENT_IN]->(child:Person)
+WHERE child.personId ='XXX'
+RETURN count(root.variantId);
+```
+## Individuals who have a particular variant
+```
+MATCH (root:Variant)-[rels*]->(child:Person)
+WHERE root.variantId ='xxx'
+RETURN child.personId;
+```
+## Find Variants shared by a list of Individuals
+```
+WITH ["XXX","yyy"] as persons
+MATCH (p:Person)<-[:PRESENT_IN]-(v:Variant) 
+WHERE p.personId IN persons
+WITH v, count(*) as c, persons
+WHERE c = size(persons)
+RETURN count( v.variantId);
+```
+## Find Variants shared by a list of Individuals, that no one else has
+```
+WITH ["XXX","YYY"] as individuals
+MATCH (p:Person)<-[:PRESENT_IN]-(v:Variant) 
+WHERE p.personId IN individuals
+WITH v, count(*) as c, individuals
+WHERE c = size(individuals)
+with v, individuals
+MATCH (v:Variant)
+where size((v)-[:PRESENT_IN]-()) = size(individuals)
+RETURN v.variantId;
+```
+## Individuals who have a Term
+```
+MATCH (t:Term)<-[tp:HAS_OBSERVED_TERM]-(p:Person)
+WHERE t.termId = 'HP:XXX'
+return p.personId;
+``` 
