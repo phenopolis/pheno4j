@@ -37,11 +37,25 @@ Below is the list of the Parsers, and the Nodes and Relationships that each one 
 | Nodes | Relationships |
 | --- | --- |
 | Term | TermToTerm |
+# Running the neo4j Bulk Csv Import Tool
+```
+bin/neo4j-import   --into /generatedGraphOutputFolder/graph.db --id-type string --bad-tolerance 50000  --skip-bad-relationships true \
+--nodes:Person /folder/Person-header.csv,/folder/Person-mainset_July2016.csv \
+--nodes:Variant /folder/Variant-header.csv,/folder/Variant-mainset_July2016.csv \
+--nodes:AnnotatedGene /folder/AnnotatedGene-header.csv,/folder/AnnotatedGene.csv \
+--nodes:AnnotatedVariant /folder/AnnotatedVariant-header.csv,/folder/AnnotatedVariant.csv \
+--nodes:Term /folder/Term-header.csv,/folder/Term.csv \
+--nodes:Gene /folder/Gene-header.csv,/folder/Gene.csv \
+--relationships:PRESENT_IN /folder/VariantToPerson-header.csv,/folder/VariantToPerson-mainset_July2016.csv \
+--relationships:HAS_ANNOTATION /folder/GeneToAnnotatedGene-header.csv,/folder/GeneToAnnotatedGene.csv \
+--relationships:HAS_ANNOTATION /folder/VariantToAnnotatedVariant-header.csv,/folder/VariantToAnnotatedVariant.csv \
+--relationships:HAS_VARIANT /folder/AnnotatedGeneToVariant-header.csv,/folder/AnnotatedGeneToVariant.csv \
+--relationships:INFLUENCES /folder/GeneToTerm-header.csv,/folder/GeneToTerm.csv \
+--relationships:IS_A /folder/TermToTerm-header.csv,/folder/TermToTerm.csv \
+--relationships:HAS_GENE /folder/PersonToGene-header.csv,/folder/PersonToGene.csv \
+--relationships:HAS_NON_OBSERVED_TERM /folder/PersonToNonObservedTerm-header.csv,/folder/PersonToNonObservedTerm.csv \
+--relationships:HAS_OBSERVED_TERM /folder/PersonToObservedTerm-header.csv,/folder/PersonToObservedTerm.csv > /folder/neo4j-log.txt &
+```
 
-
-
-
-
-Command to load into neo4j
-Example cypher queries
+# Example Cypher Queries
 
