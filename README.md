@@ -13,18 +13,16 @@ Run `mvn clean package`; this will generate graph-db.jar in the /target folder
 # Parsers
 Below is the list of the Parsers, and the Nodes and Relationships that each one is responsible for producing. 
 ### VcfParser
-| Nodes         | Relationships   |
-| ------------- |:---------------:|
-| Person        | VariantToPerson |
-| Variant       |                 |
+| Nodes            | Relationships             |
+| ---------------- |:-------------------------:|
+| Person           | VariantToPerson           |
+| Variant          |                           |
 ### AnnotationParser
-#### Nodes
-AnnotatedGene
-AnnotatedVariant
-#### Relationships
-AnnotatedGeneToVariant
-VariantToAnnotatedVariant
-GeneToAnnotatedGene
+| Nodes            | Relationships             |
+| ---------------- |:-------------------------:|
+| AnnotatedGene    | AnnotatedGeneToVariant    |
+| AnnotatedVariant | VariantToAnnotatedVariant |
+|                  | GeneToAnnotatedGene       |
 ### GeneParser
 #### Nodes
 Gene
