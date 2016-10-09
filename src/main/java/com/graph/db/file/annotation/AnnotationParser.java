@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -25,8 +27,8 @@ import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.output.HeaderGenerator;
 import com.graph.db.file.annotation.output.OutputFileType;
 import com.graph.db.file.annotation.subscriber.AnnotatedGeneSubscriber;
-import com.graph.db.file.annotation.subscriber.GeneToAnnotatedGeneSubscriber;
 import com.graph.db.file.annotation.subscriber.AnnotatedGeneToVariantSubscriber;
+import com.graph.db.file.annotation.subscriber.GeneToAnnotatedGeneSubscriber;
 
 public class AnnotationParser implements Parser {
 	
@@ -39,11 +41,8 @@ public class AnnotationParser implements Parser {
 	
 	private final ExecutorService threadPool;
 	private final EventBus eventBus;
-	private final AnnotatedGeneSubscriber annotatedGeneSubscriber;
-	private final AnnotatedGeneToVariantSubscriber annotatedGeneToVariantSubscriber;
-	private final GenericSubscriber<Object> annotatedVariantSubscriber;
-	private final GenericSubscriber<Object> variantToAnnotatedVariantSubscriber;
-	private final GeneToAnnotatedGeneSubscriber geneToAnnotatedGeneSubscriber;
+
+	private final List<GenericSubscriber<?>> subscribers;
 
 	public AnnotationParser(String inputFolder, String outputFolder) {
 		this.inputFolder = inputFolder;
@@ -53,11 +52,19 @@ public class AnnotationParser implements Parser {
         
 		threadPool = Executors.newFixedThreadPool(10);
 		eventBus = new AsyncEventBus(threadPool);
-        annotatedGeneSubscriber = new AnnotatedGeneSubscriber(outputFolder, OutputFileType.ANNOTATED_GENE);
-        annotatedGeneToVariantSubscriber = new AnnotatedGeneToVariantSubscriber(outputFolder, OutputFileType.ANNOTATED_GENE_TO_VARIANT);
-        annotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, OutputFileType.ANNOTATED_VARIANT);
-        variantToAnnotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, OutputFileType.VARIANT_TO_ANNOTATED_VARIANT);
-        geneToAnnotatedGeneSubscriber = new GeneToAnnotatedGeneSubscriber(outputFolder, OutputFileType.GENE_TO_ANNOTATED_GENE);
+		
+		subscribers = createSubscribers(outputFolder);
+	}
+
+	private List<GenericSubscriber<? extends Object>> createSubscribers(String outputFolder) {
+		AnnotatedGeneSubscriber annotatedGeneSubscriber = new AnnotatedGeneSubscriber(outputFolder, OutputFileType.ANNOTATED_GENE);
+        AnnotatedGeneToVariantSubscriber annotatedGeneToVariantSubscriber = new AnnotatedGeneToVariantSubscriber(outputFolder, OutputFileType.ANNOTATED_GENE_TO_VARIANT);
+        GenericSubscriber<Object> annotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, OutputFileType.ANNOTATED_VARIANT);
+        GenericSubscriber<Object> variantToAnnotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, OutputFileType.VARIANT_TO_ANNOTATED_VARIANT);
+        GeneToAnnotatedGeneSubscriber geneToAnnotatedGeneSubscriber = new GeneToAnnotatedGeneSubscriber(outputFolder, OutputFileType.GENE_TO_ANNOTATED_GENE);
+        
+		return Arrays.asList(annotatedGeneSubscriber, annotatedGeneToVariantSubscriber,
+				annotatedVariantSubscriber, variantToAnnotatedVariantSubscriber, geneToAnnotatedGeneSubscriber);
 	}
 
 	private Gson createGson() {
@@ -96,11 +103,7 @@ public class AnnotationParser implements Parser {
 	}
 
 	private void registerSubscribers() {
-		eventBus.register(annotatedGeneSubscriber);
-		eventBus.register(annotatedGeneToVariantSubscriber);
-		eventBus.register(annotatedVariantSubscriber);
-		eventBus.register(variantToAnnotatedVariantSubscriber);
-		eventBus.register(geneToAnnotatedGeneSubscriber);
+		subscribers.forEach(subscriber -> eventBus.register(subscriber));
 	}
 
 	private void shutDownThreadPool() {
@@ -113,11 +116,7 @@ public class AnnotationParser implements Parser {
 	}
 	
 	private void closeSubscribers() {
-		annotatedGeneSubscriber.close();
-		annotatedGeneToVariantSubscriber.close();
-		annotatedVariantSubscriber.close();
-		variantToAnnotatedVariantSubscriber.close();
-		geneToAnnotatedGeneSubscriber.close();
+		subscribers.forEach(subscriber -> subscriber.close());
 	}
 
 	private void generateHeaderFiles() {
