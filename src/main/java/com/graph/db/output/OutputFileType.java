@@ -1,14 +1,14 @@
-package com.graph.db.file.annotation.output;
+package com.graph.db.output;
 
 import com.graph.db.file.annotation.domain.AnnotatedVariant;
-import com.graph.db.file.annotation.domain.GeneToAnnotatedGene;
+import com.graph.db.file.annotation.domain.GeneSymbolToGeneId;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.file.gene.domain.Gene;
-import com.graph.db.file.gene.domain.GeneToTerm;
+import com.graph.db.file.gene.domain.GeneSymbolToTerm;
 
 public enum OutputFileType implements OutputFile {
 
-	GENE("Gene", Gene.class) {
+	GENE_SYMBOL("GeneSymbol", Gene.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {
@@ -16,7 +16,7 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
-	GENE_TO_TERM("GeneToTerm", GeneToTerm.class){
+	GENE_SYMBOL_TO_TERM("GeneSymbolToTerm", GeneSymbolToTerm.class){
 		@Override
 		public String[] getHeader() {
 			return new String[] {
@@ -26,26 +26,25 @@ public enum OutputFileType implements OutputFile {
 		}
 	},
 	
-	GENE_TO_ANNOTATED_GENE("GeneToAnnotatedGene", GeneToAnnotatedGene.class) {
+	GENE_SYMBOL_TO_GENE_ID("GeneSymbolToGeneId", GeneSymbolToGeneId.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {
 					"geneSymbol",
-					"annotatedGeneSymbol"
+					"geneId"
 					};
 		}
 	},
 	
-	ANNOTATED_GENE("AnnotatedGene", TranscriptConsequence.class) {
+	GENE_ID("GeneId", TranscriptConsequence.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {
-					"gene_id",
-					"gene_symbol"
+					"gene_id"
 					};
 		}
 	},
-	ANNOTATED_GENE_TO_VARIANT("AnnotatedGeneToVariant", TranscriptConsequence.class) {
+	GENE_ID_TO_VARIANT("GeneIdToVariant", TranscriptConsequence.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {

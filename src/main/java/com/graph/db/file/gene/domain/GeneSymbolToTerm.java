@@ -3,12 +3,12 @@ package com.graph.db.file.gene.domain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class GeneToTerm {
+public class GeneSymbolToTerm {
 	
 	private final String geneSymbol;
 	private final String termId;
 	
-	public GeneToTerm(String geneSymbol, String termId) {
+	public GeneSymbolToTerm(String geneSymbol, String termId) {
 		this.geneSymbol = geneSymbol;
 		this.termId = termId;
 	}

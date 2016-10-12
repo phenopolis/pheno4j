@@ -1,4 +1,4 @@
-package com.graph.db.file.annotation.output;
+package com.graph.db.output;
 
 public interface OutputFile {
 

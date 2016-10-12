@@ -1,9 +1,7 @@
-package com.graph.db.file.annotation.output;
+package com.graph.db.output;
 
 import static com.graph.db.util.Constants.COLON;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,13 +9,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.domain.Exac;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.util.Constants;
+import com.graph.db.util.FileUtil;
 
 public class HeaderGenerator {
 	
@@ -27,7 +25,7 @@ public class HeaderGenerator {
 			joinedHeaders = relabelIdColumns(outputFileType, joinedHeaders);
 			joinedHeaders = relabelNonStringTypes(joinedHeaders);
 			
-			writeOutHeader(outputFolder, outputFileType, joinedHeaders);
+			FileUtil.writeOutCsvHeader(outputFolder, outputFileType.getFileTag(), Arrays.asList(joinedHeaders));
 		}
 	}
 
@@ -40,22 +38,22 @@ public class HeaderGenerator {
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":START_ID(Variant)");
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":END_ID(AnnotatedVariant)");
 			break;
-		case ANNOTATED_GENE:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", "geneId:ID(AnnotatedGene)");
+		case GENE_ID:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", "geneId:ID(GeneId)");
 			break;
-		case ANNOTATED_GENE_TO_VARIANT:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", ":START_ID(AnnotatedGene)");
+		case GENE_ID_TO_VARIANT:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", ":START_ID(GeneId)");
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":END_ID(Variant)");
 			break;
-		case GENE_TO_ANNOTATED_GENE:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "geneSymbol", ":START_ID(Gene)");
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "annotatedGeneSymbol", ":END_ID(AnnotatedGene)");
+		case GENE_SYMBOL_TO_GENE_ID:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "geneSymbol", ":START_ID(GeneSymbol)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "geneId", ":END_ID(GeneId)");
 			break;
-		case GENE:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene", "geneSymbol:ID(Gene)");
+		case GENE_SYMBOL:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene", "geneSymbol:ID(GeneSymbol)");
 			break;
-		case GENE_TO_TERM:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "geneSymbol", ":START_ID(Gene)");
+		case GENE_SYMBOL_TO_TERM:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "geneSymbol", ":START_ID(GeneSymbol)");
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "termId", ":END_ID(Term)");
 			break;
 		default:
@@ -87,15 +85,6 @@ public class HeaderGenerator {
 			}
 		}
 		return nameToGraphType;
-	}
-	
-	private void writeOutHeader(String outputFolder, OutputFileType outputFileType, String joinedHeaders) {
-		String pathname = outputFolder + File.separator + outputFileType.getFileTag() + Constants.HYPHEN + "header.csv";
-		try {
-			FileUtils.writeStringToFile(new File(pathname), joinedHeaders);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 }

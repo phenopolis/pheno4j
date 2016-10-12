@@ -34,6 +34,14 @@ import com.graph.db.Parser;
  * Reads the compressed file
  * Processes each row in a fork join pool
  */
+/**
+ * Nodes
+ * - Person
+ * - Variant
+ * 
+ * Relationships
+ * - VariantToPerson
+ */
 public class VcfParser implements Parser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(VcfParser.class);
@@ -82,7 +90,7 @@ public class VcfParser implements Parser {
 						}
 					}
 					LOGGER.info("Found header at line: {}", reader.getLineNumber());
-					writeOutCsvFile(outputFolder, "Person" + fileTag + ".csv", indexToPerson.values());
+					writeOutCsvFile(outputFolder, getClass(),  "Person" + fileTag, indexToPerson.values());
 					found = true;
 					continue;
 				}

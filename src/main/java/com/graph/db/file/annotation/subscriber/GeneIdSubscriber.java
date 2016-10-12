@@ -8,12 +8,12 @@ import com.google.common.eventbus.Subscribe;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
-import com.graph.db.file.annotation.output.OutputFileType;
+import com.graph.db.output.OutputFileType;
 
-public class AnnotatedGeneSubscriber extends GenericSubscriber<AnnotatedVariant> {
+public class GeneIdSubscriber extends GenericSubscriber<AnnotatedVariant> {
 	
-	public AnnotatedGeneSubscriber(String outputFolder, OutputFileType outputFileType) {
-		super(outputFolder, outputFileType);
+	public GeneIdSubscriber(String outputFolder, Class<?> parserClass, OutputFileType outputFileType) {
+		super(outputFolder, parserClass, outputFileType);
 	}
 
 	private final Set<TranscriptConsequence> genes = ConcurrentHashMap.newKeySet();

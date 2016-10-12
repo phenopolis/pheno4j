@@ -20,10 +20,20 @@ public final class FileUtil {
     
 	private FileUtil() {}
 	
-	public static void writeOutCsvFile(String outputFolder, String fileName, Collection<String> collection) {
-		LOGGER.info("Writing out: {}", fileName);
+	public static void writeOutCsvHeader(String outputFolder, String fileName, Collection<String> collection) {
+		String pathname = outputFolder + File.separator + fileName + "-header.csv";
+		writeFile(collection, pathname);
+	}
+	
+	public static void writeOutCsvFile(String outputFolder, Class<?> c, String fileName, Collection<String> collection) {
+		String pathname = outputFolder + File.separator + fileName + Constants.HYPHEN + c.getSimpleName() + ".csv";
+		writeFile(collection, pathname);
+	}
+	
+	private static void writeFile(Collection<String> collection, String pathname) {
+		LOGGER.info("Writing out: {}", pathname);
 		try {
-			FileUtils.writeLines(new File(outputFolder + File.separator + fileName), collection);
+			FileUtils.writeLines(new File(pathname), collection);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

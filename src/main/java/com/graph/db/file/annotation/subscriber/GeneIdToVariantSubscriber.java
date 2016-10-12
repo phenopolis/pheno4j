@@ -5,12 +5,12 @@ import java.io.IOException;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
-import com.graph.db.file.annotation.output.OutputFileType;
+import com.graph.db.output.OutputFileType;
 
-public class AnnotatedGeneToVariantSubscriber extends GenericSubscriber<AnnotatedVariant> {
+public class GeneIdToVariantSubscriber extends GenericSubscriber<AnnotatedVariant> {
 	
-	public AnnotatedGeneToVariantSubscriber(String outputFolder, OutputFileType outputFileType) {
-		super(outputFolder, outputFileType);
+	public GeneIdToVariantSubscriber(String outputFolder, Class<?> parserClass, OutputFileType outputFileType) {
+		super(outputFolder, parserClass, outputFileType);
 	}
 
 	@Override

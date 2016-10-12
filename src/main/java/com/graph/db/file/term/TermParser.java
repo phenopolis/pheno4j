@@ -19,6 +19,13 @@ import com.graph.db.Parser;
 import com.graph.db.file.term.domain.RawTerm;
 import com.graph.db.util.FileUtil;
 
+/**
+ * Nodes
+ * - Term
+ * 
+ * Relationships
+ * - TermToTerm
+ */
 public class TermParser implements Parser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TermParser.class);
@@ -105,8 +112,8 @@ public class TermParser implements Parser {
 			String csvString = rawTerm.getTermId() + COMMA + StringUtils.wrap(rawTerm.getName(), DOUBLE_QUOTE);
 			csvStrings.add(csvString);
 		}
-		FileUtil.writeOutCsvFile(outputFolder, "Term-header.csv", Arrays.asList("termId:ID(Term),name"));
-		FileUtil.writeOutCsvFile(outputFolder, "Term.csv", csvStrings);
+		FileUtil.writeOutCsvHeader(outputFolder, "Term", Arrays.asList("termId:ID(Term),name"));
+		FileUtil.writeOutCsvFile(outputFolder, getClass(), "Term", csvStrings);
 	}
 	
 	private void writeOutTermRelationships(List<RawTerm> rawTerms) {
@@ -117,8 +124,8 @@ public class TermParser implements Parser {
 				csvStrings.add(csvString);
 			}
 		}
-		FileUtil.writeOutCsvFile(outputFolder, "TermToTerm-header.csv", Arrays.asList(":START_ID(Term),:END_ID(Term)"));
-		FileUtil.writeOutCsvFile(outputFolder, "TermToTerm.csv", csvStrings);
+		FileUtil.writeOutCsvHeader(outputFolder, "TermToTerm", Arrays.asList(":START_ID(Term),:END_ID(Term)"));
+		FileUtil.writeOutCsvFile(outputFolder, getClass(), "TermToTerm", csvStrings);
 	}
 	
 	public static void main(String[] args) {

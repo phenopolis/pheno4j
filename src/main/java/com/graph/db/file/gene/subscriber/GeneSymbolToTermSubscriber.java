@@ -6,14 +6,14 @@ import org.apache.commons.collections.CollectionUtils;
 
 import com.google.common.eventbus.Subscribe;
 import com.graph.db.file.GenericSubscriber;
-import com.graph.db.file.annotation.output.OutputFileType;
 import com.graph.db.file.gene.domain.Gene;
-import com.graph.db.file.gene.domain.GeneToTerm;
+import com.graph.db.file.gene.domain.GeneSymbolToTerm;
+import com.graph.db.output.OutputFileType;
 
-public class GeneToTermSubscriber extends GenericSubscriber<Gene> {
+public class GeneSymbolToTermSubscriber extends GenericSubscriber<Gene> {
 
-    public GeneToTermSubscriber(String outputFolder, OutputFileType outputFileType) {
-		super(outputFolder, outputFileType);
+    public GeneSymbolToTermSubscriber(String outputFolder, Class<?> parserClass, OutputFileType outputFileType) {
+		super(outputFolder, parserClass, outputFileType);
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class GeneToTermSubscriber extends GenericSubscriber<Gene> {
     	try {
     		if (CollectionUtils.isNotEmpty(gene.getHpo())) {
     			for (String term : gene.getHpo()) {
-    				beanWriter.write(new GeneToTerm(gene.getGene(), term));
+    				beanWriter.write(new GeneSymbolToTerm(gene.getGene(), term));
     			}
     		}
     	} catch (IOException e) {

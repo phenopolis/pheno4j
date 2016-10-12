@@ -4,25 +4,29 @@ import static com.graph.db.util.Constants.COMMA;
 import static com.graph.db.util.Constants.DOUBLE_QUOTE;
 import static com.graph.db.util.Constants.SEMI_COLON;
 import static com.graph.db.util.FileUtil.getLines;
+import static com.graph.db.util.FileUtil.writeOutCsvFile;
+import static com.graph.db.util.FileUtil.writeOutCsvHeader;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.graph.db.Parser;
-import com.graph.db.util.FileUtil;
+import com.graph.db.output.OutputFileType;
 
 /**
- * Creates following files:
+ * Nodes
  * 
- * Person to Observed Term
- * Person to Non Observed Term
- * Person to Gene
+ * Relationships
+ * - PersonToObservedTerm
+ * - PersonToNonObservedTerm
+ * - PersonToGeneSymbol
  */
 public class PersonParser implements Parser {
 	
@@ -42,7 +46,12 @@ public class PersonParser implements Parser {
 		
 		Set<String> personToObservedTerm = new HashSet<>();
 		Set<String> personToNonObservedTerm = new HashSet<>();
-		Set<String> personToGene = new HashSet<>();
+		Set<String> personToGeneSymbol = new HashSet<>();
+		Set<String> geneSymbols = new HashSet<>();
+		
+		BiFunction<String, String, String> returnPersonIdAndValue = (personId, value) -> (StringUtils.join(Arrays.asList(personId, value), COMMA));
+		BiFunction<String, String, String> returnValue = (personId, value) -> (value);
+		
 		for (String line : lines) {
 			String[] fields = line.split(COMMA);
 			String personId = StringUtils.wrap(fields[0], DOUBLE_QUOTE);
@@ -50,26 +59,34 @@ public class PersonParser implements Parser {
 			String nonObservedTermsField = fields[3];
 			String genesField = fields[4];
 			
-			splitAndAddToSet(personToObservedTerm, personId, observedTermsField);
-			splitAndAddToSet(personToNonObservedTerm, personId, nonObservedTermsField);
-			splitAndAddToSet(personToGene, personId, genesField);
+			splitAndAddToSet(personToObservedTerm, personId, observedTermsField, returnPersonIdAndValue);
+			splitAndAddToSet(personToNonObservedTerm, personId, nonObservedTermsField, returnPersonIdAndValue);
+			splitAndAddToSet(personToGeneSymbol, personId, genesField, returnPersonIdAndValue);
+			splitAndAddToSet(geneSymbols, personId, genesField, returnValue);
 		}
+		
 		writeOutHeaderAndRows("PersonToObservedTerm", "Term", personToObservedTerm);
 		writeOutHeaderAndRows("PersonToNonObservedTerm", "Term", personToNonObservedTerm);
-		writeOutHeaderAndRows("PersonToGene", "Gene", personToGene);
+		writeOutHeaderAndRows("PersonToGeneSymbol", "GeneSymbol", personToGeneSymbol);
+		writeOutGeneSymbolFile(geneSymbols);
 	}
 
-	private void splitAndAddToSet(Set<String> map, String personId, String field) {
+	//TODO double quote is causing problems
+	private void splitAndAddToSet(Set<String> set, String personId, String field, BiFunction<String, String, String> function) {
 		String[] fields = StringUtils.split(field, SEMI_COLON);
 		for (String cell : fields) {
 			String wrappedCell = StringUtils.wrap(cell, DOUBLE_QUOTE);
-			map.add(StringUtils.join(Arrays.asList(personId, wrappedCell), COMMA));
+			set.add(function.apply(personId, wrappedCell));
 		}
 	}
 	
 	private void writeOutHeaderAndRows(String fileTag, String targetEntity, Set<String> set) {
-		FileUtil.writeOutCsvFile(outputFolder, fileTag + "-header.csv", Arrays.asList(":START_ID(Person),:END_ID(" + targetEntity + ")"));
-		FileUtil.writeOutCsvFile(outputFolder, fileTag + ".csv", set);
+		writeOutCsvHeader(outputFolder, fileTag, Arrays.asList(":START_ID(Person),:END_ID(" + targetEntity + ")"));
+		writeOutCsvFile(outputFolder, getClass(), fileTag, set);
+	}
+	
+	private void writeOutGeneSymbolFile(Set<String> geneSymbols) {
+		writeOutCsvFile(outputFolder, getClass(), OutputFileType.GENE_SYMBOL.getFileTag(), geneSymbols);
 	}
 
 	public static void main(String[] args) {

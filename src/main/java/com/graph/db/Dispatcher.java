@@ -5,10 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.graph.db.file.annotation.AnnotationParser;
-import com.graph.db.file.gene.GeneParser;
+import com.graph.db.file.gene.GeneSymbolParser;
 import com.graph.db.file.person.PersonParser;
 import com.graph.db.file.term.TermParser;
 import com.graph.db.file.vcf.VcfParser;
+import com.graph.db.output.DuplicateRemover;
 
 public class Dispatcher {
 
@@ -16,9 +17,10 @@ public class Dispatcher {
 	static {
 		ENTRY_POINTS.put("VcfParser", VcfParser.class);
 		ENTRY_POINTS.put("AnnotationParser", AnnotationParser.class);
-		ENTRY_POINTS.put("GeneParser", GeneParser.class);
+		ENTRY_POINTS.put("GeneSymbolParser", GeneSymbolParser.class);
 		ENTRY_POINTS.put("PersonParser", PersonParser.class);
 		ENTRY_POINTS.put("TermParser", TermParser.class);
+		ENTRY_POINTS.put("DuplicateRemover", DuplicateRemover.class);
 	}
 
 	public static void main(final String[] args) throws Exception {

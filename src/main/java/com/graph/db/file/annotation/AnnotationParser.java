@@ -24,12 +24,23 @@ import com.google.gson.GsonBuilder;
 import com.graph.db.Parser;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.AnnotatedVariant;
-import com.graph.db.file.annotation.output.HeaderGenerator;
-import com.graph.db.file.annotation.output.OutputFileType;
-import com.graph.db.file.annotation.subscriber.AnnotatedGeneSubscriber;
-import com.graph.db.file.annotation.subscriber.AnnotatedGeneToVariantSubscriber;
-import com.graph.db.file.annotation.subscriber.GeneToAnnotatedGeneSubscriber;
+import com.graph.db.file.annotation.subscriber.GeneIdSubscriber;
+import com.graph.db.file.annotation.subscriber.GeneIdToVariantSubscriber;
+import com.graph.db.file.annotation.subscriber.GeneSymbolFromAnnotationSubscriber;
+import com.graph.db.file.annotation.subscriber.GeneSymbolToGeneIdSubscriber;
+import com.graph.db.output.HeaderGenerator;
+import com.graph.db.output.OutputFileType;
 
+/**
+ * Nodes
+ * - AnnotatedGene
+ * - AnnotatedVariant
+ * - GeneToAnnotatedGene
+ * 
+ * Relationships
+ * - AnnotatedGeneToVariant
+ * - VariantToAnnotatedVariant
+ */
 public class AnnotationParser implements Parser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationParser.class);
@@ -55,24 +66,25 @@ public class AnnotationParser implements Parser {
 		
 		subscribers = createSubscribers(outputFolder);
 	}
-
-	private List<GenericSubscriber<? extends Object>> createSubscribers(String outputFolder) {
-		AnnotatedGeneSubscriber annotatedGeneSubscriber = new AnnotatedGeneSubscriber(outputFolder, OutputFileType.ANNOTATED_GENE);
-        AnnotatedGeneToVariantSubscriber annotatedGeneToVariantSubscriber = new AnnotatedGeneToVariantSubscriber(outputFolder, OutputFileType.ANNOTATED_GENE_TO_VARIANT);
-        GenericSubscriber<Object> annotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, OutputFileType.ANNOTATED_VARIANT);
-        GenericSubscriber<Object> variantToAnnotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, OutputFileType.VARIANT_TO_ANNOTATED_VARIANT);
-        GeneToAnnotatedGeneSubscriber geneToAnnotatedGeneSubscriber = new GeneToAnnotatedGeneSubscriber(outputFolder, OutputFileType.GENE_TO_ANNOTATED_GENE);
-        
-		return Arrays.asList(annotatedGeneSubscriber, annotatedGeneToVariantSubscriber,
-				annotatedVariantSubscriber, variantToAnnotatedVariantSubscriber, geneToAnnotatedGeneSubscriber);
-	}
-
+	
 	private Gson createGson() {
 		GsonBuilder b = new GsonBuilder();
         b.registerTypeAdapter(AnnotatedVariant.class, new CustomJsonDeserializer());
         return b.create();
 	}
-	
+
+	private List<GenericSubscriber<? extends Object>> createSubscribers(String outputFolder) {
+		GeneIdSubscriber geneIdSubscriber = new GeneIdSubscriber(outputFolder, getClass(), OutputFileType.GENE_ID);
+        GeneIdToVariantSubscriber geneIdToVariantSubscriber = new GeneIdToVariantSubscriber(outputFolder, getClass(), OutputFileType.GENE_ID_TO_VARIANT);
+        GenericSubscriber<Object> annotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, getClass(), OutputFileType.ANNOTATED_VARIANT);
+        GenericSubscriber<Object> variantToAnnotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, getClass(), OutputFileType.VARIANT_TO_ANNOTATED_VARIANT);
+        GeneSymbolToGeneIdSubscriber geneSymbolToGeneIdSubscriber = new GeneSymbolToGeneIdSubscriber(outputFolder, getClass(), OutputFileType.GENE_SYMBOL_TO_GENE_ID);
+        GeneSymbolFromAnnotationSubscriber geneSymbolFromAnnotationSubscriber = new GeneSymbolFromAnnotationSubscriber(outputFolder, getClass(), OutputFileType.GENE_SYMBOL);
+        
+		return Arrays.asList(geneIdSubscriber, geneIdToVariantSubscriber, annotatedVariantSubscriber,
+				variantToAnnotatedVariantSubscriber, geneSymbolToGeneIdSubscriber, geneSymbolFromAnnotationSubscriber);
+	}
+
 	@Override
 	public void execute() {
 		File[] jsonFiles = getAllJsonFiles(inputFolder);
@@ -121,7 +133,7 @@ public class AnnotationParser implements Parser {
 
 	private void generateHeaderFiles() {
 		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.ANNOTATED_VARIANT, OutputFileType.VARIANT_TO_ANNOTATED_VARIANT,
-				OutputFileType.ANNOTATED_GENE, OutputFileType.ANNOTATED_GENE_TO_VARIANT, OutputFileType.GENE_TO_ANNOTATED_GENE);
+				OutputFileType.GENE_ID, OutputFileType.GENE_ID_TO_VARIANT, OutputFileType.GENE_SYMBOL_TO_GENE_ID);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
 

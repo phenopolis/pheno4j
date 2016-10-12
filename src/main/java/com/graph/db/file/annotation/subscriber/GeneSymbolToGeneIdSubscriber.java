@@ -6,30 +6,29 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.AnnotatedVariant;
-import com.graph.db.file.annotation.domain.GeneToAnnotatedGene;
+import com.graph.db.file.annotation.domain.GeneSymbolToGeneId;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
-import com.graph.db.file.annotation.output.OutputFileType;
+import com.graph.db.output.OutputFileType;
 
-public class GeneToAnnotatedGeneSubscriber extends GenericSubscriber<AnnotatedVariant> {
+public class GeneSymbolToGeneIdSubscriber extends GenericSubscriber<AnnotatedVariant> {
 	
-	private final Set<GeneToAnnotatedGene> set = ConcurrentHashMap.newKeySet();
+	private final Set<GeneSymbolToGeneId> set = ConcurrentHashMap.newKeySet();
 
-	public GeneToAnnotatedGeneSubscriber(String outputFolder, OutputFileType outputFileType) {
-		super(outputFolder, outputFileType);
+	public GeneSymbolToGeneIdSubscriber(String outputFolder, Class<?> parserClass, OutputFileType outputFileType) {
+		super(outputFolder, parserClass, outputFileType);
 	}
 
 	@Override
 	public void processAnnotation(AnnotatedVariant annotatedVariant) {
     	for (TranscriptConsequence transcriptConsequence : annotatedVariant.getTranscript_consequences()) {
-			String gene_symbol = transcriptConsequence.getGene_symbol();
-			set.add(new GeneToAnnotatedGene(gene_symbol, gene_symbol));
+			set.add(new GeneSymbolToGeneId(transcriptConsequence.getGene_symbol(), transcriptConsequence.getGene_id()));
 		}
 	}
 	
 	@Override
 	public void close() {
 		try {
-			for (GeneToAnnotatedGene geneToAnnotatedGenetranscriptConsequence : set) {
+			for (GeneSymbolToGeneId geneToAnnotatedGenetranscriptConsequence : set) {
 				beanWriter.write(geneToAnnotatedGenetranscriptConsequence);
 			}
 		} catch (IOException e) {

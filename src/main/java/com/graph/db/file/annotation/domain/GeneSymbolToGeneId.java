@@ -5,44 +5,44 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class GeneToAnnotatedGene {
+public class GeneSymbolToGeneId {
 	
 	private final String geneSymbol;
-	private final String annotatedGeneSymbol;
+	private final String geneId;
 	
-	public GeneToAnnotatedGene(String geneSymbol, String annotatedGeneSymbol) {
+	public GeneSymbolToGeneId(String geneSymbol, String geneId) {
 		this.geneSymbol = geneSymbol;
-		this.annotatedGeneSymbol = annotatedGeneSymbol;
+		this.geneId = geneId;
 	}
 	
 	public String getGeneSymbol() {
 		return geneSymbol;
 	}
 	
-	public String getAnnotatedGeneSymbol() {
-		return annotatedGeneSymbol;
+	public String getGeneId() {
+		return geneId;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
 				.append(this.geneSymbol)
-				.append(this.annotatedGeneSymbol)
+				.append(this.geneId)
 				.toHashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if ((obj instanceof GeneToAnnotatedGene) == false) {
+		if ((obj instanceof GeneSymbolToGeneId) == false) {
 			return false;
 		}
 		if (this == obj) {
 			return true;
 		}
-		final GeneToAnnotatedGene otherObject = (GeneToAnnotatedGene) obj;
+		final GeneSymbolToGeneId otherObject = (GeneSymbolToGeneId) obj;
 		return new EqualsBuilder()
 				.append(this.geneSymbol, otherObject.geneSymbol)
-				.append(this.annotatedGeneSymbol, otherObject.annotatedGeneSymbol)
+				.append(this.geneId, otherObject.geneId)
 				.isEquals();
 	}
 
