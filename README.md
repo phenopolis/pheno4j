@@ -146,3 +146,9 @@ WITH count(*) AS count, s
 WHERE count > 1
 RETURN s.geneSymbol, count;
 ```
+## Fine Gene Symbols that have no Term
+```
+MATCH (s:GeneSymbol)
+WHERE NOT (s)-[:INFLUENCES]->()
+return s.geneSymbol;
+```
