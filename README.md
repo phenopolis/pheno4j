@@ -26,25 +26,25 @@ java -jar graph-db.jar AnnotationParser $inputFolderWithJsonFiles $outputFolder
 ```
 | Nodes | Relationships |
 | --- | --- |
-| AnnotatedGene | AnnotatedGeneToVariant |
-| AnnotatedVariant | VariantToAnnotatedVariant |
-|  | GeneToAnnotatedGene |
+| GeneId | GeneIdToVariant |
+| GeneSymbol | VariantToAnnotatedVariant |
+| AnnotatedVariant | GeneSymbolToGeneId |
 ### GeneParser
 ```
 java -jar graph-db.jar GeneParser $geneFile $outputFolder
 ```
 | Nodes | Relationships |
 | --- | --- |
-| Gene | GeneToTerm |
+| GeneSymbol | GeneSymbolToTerm |
 ### PersonParser
 ```
 java -jar graph-db.jar PersonParser $personFile $outputFolder
 ```
 | Nodes | Relationships |
 | --- | --- |
-|  | PersonToObservedTerm |
+| GeneSymbol | PersonToObservedTerm |
 |  | PersonToNonObservedTerm |
-|  | PersonToGene |
+|  | PersonToGeneSymbol |
 ### TermParser
 ```
 java -jar graph-db.jar TermParser $termFile $outputFolder
