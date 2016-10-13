@@ -138,4 +138,11 @@ RETURN v.variantId;
 MATCH (t:Term)<-[tp:HAS_OBSERVED_TERM]-(p:Person)
 WHERE t.termId = 'HP:XXX'
 return p.personId;
-``` 
+```
+## Find Gene Symbols that have multiple Gene Ids
+```
+MATCH (s:GeneSymbol)-[:HAS_GENE_ID]->(i:GeneId)
+WITH count(*) AS count, s
+WHERE count > 1
+RETURN s.geneSymbol, count;
+```
