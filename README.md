@@ -86,7 +86,9 @@ cd $NEO4J_HOME/bin
 1. Run 'warmup' query
 This query will basically hit the entire graph, the result will be all the data stored on the disk will be loaded into memory.
 ```
-//TODO
+MATCH (a)-[b]-(c)
+with count(b) as count
+RETURN count;
 ```
 4. Create the constraints
 ```
