@@ -55,22 +55,22 @@ java -jar graph-db.jar TermParser $termFile $outputFolder
 # Running the neo4j Bulk Csv Import Tool
 1. generate the database using the csv's
 ```
-bin/neo4j-import   --into /generatedGraphOutputFolder/graph.db --id-type string --bad-tolerance 50000  --skip-bad-relationships true \
+bin/neo4j-import   --into /generatedGraphOutputFolder/graph.db --id-type string --bad-tolerance 50000  --skip-bad-relationships true --skip-duplicate-nodes true \
+--nodes:AnnotatedVariant /folder/AnnotatedVariant-header.csv,/folder/AnnotatedVariant-AnnotationParser.csv \
+--nodes:GeneSymbol /folder/GeneSymbol-header.csv,/folder/GeneSymbol.csv \
+--nodes:GeneId /folder/GeneId-header.csv,/folder/GeneId-AnnotationParser.csv \
 --nodes:Person /folder/Person-header.csv,/folder/Person-mainset_July2016.csv \
+--nodes:Term /folder/Term-header.csv,/folder/Term-TermParser.csv \
 --nodes:Variant /folder/Variant-header.csv,/folder/Variant-mainset_July2016.csv \
---nodes:AnnotatedGene /folder/AnnotatedGene-header.csv,/folder/AnnotatedGene.csv \
---nodes:AnnotatedVariant /folder/AnnotatedVariant-header.csv,/folder/AnnotatedVariant.csv \
---nodes:Term /folder/Term-header.csv,/folder/Term.csv \
---nodes:Gene /folder/Gene-header.csv,/folder/Gene.csv \
---relationships:PRESENT_IN /folder/VariantToPerson-header.csv,/folder/VariantToPerson-mainset_July2016.csv \
---relationships:HAS_ANNOTATION /folder/GeneToAnnotatedGene-header.csv,/folder/GeneToAnnotatedGene.csv \
---relationships:HAS_ANNOTATION /folder/VariantToAnnotatedVariant-header.csv,/folder/VariantToAnnotatedVariant.csv \
---relationships:HAS_VARIANT /folder/AnnotatedGeneToVariant-header.csv,/folder/AnnotatedGeneToVariant.csv \
---relationships:INFLUENCES /folder/GeneToTerm-header.csv,/folder/GeneToTerm.csv \
---relationships:IS_A /folder/TermToTerm-header.csv,/folder/TermToTerm.csv \
---relationships:HAS_GENE /folder/PersonToGene-header.csv,/folder/PersonToGene.csv \
---relationships:HAS_NON_OBSERVED_TERM /folder/PersonToNonObservedTerm-header.csv,/folder/PersonToNonObservedTerm.csv \
---relationships:HAS_OBSERVED_TERM /folder/PersonToObservedTerm-header.csv,/folder/PersonToObservedTerm.csv > /folder/neo4j-log.txt &
+--relationships:HAS_VARIANT /folder/GeneIdToVariant-header.csv,/folder/GeneIdToVariant-AnnotationParser.csv \
+--relationships:HAS_GENE_ID /folder/GeneSymbolToGeneId-header.csv,/folder/GeneSymbolToGeneId-AnnotationParser.csv \
+--relationships:INFLUENCES /folder/GeneSymbolToTerm-header.csv,/folder/GeneSymbolToTerm-GeneSymbolParser.csv \
+--relationships:HAS_GENE_SYMBOL /folder/PersonToGeneSymbol-header.csv,/folder/PersonToGeneSymbol-PersonParser.csv \
+--relationships:HAS_NON_OBSERVED_TERM /folder/PersonToNonObservedTerm-header.csv,/folder/PersonToNonObservedTerm-PersonParser.csv \
+--relationships:HAS_OBSERVED_TERM /folder/PersonToObservedTerm-header.csv,/folder/PersonToObservedTerm-PersonParser.csv \
+--relationships:IS_A /folder/TermToTerm-header.csv,/folder/TermToTerm-TermParser.csv \
+--relationships:HAS_ANNOTATION /folder/VariantToAnnotatedVariant-header.csv,/folder/VariantToAnnotatedVariant-AnnotationParser.csv \
+--relationships:PRESENT_IN /folder/VariantToPerson-header.csv,/folder/VariantToPerson-mainset_July2016.csv > /folder/neo4j-log.txt &
 ```
 2. Create the symlink to the generated graph
 ```
@@ -92,10 +92,10 @@ This query will basically hit the entire graph, the result will be all the data 
 ```
 CREATE CONSTRAINT ON (p:Variant) ASSERT p.variantId IS UNIQUE;
 CREATE CONSTRAINT ON (p:Person) ASSERT p.personId IS UNIQUE;
-CREATE CONSTRAINT ON (p:AnnotatedGene) ASSERT p.geneId IS UNIQUE;
+CREATE CONSTRAINT ON (p:GeneSymbol) ASSERT p.geneSymbol IS UNIQUE;
 CREATE CONSTRAINT ON (p:AnnotatedVariant) ASSERT p.variantId IS UNIQUE;
 CREATE CONSTRAINT ON (p:Term) ASSERT p.termId IS UNIQUE;
-CREATE CONSTRAINT ON (p:geneSymbol) ASSERT p.termId IS UNIQUE;
+CREATE CONSTRAINT ON (p:GeneId) ASSERT p.geneId IS UNIQUE;
 ```
 # Example Cypher Queries
 ## All Variants for an individual
