@@ -71,15 +71,17 @@ public class HeaderGenerator {
 		return joinedHeaders;
 	}
 	
-	//currently only handles ints everything else will be a string
 	private Map<String, String> createMapFromJavaTypeToGraphType() {
 		Map<String, String> nameToGraphType = new HashMap<>();
 		for (Class<?> c : Arrays.asList(AnnotatedVariant.class, Exac.class, TranscriptConsequence.class)) {
 			for (Field field : c.getDeclaredFields()) {
 				String name = field.getName();
-				switch(field.getType().getName()) {
+				switch (field.getType().getName()) {
 				case "java.lang.Integer":
 					nameToGraphType.put(name, name + COLON + "int");
+					break;
+				case "java.lang.Double":
+					nameToGraphType.put(name, name + COLON + "double");
 					break;
 				}
 			}

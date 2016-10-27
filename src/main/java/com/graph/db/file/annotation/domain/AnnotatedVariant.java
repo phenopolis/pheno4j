@@ -15,6 +15,7 @@ public class AnnotatedVariant {
 	private Integer WT_COUNT;
 	private Integer HOM_COUNT;
 	private Integer MISS_COUNT;
+	private Double allele_freq;
 	
 	public String getVariant_id() {
 		return variant_id;
@@ -46,6 +47,10 @@ public class AnnotatedVariant {
 
 	public Integer getMISS_COUNT() {
 		return MISS_COUNT;
+	}
+
+	public Double getAllele_freq() {
+		return allele_freq;
 	}
 
 	@Override
