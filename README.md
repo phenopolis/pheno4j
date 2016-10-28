@@ -137,7 +137,7 @@ RETURN v.variantId;
 ```
 MATCH (t:Term)<-[tp:HAS_OBSERVED_TERM]-(p:Person)
 WHERE t.termId = 'HP:XXX'
-return p.personId;
+RETURN p.personId;
 ```
 ## Find Gene Symbols that have multiple Gene Ids
 ```
@@ -146,9 +146,15 @@ WITH count(*) AS count, s
 WHERE count > 1
 RETURN s.geneSymbol, count;
 ```
-## Fine Gene Symbols that have no Term
+## Find Gene Symbols that have no Term
 ```
 MATCH (s:GeneSymbol)
 WHERE NOT (s)-[:INFLUENCES]->()
-return s.geneSymbol;
+RETURN s.geneSymbol;
+```
+## Find Variants which have a frequency less than 0.001 and a CADD score greater than 20
+```
+MATCH (n:AnnotatedVariant) 
+WHERE n.allele_freq < 0.001 and n.cadd > 20 
+RETURN count(*);
 ```
