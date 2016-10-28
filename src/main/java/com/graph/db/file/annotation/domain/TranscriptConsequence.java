@@ -10,6 +10,7 @@ public class TranscriptConsequence {
 	private String gene_id;
 	private String gene_symbol;
 	private String variant_id;
+	private String cadd;
 	
 	public String getGene_id() {
 		return gene_id;
@@ -27,6 +28,10 @@ public class TranscriptConsequence {
 		this.variant_id = variant_id;
 	}
 	
+	public String getCadd() {
+		return cadd;
+	}
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()

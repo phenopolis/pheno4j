@@ -63,6 +63,7 @@ public enum OutputFileType implements OutputFile {
 					"HOM_COUNT",
 					"MISS_COUNT",
 					"allele_freq",
+					"cadd",
 					"EXAC.AC",
 					"EXAC.AC_Adj",
 					"EXAC.AC_AFR",

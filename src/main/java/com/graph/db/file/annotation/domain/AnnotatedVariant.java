@@ -16,6 +16,7 @@ public class AnnotatedVariant {
 	private Integer HOM_COUNT;
 	private Integer MISS_COUNT;
 	private Double allele_freq;
+	private Double cadd;
 	
 	public String getVariant_id() {
 		return variant_id;
@@ -52,9 +53,18 @@ public class AnnotatedVariant {
 	public Double getAllele_freq() {
 		return allele_freq;
 	}
+	
+	public Double getCadd() {
+		return cadd;
+	}
+
+	public void setCadd(Double cadd) {
+		this.cadd = cadd;
+	}
 
 	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
+
 }
