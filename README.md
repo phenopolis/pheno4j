@@ -90,7 +90,7 @@ MATCH (a)-[b]-(c)
 with count(b) as count
 RETURN count;
 ```
-4. Create the constraints
+4. Create the constraints and indexes
 ```
 CREATE CONSTRAINT ON (p:Variant) ASSERT p.variantId IS UNIQUE;
 CREATE CONSTRAINT ON (p:Person) ASSERT p.personId IS UNIQUE;
@@ -98,6 +98,9 @@ CREATE CONSTRAINT ON (p:GeneSymbol) ASSERT p.geneSymbol IS UNIQUE;
 CREATE CONSTRAINT ON (p:AnnotatedVariant) ASSERT p.variantId IS UNIQUE;
 CREATE CONSTRAINT ON (p:Term) ASSERT p.termId IS UNIQUE;
 CREATE CONSTRAINT ON (p:GeneId) ASSERT p.geneId IS UNIQUE;
+
+CREATE INDEX ON :AnnotatedVariant(allele_freq);
+CREATE INDEX ON :AnnotatedVariant(cadd);
 ```
 # Example Cypher Queries
 ## All Variants for an individual
