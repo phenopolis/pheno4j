@@ -161,3 +161,11 @@ MATCH (n:AnnotatedVariant)
 WHERE n.allele_freq < 0.001 and n.cadd > 20 
 RETURN count(*);
 ```
+## For a Term, find all the Descendant Terms
+```
+MATCH (p:Term)<-[:IS_A*]-(q:Term)
+where p.termId ='HP:0000556'
+with  p + collect( distinct q) as allRows
+unwind allRows as rows
+return rows
+```
