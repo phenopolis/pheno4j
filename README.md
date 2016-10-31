@@ -178,3 +178,14 @@ MATCH (p:Person)-[:HAS_OBSERVED_TERM]->(t:Term)
 where t IN allRows
 return count(p);
 ```
+## Find variants which have a frequency less than 0.001 and a CADD score greater than 20 seen in in people with HP:0000556 and belonging to a gene with HP:0000556
+```
+MATCH (p:Term)<-[:IS_A*]-(q:Term)
+WHERE p.termId ='HP:0000556'
+WITH  p + collect( distinct q) as allRows
+MATCH (t:Term)<-[:INFLUENCES]-(gs:GeneSymbol) <-[:HAS_GENE_SYMBOL]-(p:Person)<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]-(av:AnnotatedVariant)
+WHERE t IN allRows
+AND av.allele_freq < 0.001 
+AND av.cadd > 20 
+RETURN count(av);
+```
