@@ -187,5 +187,6 @@ MATCH (t:Term)<-[:INFLUENCES]-(gs:GeneSymbol) <-[:HAS_GENE_SYMBOL]-(p:Person)<-[
 WHERE t IN allTerms
 AND av.allele_freq < 0.001 
 AND av.cadd > 20 
-RETURN count(av);
+RETURN count(distinct av.variantId);
+
 ```
