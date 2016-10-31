@@ -182,9 +182,9 @@ return count(p);
 ```
 MATCH (p:Term)<-[:IS_A*]-(q:Term)
 WHERE p.termId ='HP:0000556'
-WITH  p + collect( distinct q) as allRows
+WITH  p + collect( distinct q) as allTerms
 MATCH (t:Term)<-[:INFLUENCES]-(gs:GeneSymbol) <-[:HAS_GENE_SYMBOL]-(p:Person)<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]-(av:AnnotatedVariant)
-WHERE t IN allRows
+WHERE t IN allTerms
 AND av.allele_freq < 0.001 
 AND av.cadd > 20 
 RETURN count(av);
