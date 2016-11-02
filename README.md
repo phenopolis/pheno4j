@@ -1,5 +1,7 @@
 # Pheno4j: a graph based HPO to NGS database
 
+# How to run the program?
+
 # Purpose
 Take raw input files and convert them into csv files that represent Nodes and Relationships, which can then be used to populate neo4j using their bulk csv import tool.
 # Domain Model
