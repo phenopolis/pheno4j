@@ -31,7 +31,8 @@ public class CustomJsonDeserializer implements JsonDeserializer<AnnotatedVariant
 		updateVariantIdOnAnnotatedVariant(annotatedVariant, transformedVariantId);
 		updateVariantIdOnTranscriptConsequences(annotatedVariant.getTranscript_consequences(), transformedVariantId);
 		
-		moveCaddFromTranscriptConsequenceToVariant(annotatedVariant);
+		copyCaddFromTranscriptConsequenceToVariant(annotatedVariant);
+		setHasExac(annotatedVariant);
 		
 		return annotatedVariant;
 	}
@@ -58,7 +59,7 @@ public class CustomJsonDeserializer implements JsonDeserializer<AnnotatedVariant
 		}
 	}
 	
-	private void moveCaddFromTranscriptConsequenceToVariant(AnnotatedVariant annotatedVariant) {
+	private void copyCaddFromTranscriptConsequenceToVariant(AnnotatedVariant annotatedVariant) {
 		Set<String> cadds = new HashSet<>();
 		for (TranscriptConsequence transcriptConsequence : annotatedVariant.getTranscript_consequences()) {
 			if (NumberUtils.isNumber(transcriptConsequence.getCadd())) {
@@ -74,5 +75,9 @@ public class CustomJsonDeserializer implements JsonDeserializer<AnnotatedVariant
 				annotatedVariant.setCadd(Double.valueOf(cadd));
 			}
 		}
+	}
+	
+	private void setHasExac(AnnotatedVariant annotatedVariant) {
+		annotatedVariant.setHasExac(annotatedVariant.getEXAC() != null);
 	}
 }

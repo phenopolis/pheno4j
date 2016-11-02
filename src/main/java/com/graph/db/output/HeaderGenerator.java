@@ -83,6 +83,9 @@ public class HeaderGenerator {
 				case "java.lang.Double":
 					nameToGraphType.put(name, name + COLON + "double");
 					break;
+				case "java.lang.Boolean":
+					nameToGraphType.put(name, name + COLON + "boolean");
+					break;
 				}
 			}
 		}

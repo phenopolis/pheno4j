@@ -17,6 +17,7 @@ public class AnnotatedVariant {
 	private Integer MISS_COUNT;
 	private Double allele_freq;
 	private Double cadd;
+	private Boolean hasExac;
 	
 	public String getVariant_id() {
 		return variant_id;
@@ -60,6 +61,14 @@ public class AnnotatedVariant {
 
 	public void setCadd(Double cadd) {
 		this.cadd = cadd;
+	}
+
+	public boolean isHasExac() {
+		return hasExac;
+	}
+
+	public void setHasExac(Boolean hasExac) {
+		this.hasExac = hasExac;
 	}
 
 	@Override
