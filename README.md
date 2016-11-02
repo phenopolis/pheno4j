@@ -13,6 +13,7 @@ Run `mvn clean package`; this will generate graph-db.jar in the /target folder
 # Parsers
 Below is the list of the Parsers, and the Nodes and Relationships that each one is responsible for producing. 
 ### VcfParser
+This parses the genotype VCF file containing the variant to individual relationships:
 ```
 java -jar graph-db.jar VcfParser $vcfFile $outputFolder
 ```
@@ -21,6 +22,7 @@ java -jar graph-db.jar VcfParser $vcfFile $outputFolder
 | Person  | VariantToPerson |
 | Variant |  |
 ### AnnotationParser
+This parses the annotation file produced by the Variant Effect Predictor in the JSON format (VCF format to be supported soon):
 ```
 java -jar graph-db.jar AnnotationParser $inputFolderWithJsonFiles $outputFolder
 ```
@@ -30,13 +32,16 @@ java -jar graph-db.jar AnnotationParser $inputFolderWithJsonFiles $outputFolder
 | GeneSymbol | VariantToAnnotatedVariant |
 | AnnotatedVariant | GeneSymbolToGeneId |
 ### GeneParser
+This parses the OMIM-HPO file which links genes to the HPO terms to which they are associate:
 ```
 java -jar graph-db.jar GeneParser $geneFile $outputFolder
 ```
 | Nodes | Relationships |
 | --- | --- |
 | GeneSymbol | GeneSymbolToTerm |
+
 ### PersonParser
+This parses the phenotype file which links individuals to their HPO terms:
 ```
 java -jar graph-db.jar PersonParser $personFile $outputFolder
 ```
@@ -45,7 +50,8 @@ java -jar graph-db.jar PersonParser $personFile $outputFolder
 | GeneSymbol | PersonToObservedTerm |
 |  | PersonToNonObservedTerm |
 |  | PersonToGeneSymbol |
-### TermParser
+### HPOTermParser
+This loads the HPO ontology which links HPO terms to other HPO terms with "is a" relationships.
 ```
 java -jar graph-db.jar TermParser $termFile $outputFolder
 ```
