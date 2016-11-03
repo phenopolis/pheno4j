@@ -109,6 +109,7 @@ CREATE CONSTRAINT ON (p:GeneId) ASSERT p.geneId IS UNIQUE;
 
 CREATE INDEX ON :AnnotatedVariant(allele_freq);
 CREATE INDEX ON :AnnotatedVariant(cadd);
+CREATE INDEX ON :AnnotatedVariant(hasExac);
 ```
 # Example Cypher Queries
 ## All Variants for an individual
