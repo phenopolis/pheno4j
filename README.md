@@ -114,13 +114,13 @@ CREATE INDEX ON :AnnotatedVariant(hasExac);
 # Example Cypher Queries
 ## All Variants for an individual
 ```
-MATCH (root:Variant)-[rels:PRESENT_IN]->(child:Person)
+MATCH (root:Variant)-[:PRESENT_IN]->(child:Person)
 WHERE child.personId ='XXX'
 RETURN count(root.variantId);
 ```
 ## Individuals who have a particular variant
 ```
-MATCH (root:Variant)-[rels*]->(child:Person)
+MATCH (root:Variant)-[:PRESENT_IN]->(child:Person)
 WHERE root.variantId ='xxx'
 RETURN child.personId;
 ```
@@ -198,4 +198,14 @@ AND av.allele_freq < 0.001
 AND av.cadd > 20 
 RETURN count(distinct av.variantId);
 
+```
+### For an Individual, rank their variants by the number of occurrences in other Individuals
+```
+MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]->(av:AnnotatedVariant)
+where (av.allele_freq < 0.001 or av.hasExac = false)
+with size(()<-[:PRESENT_IN]-(v)) as count , v
+where count > 1 
+and count < 10
+return v.variantId, size(()<-[:PRESENT_IN]-(v)) as count
+order by count asc
 ```
