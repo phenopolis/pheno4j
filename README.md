@@ -209,3 +209,18 @@ and count < 10
 return v.variantId, size(()<-[:PRESENT_IN]-(v)) as count
 order by count asc
 ```
+### For a particular individual, show a list of individuals in decreasing order by the number of variants they share with the given individual, with a frequency less than 0.001 or NA in ExAC, and that appear in less than 5% of individuals
+```
+MATCH (k:Person)
+WITH count(k) as numberOfPeople
+MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]->(av:AnnotatedVariant)
+WHERE (av.allele_freq < 0.001 or av.hasExac = false)
+WITH size(()<-[:PRESENT_IN]-(v)) as count , v, p, numberOfPeople
+WHERE count > 1 
+AND ((count / toFloat(numberOfPeople))  <= 0.05)
+match (v)-[:PRESENT_IN]->(q:Person)
+WHERE p <> q
+WITH p,q,count(v) as c
+ORDER BY c desc LIMIT 10
+RETURN p.personId,q.personId, c
+```
