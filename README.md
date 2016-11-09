@@ -224,3 +224,23 @@ WITH p,q,count(v) as c
 ORDER BY c desc LIMIT 10
 RETURN p.personId,q.personId, c
 ```
+### As above, but show the as a percentage the common variants (i.e. the intersection) over the shared variants (the union)
+```
+MATCH (k:Person)
+WITH count(k) as numberOfPeople
+MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]->(av:AnnotatedVariant)
+WHERE (av.allele_freq < 0.001 or av.hasExac = false)
+WITH size(()<-[:PRESENT_IN]-(v)) as count , v, p, numberOfPeople
+WHERE count > 1 
+AND ((count / toFloat(numberOfPeople))  <= 0.05)
+MATCH (v)-[:PRESENT_IN]->(q:Person)
+WHERE p <> q
+WITH p,q,count(v) as intersection
+order by intersection desc limit 1
+MATCH (x:Person)<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]->(av:AnnotatedVariant)
+WHERE (x.personId = p.personId or x.personId = q.personId)
+AND (av.allele_freq < 0.001 or av.hasExac = false)
+WITH v, count(*) as c, q,p, intersection
+WHERE c = 2
+RETURN p.personId, q.personId, intersection, size(collect(distinct v)) as unionSum, (round((intersection/toFloat(size(collect(distinct v))))*100.0*10)/10) as PercentShared
+```
