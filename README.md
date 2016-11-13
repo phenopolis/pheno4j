@@ -235,12 +235,13 @@ WHERE count > 1
 AND ((count / toFloat(numberOfPeople))  <= 0.05)
 MATCH (v)-[:PRESENT_IN]->(q:Person)
 WHERE p <> q
-WITH p,q,count(v) as intersection
-order by intersection desc limit 1
+WITH p,q,count(v) as intersection, numberOfPeople
+order by intersection DESC limit 1
 MATCH (x:Person)<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]->(av:AnnotatedVariant)
 WHERE (x.personId = p.personId or x.personId = q.personId)
 AND (av.allele_freq < 0.001 or av.hasExac = false)
-WITH v, count(*) as c, q,p, intersection
-WHERE c = 2
+AND ((size(()<-[:PRESENT_IN]-(v)) / toFloat(numberOfPeople))  <= 0.05)
+WITH p, q, v, intersection
 RETURN p.personId, q.personId, intersection, size(collect(distinct v)) as unionSum, (round((intersection/toFloat(size(collect(distinct v))))*100.0*10)/10) as PercentShared
+ORDER BY PercentShared DESC
 ```
