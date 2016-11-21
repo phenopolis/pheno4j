@@ -39,6 +39,7 @@ import com.graph.db.output.OutputFileType;
  * Relationships
  * - GeneToGeneticVariant
  * - GeneticVariantToTranscriptVariant
+ * - TranscriptToTranscriptVariant
  */
 public class AnnotationParser implements Parser {
 	
