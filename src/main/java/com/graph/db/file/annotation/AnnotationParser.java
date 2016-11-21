@@ -24,19 +24,16 @@ import com.google.gson.GsonBuilder;
 import com.graph.db.Parser;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.GeneticVariant;
-import com.graph.db.file.annotation.subscriber.GeneIdToVariantSubscriber;
-import com.graph.db.file.annotation.subscriber.GeneSymbolToGeneIdSubscriber;
+import com.graph.db.file.annotation.subscriber.GeneToGeneticVariantSubscriber;
 import com.graph.db.output.HeaderGenerator;
 import com.graph.db.output.OutputFileType;
 
 /**
  * Nodes
  * - GeneticVariant
- * - GeneToAnnotatedGene
  * 
  * Relationships
- * - AnnotatedGeneToVariant
- * - VariantToAnnotatedVariant
+ * - GeneToGeneticVariant
  */
 public class AnnotationParser implements Parser {
 	
@@ -71,11 +68,10 @@ public class AnnotationParser implements Parser {
 	}
 
 	private List<GenericSubscriber<? extends Object>> createSubscribers(String outputFolder) {
-        GeneIdToVariantSubscriber geneIdToVariantSubscriber = new GeneIdToVariantSubscriber(outputFolder, getClass(), OutputFileType.GENE_ID_TO_VARIANT);
+        GeneToGeneticVariantSubscriber geneIdToVariantSubscriber = new GeneToGeneticVariantSubscriber(outputFolder, getClass());
         GenericSubscriber<Object> geneticVariantSubscriber = new GenericSubscriber<Object>(outputFolder, getClass(), OutputFileType.GENETIC_VARIANT);
-        GeneSymbolToGeneIdSubscriber geneSymbolToGeneIdSubscriber = new GeneSymbolToGeneIdSubscriber(outputFolder, getClass(), OutputFileType.GENE_SYMBOL_TO_GENE_ID);
         
-		return Arrays.asList(geneIdToVariantSubscriber, geneticVariantSubscriber, geneSymbolToGeneIdSubscriber);
+		return Arrays.asList(geneIdToVariantSubscriber, geneticVariantSubscriber);
 	}
 
 	@Override
@@ -125,8 +121,8 @@ public class AnnotationParser implements Parser {
 	}
 
 	private void generateHeaderFiles() {
-		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENETIC_VARIANT, OutputFileType.GENE_ID,
-				OutputFileType.GENE_ID_TO_VARIANT, OutputFileType.GENE_SYMBOL_TO_GENE_ID);
+		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENETIC_VARIANT,
+				OutputFileType.GENE_TO_GENETIC_VARIANT);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
 

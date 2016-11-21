@@ -7,11 +7,10 @@ import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.output.OutputFileType;
 
-//TODO this needs to become GeneToGeneticVariant
-public class GeneIdToVariantSubscriber extends GenericSubscriber<GeneticVariant> {
+public class GeneToGeneticVariantSubscriber extends GenericSubscriber<GeneticVariant> {
 	
-	public GeneIdToVariantSubscriber(String outputFolder, Class<?> parserClass, OutputFileType outputFileType) {
-		super(outputFolder, parserClass, outputFileType);
+	public GeneToGeneticVariantSubscriber(String outputFolder, Class<?> parserClass) {
+		super(outputFolder, parserClass, OutputFileType.GENE_TO_GENETIC_VARIANT);
 	}
 
 	@Override

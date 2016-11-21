@@ -1,6 +1,5 @@
 package com.graph.db.output;
 
-import com.graph.db.file.annotation.domain.GeneSymbolToGeneId;
 import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.file.gene.domain.GeneSymbolToTerm;
@@ -17,16 +16,6 @@ public enum OutputFileType implements OutputFile {
 		}
 	},
 	
-	GENE_SYMBOL_TO_GENE_ID("GeneSymbolToGeneId", GeneSymbolToGeneId.class) {
-		@Override
-		public String[] getHeader() {
-			return new String[] {
-					"geneSymbol",
-					"geneId"
-					};
-		}
-	},
-	
 	GENE_ID("GeneId", TranscriptConsequence.class) {
 		@Override
 		public String[] getHeader() {
@@ -35,7 +24,7 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
-	GENE_ID_TO_VARIANT("GeneIdToVariant", TranscriptConsequence.class) {
+	GENE_TO_GENETIC_VARIANT("GeneToGeneticVariant", TranscriptConsequence.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {

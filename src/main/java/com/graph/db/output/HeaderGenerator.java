@@ -34,16 +34,12 @@ public class HeaderGenerator {
 		case GENETIC_VARIANT:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", "variantId:ID(GeneticVariant)");
 			break;
-		case GENE_ID:
+		case GENE_ID://TODO unused
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", "geneId:ID(GeneId)");
 			break;
-		case GENE_ID_TO_VARIANT:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", ":START_ID(GeneId)");
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":END_ID(Variant)");
-			break;
-		case GENE_SYMBOL_TO_GENE_ID:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "geneSymbol", ":START_ID(GeneSymbol)");
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "geneId", ":END_ID(GeneId)");
+		case GENE_TO_GENETIC_VARIANT:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", ":START_ID(Gene)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":END_ID(GeneticVariant)");
 			break;
 		case GENE_SYMBOL_TO_TERM:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "geneSymbol", ":START_ID(GeneSymbol)");
