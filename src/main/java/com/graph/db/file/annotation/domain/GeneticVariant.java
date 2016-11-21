@@ -5,7 +5,7 @@ import java.util.Set;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class AnnotatedVariant {
+public class GeneticVariant {
 	
 	private String variant_id;
 	private Exac EXAC;

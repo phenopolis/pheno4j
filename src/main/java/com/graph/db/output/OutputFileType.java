@@ -1,7 +1,7 @@
 package com.graph.db.output;
 
-import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.domain.GeneSymbolToGeneId;
+import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.file.gene.domain.GeneSymbolToTerm;
 
@@ -44,7 +44,7 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
-	ANNOTATED_VARIANT("AnnotatedVariant", AnnotatedVariant.class) {
+	GENETIC_VARIANT("GeneticVariant", GeneticVariant.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {
@@ -146,15 +146,7 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
-	VARIANT_TO_ANNOTATED_VARIANT("VariantToAnnotatedVariant", AnnotatedVariant.class){
-		@Override
-		public String[] getHeader() {
-			return new String[] {
-					"variant_id",
-					"variant_id"
-			};
-		}
-	};
+	;
 	
 	private final String fileTag;
 	private final Class<?> beanClass;

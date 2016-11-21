@@ -23,8 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.graph.db.Parser;
 import com.graph.db.file.GenericSubscriber;
-import com.graph.db.file.annotation.domain.AnnotatedVariant;
-import com.graph.db.file.annotation.subscriber.GeneIdSubscriber;
+import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.subscriber.GeneIdToVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneSymbolToGeneIdSubscriber;
 import com.graph.db.output.HeaderGenerator;
@@ -32,8 +31,7 @@ import com.graph.db.output.OutputFileType;
 
 /**
  * Nodes
- * - AnnotatedGene
- * - AnnotatedVariant
+ * - GeneticVariant
  * - GeneToAnnotatedGene
  * 
  * Relationships
@@ -68,19 +66,16 @@ public class AnnotationParser implements Parser {
 	
 	private Gson createGson() {
 		GsonBuilder b = new GsonBuilder();
-        b.registerTypeAdapter(AnnotatedVariant.class, new CustomJsonDeserializer());
+        b.registerTypeAdapter(GeneticVariant.class, new CustomJsonDeserializer());
         return b.create();
 	}
 
 	private List<GenericSubscriber<? extends Object>> createSubscribers(String outputFolder) {
-		GeneIdSubscriber geneIdSubscriber = new GeneIdSubscriber(outputFolder, getClass(), OutputFileType.GENE_ID);
         GeneIdToVariantSubscriber geneIdToVariantSubscriber = new GeneIdToVariantSubscriber(outputFolder, getClass(), OutputFileType.GENE_ID_TO_VARIANT);
-        GenericSubscriber<Object> annotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, getClass(), OutputFileType.ANNOTATED_VARIANT);
-        GenericSubscriber<Object> variantToAnnotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, getClass(), OutputFileType.VARIANT_TO_ANNOTATED_VARIANT);
+        GenericSubscriber<Object> geneticVariantSubscriber = new GenericSubscriber<Object>(outputFolder, getClass(), OutputFileType.GENETIC_VARIANT);
         GeneSymbolToGeneIdSubscriber geneSymbolToGeneIdSubscriber = new GeneSymbolToGeneIdSubscriber(outputFolder, getClass(), OutputFileType.GENE_SYMBOL_TO_GENE_ID);
         
-		return Arrays.asList(geneIdSubscriber, geneIdToVariantSubscriber, annotatedVariantSubscriber,
-				variantToAnnotatedVariantSubscriber, geneSymbolToGeneIdSubscriber);
+		return Arrays.asList(geneIdToVariantSubscriber, geneticVariantSubscriber, geneSymbolToGeneIdSubscriber);
 	}
 
 	@Override
@@ -98,8 +93,8 @@ public class AnnotationParser implements Parser {
 				while (( line = reader.readLine()) != null) {
 					logLineNumber(reader, 1000);
 					
-					AnnotatedVariant annotatedVariant = gson.fromJson(line, AnnotatedVariant.class);
-					eventBus.post(annotatedVariant);
+					GeneticVariant geneticVariant = gson.fromJson(line, GeneticVariant.class);
+					eventBus.post(geneticVariant);
 				}
 			} catch (IOException e) {
 				throw new RuntimeException(e);
@@ -130,8 +125,8 @@ public class AnnotationParser implements Parser {
 	}
 
 	private void generateHeaderFiles() {
-		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.ANNOTATED_VARIANT, OutputFileType.VARIANT_TO_ANNOTATED_VARIANT,
-				OutputFileType.GENE_ID, OutputFileType.GENE_ID_TO_VARIANT, OutputFileType.GENE_SYMBOL_TO_GENE_ID);
+		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENETIC_VARIANT, OutputFileType.GENE_ID,
+				OutputFileType.GENE_ID_TO_VARIANT, OutputFileType.GENE_SYMBOL_TO_GENE_ID);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
 

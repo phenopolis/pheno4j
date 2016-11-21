@@ -16,25 +16,25 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.graph.db.file.annotation.domain.AnnotatedVariant;
+import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 
-public class CustomJsonDeserializer implements JsonDeserializer<AnnotatedVariant> {
+public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> {
 	
 	@Override
-	public AnnotatedVariant deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+	public GeneticVariant deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 			throws JsonParseException {
-		AnnotatedVariant annotatedVariant = new Gson().fromJson(json, AnnotatedVariant.class);
+		GeneticVariant variant = new Gson().fromJson(json, GeneticVariant.class);
 		
-		String transformedVariantId = getTransformedVariantId(annotatedVariant.getVariant_id());
+		String transformedVariantId = getTransformedVariantId(variant.getVariant_id());
 		
-		updateVariantIdOnAnnotatedVariant(annotatedVariant, transformedVariantId);
-		updateVariantIdOnTranscriptConsequences(annotatedVariant.getTranscript_consequences(), transformedVariantId);
+		updateVariantIdOnAnnotatedVariant(variant, transformedVariantId);
+		updateVariantIdOnTranscriptConsequences(variant.getTranscript_consequences(), transformedVariantId);
 		
-		copyCaddFromTranscriptConsequenceToVariant(annotatedVariant);
-		setHasExac(annotatedVariant);
+		copyCaddFromTranscriptConsequenceToVariant(variant);
+		setHasExac(variant);
 		
-		return annotatedVariant;
+		return variant;
 	}
 
 	/**
@@ -48,8 +48,8 @@ public class CustomJsonDeserializer implements JsonDeserializer<AnnotatedVariant
 		return StringUtils.replace(variantIdWithHyphens, HYPHEN, UNDERSCORE);
 	}
 
-	private void updateVariantIdOnAnnotatedVariant(AnnotatedVariant annotatedVariant, String transformedVariantId) {
-		annotatedVariant.setVariant_id(transformedVariantId);
+	private void updateVariantIdOnAnnotatedVariant(GeneticVariant variant, String transformedVariantId) {
+		variant.setVariant_id(transformedVariantId);
 	}
 	
 	private void updateVariantIdOnTranscriptConsequences(Collection<TranscriptConsequence> transcriptConsequences,
@@ -59,9 +59,9 @@ public class CustomJsonDeserializer implements JsonDeserializer<AnnotatedVariant
 		}
 	}
 	
-	private void copyCaddFromTranscriptConsequenceToVariant(AnnotatedVariant annotatedVariant) {
+	private void copyCaddFromTranscriptConsequenceToVariant(GeneticVariant variant) {
 		Set<String> cadds = new HashSet<>();
-		for (TranscriptConsequence transcriptConsequence : annotatedVariant.getTranscript_consequences()) {
+		for (TranscriptConsequence transcriptConsequence : variant.getTranscript_consequences()) {
 			if (NumberUtils.isNumber(transcriptConsequence.getCadd())) {
 				cadds.add(transcriptConsequence.getCadd());
 			}
@@ -69,15 +69,15 @@ public class CustomJsonDeserializer implements JsonDeserializer<AnnotatedVariant
 		
 		if (!cadds.isEmpty()) {
 			if (cadds.size() > 1) {
-				throw new RuntimeException(annotatedVariant.getVariant_id() + " has more than 1 cadd: " + cadds);
+				throw new RuntimeException(variant.getVariant_id() + " has more than 1 cadd: " + cadds);
 			} else {
 				String cadd = cadds.iterator().next();
-				annotatedVariant.setCadd(Double.valueOf(cadd));
+				variant.setCadd(Double.valueOf(cadd));
 			}
 		}
 	}
 	
-	private void setHasExac(AnnotatedVariant annotatedVariant) {
+	private void setHasExac(GeneticVariant annotatedVariant) {
 		annotatedVariant.setHasExac(annotatedVariant.getEXAC() != null);
 	}
 }

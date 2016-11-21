@@ -11,8 +11,8 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.domain.Exac;
+import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.util.Constants;
 import com.graph.db.util.FileUtil;
@@ -31,12 +31,8 @@ public class HeaderGenerator {
 
 	private String relabelIdColumns(OutputFileType outputFileType, String joinedHeaders) {
 		switch(outputFileType) {
-		case ANNOTATED_VARIANT:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", "variantId:ID(AnnotatedVariant)");
-			break;
-		case VARIANT_TO_ANNOTATED_VARIANT:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":START_ID(Variant)");
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":END_ID(AnnotatedVariant)");
+		case GENETIC_VARIANT:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", "variantId:ID(GeneticVariant)");
 			break;
 		case GENE_ID:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", "geneId:ID(GeneId)");
@@ -70,7 +66,7 @@ public class HeaderGenerator {
 	
 	private Map<String, String> createMapFromJavaTypeToGraphType() {
 		Map<String, String> nameToGraphType = new HashMap<>();
-		for (Class<?> c : Arrays.asList(AnnotatedVariant.class, Exac.class, TranscriptConsequence.class)) {
+		for (Class<?> c : Arrays.asList(GeneticVariant.class, Exac.class, TranscriptConsequence.class)) {
 			for (Field field : c.getDeclaredFields()) {
 				String name = field.getName();
 				switch (field.getType().getName()) {
