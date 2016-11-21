@@ -24,6 +24,7 @@ import com.google.gson.GsonBuilder;
 import com.graph.db.Parser;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.GeneticVariant;
+import com.graph.db.file.annotation.subscriber.ConsequenceTermSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneToGeneticVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneticVariantToTranscriptVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.TranscriptToTranscriptVariantSubscriber;
@@ -35,6 +36,7 @@ import com.graph.db.output.OutputFileType;
  * Nodes
  * - GeneticVariant
  * - TranscriptVariant
+ * - ConsequenceTerm
  * 
  * Relationships
  * - GeneToGeneticVariant
@@ -79,9 +81,11 @@ public class AnnotationParser implements Parser {
         TranscriptVariantSubscriber transcriptVariantSubscriber = new TranscriptVariantSubscriber(outputFolder, getClass());
         GeneticVariantToTranscriptVariantSubscriber geneticVariantToTranscriptVariantSubscriber = new GeneticVariantToTranscriptVariantSubscriber(outputFolder, getClass());
         TranscriptToTranscriptVariantSubscriber transcriptToTranscriptVariantSubscriber = new TranscriptToTranscriptVariantSubscriber(outputFolder, getClass());
+        ConsequenceTermSubscriber consequenceTermSubscriber = new ConsequenceTermSubscriber(outputFolder, getClass());
         
 		return Arrays.asList(geneToGeneticVariantSubscriber, geneticVariantSubscriber, transcriptVariantSubscriber,
-				geneticVariantToTranscriptVariantSubscriber, transcriptToTranscriptVariantSubscriber);
+				geneticVariantToTranscriptVariantSubscriber, transcriptToTranscriptVariantSubscriber,
+				consequenceTermSubscriber);
 	}
 
 	@Override
@@ -133,7 +137,8 @@ public class AnnotationParser implements Parser {
 	private void generateHeaderFiles() {
 		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENETIC_VARIANT,
 				OutputFileType.GENE_TO_GENETIC_VARIANT, OutputFileType.TRANSCRIPT_VARIANT,
-				OutputFileType.GENETIC_VARIANT_TO_TRANSCRIPT_VARIANT, OutputFileType.TRANSCRIPT_TO_TRANSCRIPT_VARIANT);
+				OutputFileType.GENETIC_VARIANT_TO_TRANSCRIPT_VARIANT, OutputFileType.TRANSCRIPT_TO_TRANSCRIPT_VARIANT,
+				OutputFileType.CONSEQUENCE_TERM);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
 

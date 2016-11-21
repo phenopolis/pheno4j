@@ -1,5 +1,7 @@
 package com.graph.db.file.annotation.domain;
 
+import java.util.Set;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -21,6 +23,7 @@ public class TranscriptConsequence {
 	private String variant_allele;
 	private Integer strand;
 	private Integer canonical;
+	private Set<String> consequence_terms;
 	
 	public String getVariant_id() {
 		return variant_id;
@@ -72,6 +75,10 @@ public class TranscriptConsequence {
 
 	public Integer getCanonical() {
 		return canonical;
+	}
+
+	public Set<String> getConsequence_terms() {
+		return consequence_terms;
 	}
 
 	public void setVariant_id(String variant_id) {

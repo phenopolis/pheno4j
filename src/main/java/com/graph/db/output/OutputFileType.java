@@ -165,7 +165,15 @@ public enum OutputFileType implements OutputFile {
 					"hgvsc"
 					};
 		}
-	}
+	},
+	CONSEQUENCE_TERM("ConsequenceTerm", String.class) {
+		@Override
+		public String[] getHeader() {
+			return new String[] {
+					"this",
+					};
+		}
+	},
 	;
 	
 	private final String fileTag;
