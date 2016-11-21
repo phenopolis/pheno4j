@@ -37,7 +37,6 @@ import com.graph.db.Parser;
 /**
  * Nodes
  * - Person
- * - Variant
  * 
  * Relationships
  * - VariantToPerson
@@ -65,10 +64,6 @@ public class VcfParser implements Parser {
 			
 			String fileTag = StringUtils.substringBefore(fileName, ".");
 			
-			BlockingQueue<String> variantIdsBlockingQueue = new ArrayBlockingQueue<>(1024);
-			Runnable variantIdsBlockingQueueConsumer = new QueueToFileConsumer(variantIdsBlockingQueue, outputFolder, "Variant-" + fileTag + ".csv");
-	        new Thread(variantIdsBlockingQueueConsumer).start();
-	        
 	        Runnable variantToPersonBlockingQueueConsumer = new QueueToFileConsumer(variantToPersonBlockingQueue, outputFolder, "VariantToPerson-" + fileTag + ".csv");
 	        new Thread(variantToPersonBlockingQueueConsumer).start();
 	        
@@ -106,16 +101,14 @@ public class VcfParser implements Parser {
 					String[] alts = altField.split(COMMA);
 					for (String alt : alts) {
 						String variantId = DOUBLE_QUOTE + chrom + UNDERSCORE + pos + UNDERSCORE + ref + UNDERSCORE + alt + DOUBLE_QUOTE;
-						variantIdsBlockingQueue.put(variantId);
 						
 						RecursiveAction task = new RowAction(variantId, split, personStartColumn, split.length);
 						forkJoinPool.invoke(task);
 					}
 				}
 			}
-			sendPoisonPillToQueue(variantIdsBlockingQueue);
 			sendPoisonPillToQueue(variantToPersonBlockingQueue);
-		} catch (IOException | InterruptedException e) {
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
