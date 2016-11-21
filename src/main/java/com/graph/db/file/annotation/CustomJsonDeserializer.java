@@ -5,11 +5,8 @@ import static com.graph.db.util.Constants.UNDERSCORE;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -31,7 +28,6 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 		updateVariantIdOnAnnotatedVariant(variant, transformedVariantId);
 		updateVariantIdOnTranscriptConsequences(variant.getTranscript_consequences(), transformedVariantId);
 		
-		copyCaddFromTranscriptConsequenceToVariant(variant);
 		setHasExac(variant);
 		
 		return variant;
@@ -56,24 +52,6 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 			String transformedVariantId) {
 		for (TranscriptConsequence consequence : transcriptConsequences) {
 			consequence.setVariant_id(transformedVariantId);
-		}
-	}
-	
-	private void copyCaddFromTranscriptConsequenceToVariant(GeneticVariant variant) {
-		Set<String> cadds = new HashSet<>();
-		for (TranscriptConsequence transcriptConsequence : variant.getTranscript_consequences()) {
-			if (NumberUtils.isNumber(transcriptConsequence.getCadd())) {
-				cadds.add(transcriptConsequence.getCadd());
-			}
-		}
-		
-		if (!cadds.isEmpty()) {
-			if (cadds.size() > 1) {
-				throw new RuntimeException(variant.getVariant_id() + " has more than 1 cadd: " + cadds);
-			} else {
-				String cadd = cadds.iterator().next();
-				variant.setCadd(Double.valueOf(cadd));
-			}
 		}
 	}
 	
