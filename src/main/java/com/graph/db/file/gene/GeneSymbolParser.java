@@ -22,9 +22,6 @@ import com.graph.db.output.HeaderGenerator;
 import com.graph.db.output.OutputFileType;
 
 /**
- * Nodes
- * - GeneSymbol
- * 
  * Relationships
  * - GeneSymbolToTerm
  */
@@ -48,9 +45,8 @@ public class GeneSymbolParser implements Parser {
 	}
 	
 	private List<GenericSubscriber<?>> createSubscribers(String outputFolder2) {
-		GenericSubscriber<Object> geneSymbolSubscriber = new GenericSubscriber<Object>(outputFolder, getClass(), OutputFileType.GENE_SYMBOL);
 		GeneSymbolToTermSubscriber geneSymbolToTermSubscriber = new GeneSymbolToTermSubscriber(outputFolder, getClass(), OutputFileType.GENE_SYMBOL_TO_TERM);
-		return Arrays.asList(geneSymbolSubscriber, geneSymbolToTermSubscriber);
+		return Arrays.asList(geneSymbolToTermSubscriber);
 	}
 
 	@Override
@@ -82,7 +78,7 @@ public class GeneSymbolParser implements Parser {
 	}
 
 	private void generateHeaderFiles() {
-		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE_SYMBOL, OutputFileType.GENE_SYMBOL_TO_TERM);
+		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE_SYMBOL_TO_TERM);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
 

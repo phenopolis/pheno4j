@@ -26,7 +26,6 @@ import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.subscriber.GeneIdSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneIdToVariantSubscriber;
-import com.graph.db.file.annotation.subscriber.GeneSymbolFromAnnotationSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneSymbolToGeneIdSubscriber;
 import com.graph.db.output.HeaderGenerator;
 import com.graph.db.output.OutputFileType;
@@ -79,10 +78,9 @@ public class AnnotationParser implements Parser {
         GenericSubscriber<Object> annotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, getClass(), OutputFileType.ANNOTATED_VARIANT);
         GenericSubscriber<Object> variantToAnnotatedVariantSubscriber = new GenericSubscriber<Object>(outputFolder, getClass(), OutputFileType.VARIANT_TO_ANNOTATED_VARIANT);
         GeneSymbolToGeneIdSubscriber geneSymbolToGeneIdSubscriber = new GeneSymbolToGeneIdSubscriber(outputFolder, getClass(), OutputFileType.GENE_SYMBOL_TO_GENE_ID);
-        GeneSymbolFromAnnotationSubscriber geneSymbolFromAnnotationSubscriber = new GeneSymbolFromAnnotationSubscriber(outputFolder, getClass(), OutputFileType.GENE_SYMBOL);
         
 		return Arrays.asList(geneIdSubscriber, geneIdToVariantSubscriber, annotatedVariantSubscriber,
-				variantToAnnotatedVariantSubscriber, geneSymbolToGeneIdSubscriber, geneSymbolFromAnnotationSubscriber);
+				variantToAnnotatedVariantSubscriber, geneSymbolToGeneIdSubscriber);
 	}
 
 	@Override

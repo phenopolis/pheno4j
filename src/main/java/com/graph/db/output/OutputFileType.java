@@ -3,19 +3,10 @@ package com.graph.db.output;
 import com.graph.db.file.annotation.domain.AnnotatedVariant;
 import com.graph.db.file.annotation.domain.GeneSymbolToGeneId;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
-import com.graph.db.file.gene.domain.Gene;
 import com.graph.db.file.gene.domain.GeneSymbolToTerm;
 
 public enum OutputFileType implements OutputFile {
 
-	GENE_SYMBOL("GeneSymbol", Gene.class) {
-		@Override
-		public String[] getHeader() {
-			return new String[] {
-					"gene"
-					};
-		}
-	},
 	GENE_SYMBOL_TO_TERM("GeneSymbolToTerm", GeneSymbolToTerm.class){
 		@Override
 		public String[] getHeader() {

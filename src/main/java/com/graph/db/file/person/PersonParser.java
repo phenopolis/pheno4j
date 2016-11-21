@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.graph.db.Parser;
-import com.graph.db.output.OutputFileType;
 
 /**
  * Nodes
@@ -47,7 +46,6 @@ public class PersonParser implements Parser {
 		Set<String> personToObservedTerm = new HashSet<>();
 		Set<String> personToNonObservedTerm = new HashSet<>();
 		Set<String> personToGeneSymbol = new HashSet<>();
-		Set<String> geneSymbols = new HashSet<>();
 		
 		BiFunction<String, String, String> returnPersonIdAndValue = (personId, value) -> (StringUtils.join(Arrays.asList(personId, value), COMMA));
 		BiFunction<String, String, String> returnValue = (personId, value) -> (value);
@@ -62,13 +60,11 @@ public class PersonParser implements Parser {
 			splitAndAddToSet(personToObservedTerm, personId, observedTermsField, returnPersonIdAndValue);
 			splitAndAddToSet(personToNonObservedTerm, personId, nonObservedTermsField, returnPersonIdAndValue);
 			splitAndAddToSet(personToGeneSymbol, personId, genesField, returnPersonIdAndValue);
-			splitAndAddToSet(geneSymbols, personId, genesField, returnValue);
 		}
 		
 		writeOutHeaderAndRows("PersonToObservedTerm", "Term", personToObservedTerm);
 		writeOutHeaderAndRows("PersonToNonObservedTerm", "Term", personToNonObservedTerm);
 		writeOutHeaderAndRows("PersonToGeneSymbol", "GeneSymbol", personToGeneSymbol);
-		writeOutGeneSymbolFile(geneSymbols);
 	}
 
 	//TODO double quote is causing problems
@@ -85,10 +81,6 @@ public class PersonParser implements Parser {
 		writeOutCsvFile(outputFolder, getClass(), fileTag, set);
 	}
 	
-	private void writeOutGeneSymbolFile(Set<String> geneSymbols) {
-		writeOutCsvFile(outputFolder, getClass(), OutputFileType.GENE_SYMBOL.getFileTag(), geneSymbols);
-	}
-
 	public static void main(String[] args) {
 		if ((args != null) && (args.length != 2)) {
 			throw new RuntimeException("Incorrect args: $1=termFile, $2=outputFolder");

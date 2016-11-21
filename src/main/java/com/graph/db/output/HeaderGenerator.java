@@ -49,9 +49,6 @@ public class HeaderGenerator {
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "geneSymbol", ":START_ID(GeneSymbol)");
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "geneId", ":END_ID(GeneId)");
 			break;
-		case GENE_SYMBOL:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene", "geneSymbol:ID(GeneSymbol)");
-			break;
 		case GENE_SYMBOL_TO_TERM:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "geneSymbol", ":START_ID(GeneSymbol)");
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "termId", ":END_ID(Term)");
