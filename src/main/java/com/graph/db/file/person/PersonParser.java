@@ -20,12 +20,9 @@ import org.slf4j.LoggerFactory;
 import com.graph.db.Parser;
 
 /**
- * Nodes
- * 
  * Relationships
  * - PersonToObservedTerm
  * - PersonToNonObservedTerm
- * - PersonToGeneSymbol
  */
 public class PersonParser implements Parser {
 	
@@ -45,26 +42,21 @@ public class PersonParser implements Parser {
 		
 		Set<String> personToObservedTerm = new HashSet<>();
 		Set<String> personToNonObservedTerm = new HashSet<>();
-		Set<String> personToGeneSymbol = new HashSet<>();
 		
 		BiFunction<String, String, String> returnPersonIdAndValue = (personId, value) -> (StringUtils.join(Arrays.asList(personId, value), COMMA));
-		BiFunction<String, String, String> returnValue = (personId, value) -> (value);
 		
 		for (String line : lines) {
 			String[] fields = line.split(COMMA);
 			String personId = StringUtils.wrap(fields[0], DOUBLE_QUOTE);
 			String observedTermsField = fields[2];
 			String nonObservedTermsField = fields[3];
-			String genesField = fields[4];
 			
 			splitAndAddToSet(personToObservedTerm, personId, observedTermsField, returnPersonIdAndValue);
 			splitAndAddToSet(personToNonObservedTerm, personId, nonObservedTermsField, returnPersonIdAndValue);
-			splitAndAddToSet(personToGeneSymbol, personId, genesField, returnPersonIdAndValue);
 		}
 		
 		writeOutHeaderAndRows("PersonToObservedTerm", "Term", personToObservedTerm);
 		writeOutHeaderAndRows("PersonToNonObservedTerm", "Term", personToNonObservedTerm);
-		writeOutHeaderAndRows("PersonToGeneSymbol", "GeneSymbol", personToGeneSymbol);
 	}
 
 	//TODO double quote is causing problems
