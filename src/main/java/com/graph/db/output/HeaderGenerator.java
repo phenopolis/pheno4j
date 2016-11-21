@@ -45,8 +45,11 @@ public class HeaderGenerator {
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "geneSymbol", ":START_ID(GeneSymbol)");
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "termId", ":END_ID(Term)");
 			break;
+		case TRANSCRIPT_VARIANT:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "hgvsc", "hgvsc:ID(TranscriptVariant)");
+			break;
 		default:
-			throw new IllegalStateException();
+			throw new IllegalStateException("Unknown outputFileType: " + outputFileType);
 		}
 		return joinedHeaders;
 	}

@@ -25,12 +25,14 @@ import com.graph.db.Parser;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.subscriber.GeneToGeneticVariantSubscriber;
+import com.graph.db.file.annotation.subscriber.TranscriptVariantSubscriber;
 import com.graph.db.output.HeaderGenerator;
 import com.graph.db.output.OutputFileType;
 
 /**
  * Nodes
  * - GeneticVariant
+ * - TranscriptVariant
  * 
  * Relationships
  * - GeneToGeneticVariant
@@ -68,10 +70,11 @@ public class AnnotationParser implements Parser {
 	}
 
 	private List<GenericSubscriber<? extends Object>> createSubscribers(String outputFolder) {
-        GeneToGeneticVariantSubscriber geneIdToVariantSubscriber = new GeneToGeneticVariantSubscriber(outputFolder, getClass());
+        GeneToGeneticVariantSubscriber geneToGeneticVariantSubscriber = new GeneToGeneticVariantSubscriber(outputFolder, getClass());
         GenericSubscriber<Object> geneticVariantSubscriber = new GenericSubscriber<Object>(outputFolder, getClass(), OutputFileType.GENETIC_VARIANT);
+        TranscriptVariantSubscriber transcriptVariantSubscriber = new TranscriptVariantSubscriber(outputFolder, getClass());
         
-		return Arrays.asList(geneIdToVariantSubscriber, geneticVariantSubscriber);
+		return Arrays.asList(geneToGeneticVariantSubscriber, geneticVariantSubscriber, transcriptVariantSubscriber);
 	}
 
 	@Override
@@ -122,7 +125,7 @@ public class AnnotationParser implements Parser {
 
 	private void generateHeaderFiles() {
 		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENETIC_VARIANT,
-				OutputFileType.GENE_TO_GENETIC_VARIANT);
+				OutputFileType.GENE_TO_GENETIC_VARIANT, OutputFileType.TRANSCRIPT_VARIANT);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
 

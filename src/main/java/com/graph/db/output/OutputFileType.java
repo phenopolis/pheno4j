@@ -135,6 +135,20 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
+	TRANSCRIPT_VARIANT("TranscriptVariant", TranscriptConsequence.class) {
+		@Override
+		public String[] getHeader() {
+			return new String[] {
+					"hgvsc",
+					"impact",
+					"gene_symbol_source",
+					"cdna_end",
+					"cdna_start",
+					"cadd",
+					"variant_allele",
+					};
+		}
+	},
 	;
 	
 	private final String fileTag;
