@@ -45,7 +45,7 @@ public class GeneSymbolParser implements Parser {
 	}
 	
 	private List<GenericSubscriber<?>> createSubscribers(String outputFolder2) {
-		GeneSymbolToTermSubscriber geneSymbolToTermSubscriber = new GeneSymbolToTermSubscriber(outputFolder, getClass(), OutputFileType.GENE_SYMBOL_TO_TERM);
+		GeneSymbolToTermSubscriber geneSymbolToTermSubscriber = new GeneSymbolToTermSubscriber(outputFolder, getClass());
 		return Arrays.asList(geneSymbolToTermSubscriber);
 	}
 

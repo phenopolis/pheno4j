@@ -12,8 +12,8 @@ import com.graph.db.output.OutputFileType;
 
 public class GeneSymbolToTermSubscriber extends GenericSubscriber<Gene> {
 
-    public GeneSymbolToTermSubscriber(String outputFolder, Class<?> parserClass, OutputFileType outputFileType) {
-		super(outputFolder, parserClass, outputFileType);
+    public GeneSymbolToTermSubscriber(String outputFolder, Class<?> parserClass) {
+		super(outputFolder, parserClass, OutputFileType.GENE_SYMBOL_TO_TERM);
 	}
 
 	@Override

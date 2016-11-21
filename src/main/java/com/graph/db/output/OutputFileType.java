@@ -148,6 +148,15 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
+	GENETIC_VARIANT_TO_TRANSCRIPT_VARIANT("GeneticVariantToTranscriptVariant", TranscriptConsequence.class) {
+		@Override
+		public String[] getHeader() {
+			return new String[] {
+					"variant_id",
+					"hgvsc"
+					};
+		}
+	},
 	;
 	
 	private final String fileTag;

@@ -48,6 +48,10 @@ public class HeaderGenerator {
 		case TRANSCRIPT_VARIANT:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "hgvsc", "hgvsc:ID(TranscriptVariant)");
 			break;
+		case GENETIC_VARIANT_TO_TRANSCRIPT_VARIANT:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":START_ID(GeneticVariant)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "hgvsc", ":END_ID(TranscriptVariant)");
+			break;
 		default:
 			throw new IllegalStateException("Unknown outputFileType: " + outputFileType);
 		}

@@ -25,6 +25,7 @@ import com.graph.db.Parser;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.subscriber.GeneToGeneticVariantSubscriber;
+import com.graph.db.file.annotation.subscriber.GeneticVariantToTranscriptVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.TranscriptVariantSubscriber;
 import com.graph.db.output.HeaderGenerator;
 import com.graph.db.output.OutputFileType;
@@ -36,6 +37,7 @@ import com.graph.db.output.OutputFileType;
  * 
  * Relationships
  * - GeneToGeneticVariant
+ * - GeneticVariantToTranscriptVariant
  */
 public class AnnotationParser implements Parser {
 	
@@ -73,8 +75,10 @@ public class AnnotationParser implements Parser {
         GeneToGeneticVariantSubscriber geneToGeneticVariantSubscriber = new GeneToGeneticVariantSubscriber(outputFolder, getClass());
         GenericSubscriber<Object> geneticVariantSubscriber = new GenericSubscriber<Object>(outputFolder, getClass(), OutputFileType.GENETIC_VARIANT);
         TranscriptVariantSubscriber transcriptVariantSubscriber = new TranscriptVariantSubscriber(outputFolder, getClass());
+        GeneticVariantToTranscriptVariantSubscriber geneticVariantToTranscriptVariantSubscriber = new GeneticVariantToTranscriptVariantSubscriber(outputFolder, getClass());
         
-		return Arrays.asList(geneToGeneticVariantSubscriber, geneticVariantSubscriber, transcriptVariantSubscriber);
+		return Arrays.asList(geneToGeneticVariantSubscriber, geneticVariantSubscriber, transcriptVariantSubscriber,
+				geneticVariantToTranscriptVariantSubscriber);
 	}
 
 	@Override
@@ -125,7 +129,8 @@ public class AnnotationParser implements Parser {
 
 	private void generateHeaderFiles() {
 		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENETIC_VARIANT,
-				OutputFileType.GENE_TO_GENETIC_VARIANT, OutputFileType.TRANSCRIPT_VARIANT);
+				OutputFileType.GENE_TO_GENETIC_VARIANT, OutputFileType.TRANSCRIPT_VARIANT,
+				OutputFileType.GENETIC_VARIANT_TO_TRANSCRIPT_VARIANT);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
 
