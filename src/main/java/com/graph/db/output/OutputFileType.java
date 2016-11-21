@@ -157,6 +157,15 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
+	TRANSCRIPT_TO_TRANSCRIPT_VARIANT("TranscriptToTranscriptVariant", TranscriptConsequence.class) {
+		@Override
+		public String[] getHeader() {
+			return new String[] {
+					"transcript_id",
+					"hgvsc"
+					};
+		}
+	}
 	;
 	
 	private final String fileTag;
