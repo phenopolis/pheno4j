@@ -26,12 +26,12 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
-	GENE_TO_GENETIC_VARIANT("GeneToGeneticVariant", TranscriptConsequence.class) {
+	GENE_TO_GENETIC_VARIANT("GeneToGeneticVariant", Pair.class) {
 		@Override
 		public String[] getHeader() {
 			return new String[] {
-					"gene_id",
-					"variant_id"
+					"left",
+					"right"
 					};
 		}
 	},
