@@ -1,5 +1,7 @@
 package com.graph.db.output;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.file.gene.domain.GeneSymbolToTerm;
@@ -171,6 +173,15 @@ public enum OutputFileType implements OutputFile {
 		public String[] getHeader() {
 			return new String[] {
 					"this",
+					};
+		}
+	},
+	TRANSCRIPT_VARIANT_TO_CONSEQUENCE_TERM("TranscriptVariantToConsequenceTerm", Pair.class) {
+		@Override
+		public String[] getHeader() {
+			return new String[] {
+					"left",
+					"right"
 					};
 		}
 	},

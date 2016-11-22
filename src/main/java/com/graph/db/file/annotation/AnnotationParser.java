@@ -29,6 +29,7 @@ import com.graph.db.file.annotation.subscriber.GeneToGeneticVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneticVariantToTranscriptVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.TranscriptToTranscriptVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.TranscriptVariantSubscriber;
+import com.graph.db.file.annotation.subscriber.TranscriptVariantToConsequenceTermSubscriber;
 import com.graph.db.output.HeaderGenerator;
 import com.graph.db.output.OutputFileType;
 
@@ -42,6 +43,7 @@ import com.graph.db.output.OutputFileType;
  * - GeneToGeneticVariant
  * - GeneticVariantToTranscriptVariant
  * - TranscriptToTranscriptVariant
+ * - TranscriptVariantToConsequenceTerm
  */
 public class AnnotationParser implements Parser {
 	
@@ -82,10 +84,11 @@ public class AnnotationParser implements Parser {
         GeneticVariantToTranscriptVariantSubscriber geneticVariantToTranscriptVariantSubscriber = new GeneticVariantToTranscriptVariantSubscriber(outputFolder, getClass());
         TranscriptToTranscriptVariantSubscriber transcriptToTranscriptVariantSubscriber = new TranscriptToTranscriptVariantSubscriber(outputFolder, getClass());
         ConsequenceTermSubscriber consequenceTermSubscriber = new ConsequenceTermSubscriber(outputFolder, getClass());
+        TranscriptVariantToConsequenceTermSubscriber transcriptVariantToConsequenceTermSubscriber = new TranscriptVariantToConsequenceTermSubscriber(outputFolder, getClass());
         
 		return Arrays.asList(geneToGeneticVariantSubscriber, geneticVariantSubscriber, transcriptVariantSubscriber,
 				geneticVariantToTranscriptVariantSubscriber, transcriptToTranscriptVariantSubscriber,
-				consequenceTermSubscriber);
+				consequenceTermSubscriber, transcriptVariantToConsequenceTermSubscriber);
 	}
 
 	@Override
@@ -138,7 +141,7 @@ public class AnnotationParser implements Parser {
 		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENETIC_VARIANT,
 				OutputFileType.GENE_TO_GENETIC_VARIANT, OutputFileType.TRANSCRIPT_VARIANT,
 				OutputFileType.GENETIC_VARIANT_TO_TRANSCRIPT_VARIANT, OutputFileType.TRANSCRIPT_TO_TRANSCRIPT_VARIANT,
-				OutputFileType.CONSEQUENCE_TERM);
+				OutputFileType.CONSEQUENCE_TERM, OutputFileType.TRANSCRIPT_VARIANT_TO_CONSEQUENCE_TERM);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
 

@@ -59,6 +59,10 @@ public class HeaderGenerator {
 		case CONSEQUENCE_TERM:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "this", "consequenceTerm:ID(ConsequenceTerm)");
 			break;
+		case TRANSCRIPT_VARIANT_TO_CONSEQUENCE_TERM:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "left", ":START_ID(TranscriptVariant)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "right", ":END_ID(ConsequenceTerm)");
+			break;
 		default:
 			throw new IllegalStateException("Unknown outputFileType: " + outputFileType);
 		}
