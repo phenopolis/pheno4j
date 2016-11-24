@@ -194,6 +194,14 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
+	TRANSCRIPT("Transcript", null) {
+		@Override
+		public String[] getHeader() {
+			return new String[] {
+					"transcript_id",
+					};
+		}
+	},
 	;
 	
 	private final String fileTag;

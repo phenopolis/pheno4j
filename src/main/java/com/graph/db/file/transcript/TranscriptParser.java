@@ -49,8 +49,10 @@ public class TranscriptParser implements Parser {
 	}
 	
 	private List<? extends AutoCloseable> createSubscribers() {
+		//TODO gene will likely have problems with duplicate rows; create subclass to fix
 		GenericMapSubscriber<HashMap<String, String>> geneSubscriber = new GenericMapSubscriber<>(outputFolder, getClass(), OutputFileType.GENE);
-		return Arrays.asList(geneSubscriber);
+		GenericMapSubscriber<HashMap<String, String>> transcriptSubscriber = new GenericMapSubscriber<>(outputFolder, getClass(), OutputFileType.TRANSCRIPT);
+		return Arrays.asList(geneSubscriber, transcriptSubscriber);
 	}
 
 	@Override
@@ -113,7 +115,7 @@ public class TranscriptParser implements Parser {
 	}
 
 	private void generateHeaderFiles() {
-		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE);
+		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE, OutputFileType.TRANSCRIPT);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
 

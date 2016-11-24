@@ -64,7 +64,10 @@ public class HeaderGenerator {
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "right", ":END_ID(ConsequenceTerm)");
 			break;
 		case GENE:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", "gene_id:ID(GENE)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", "gene_id:ID(Gene)");
+			break;
+		case TRANSCRIPT:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "transcript_id", "gene_id:ID(Transcript)");
 			break;
 		default:
 			throw new IllegalStateException("Unknown outputFileType: " + outputFileType);
