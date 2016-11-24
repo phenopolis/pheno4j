@@ -52,7 +52,8 @@ public class TranscriptParser implements Parser {
 		//TODO gene will likely have problems with duplicate rows; create subclass to fix
 		GenericMapSubscriber<HashMap<String, String>> geneSubscriber = new GenericMapSubscriber<>(outputFolder, getClass(), OutputFileType.GENE);
 		GenericMapSubscriber<HashMap<String, String>> transcriptSubscriber = new GenericMapSubscriber<>(outputFolder, getClass(), OutputFileType.TRANSCRIPT);
-		return Arrays.asList(geneSubscriber, transcriptSubscriber);
+		GenericMapSubscriber<HashMap<String, String>> transcriptToGeneSubscriber = new GenericMapSubscriber<>(outputFolder, getClass(), OutputFileType.TRANSCRIPT_TO_GENE);
+		return Arrays.asList(geneSubscriber, transcriptSubscriber, transcriptToGeneSubscriber);
 	}
 
 	@Override
@@ -115,7 +116,7 @@ public class TranscriptParser implements Parser {
 	}
 
 	private void generateHeaderFiles() {
-		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE, OutputFileType.TRANSCRIPT);
+		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE, OutputFileType.TRANSCRIPT, OutputFileType.TRANSCRIPT_TO_GENE);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
 

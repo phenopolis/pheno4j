@@ -202,6 +202,15 @@ public enum OutputFileType implements OutputFile {
 					};
 		}
 	},
+	TRANSCRIPT_TO_GENE("TranscriptToGene", null) {
+		@Override
+		public String[] getHeader() {
+			return new String[] {
+					"transcript_id",
+					"gene_id"
+					};
+		}
+	},
 	;
 	
 	private final String fileTag;
