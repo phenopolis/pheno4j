@@ -41,10 +41,10 @@ public class GeneSymbolParser implements Parser {
 		this.outputFolder = outputFolder;
 		
 		eventBus = new EventBus();
-		subscribers = createSubscribers(outputFolder);
+		subscribers = createSubscribers();
 	}
 	
-	private List<GenericSubscriber<?>> createSubscribers(String outputFolder2) {
+	private List<GenericSubscriber<?>> createSubscribers() {
 		GeneSymbolToTermSubscriber geneSymbolToTermSubscriber = new GeneSymbolToTermSubscriber(outputFolder, getClass());
 		return Arrays.asList(geneSymbolToTermSubscriber);
 	}

@@ -3,6 +3,8 @@ package com.graph.db.file.gene.domain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+//TODO delete this
+@Deprecated
 public class GeneSymbolToTerm {
 	
 	private final String geneSymbol;
