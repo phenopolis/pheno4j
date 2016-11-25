@@ -1,4 +1,4 @@
-package com.graph.db.file.transcript;
+package com.graph.db.file.gene;
 
 import static com.graph.db.util.FileUtil.logLineNumber;
 
@@ -22,22 +22,17 @@ import org.slf4j.LoggerFactory;
 import com.google.common.eventbus.EventBus;
 import com.graph.db.Parser;
 import com.graph.db.file.GenericMapSubscriber;
-import com.graph.db.file.transcript.subscriber.GeneSubscriber;
 import com.graph.db.output.HeaderGenerator;
 import com.graph.db.output.OutputFileType;
 import com.graph.db.util.Constants;
 
 /**
- * Nodes
- * - Transcript
- * - Gene
- * 
  * Relationships
- * - TranscriptToGene
+ * - GeneToTerm
  */
-public class TranscriptParser implements Parser {
+public class GeneParser implements Parser {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(TranscriptParser.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeneParser.class);
 
 	private final String fileName;
 	private final String outputFolder;
@@ -45,7 +40,7 @@ public class TranscriptParser implements Parser {
 	private final EventBus eventBus;
 	private final List<? extends AutoCloseable> subscribers;
 	
-	public TranscriptParser(String fileName, String outputFolder) {
+	public GeneParser(String fileName, String outputFolder) {
 		this.fileName = fileName;
 		this.outputFolder = outputFolder;
 		
@@ -54,30 +49,29 @@ public class TranscriptParser implements Parser {
 	}
 	
 	private List<? extends AutoCloseable> createSubscribers() {
-		GeneSubscriber geneSubscriber = new GeneSubscriber(outputFolder, getClass());
-		GenericMapSubscriber<HashMap<String, String>> transcriptSubscriber = new GenericMapSubscriber<>(outputFolder, getClass(), OutputFileType.TRANSCRIPT);
-		GenericMapSubscriber<HashMap<String, String>> transcriptToGeneSubscriber = new GenericMapSubscriber<>(outputFolder, getClass(), OutputFileType.TRANSCRIPT_TO_GENE);
-		return Arrays.asList(geneSubscriber, transcriptSubscriber, transcriptToGeneSubscriber);
+		GenericMapSubscriber<HashMap<String, String>> geneToTermSubscriber = new GenericMapSubscriber<>(outputFolder, getClass(), OutputFileType.GENE_TO_TERM);
+		return Arrays.asList(geneToTermSubscriber);
 	}
 
 	@Override
 	public void execute() {
 		registerSubscribers();
+		
 		try (LineNumberReader reader = createLineNumberReader();) {
+			String[] header = null;
 			String line;
 			
 			while (( line = reader.readLine()) != null) {
 				logLineNumber(reader, 1000);
 				
-				if (isNotCommentRow(line)) {
-					String[] columns = StringUtils.split(line, Constants.TAB);
-					if (isTranscriptRow(columns)) {
-						String[] cells = StringUtils.split(columns[8], Constants.SEMI_COLON);
-						
-						Map<String, String> map = splitCellsIntoKeyValuePairs(cells);
-						eventBus.post(map);
-					}
+				if (header == null) {
+					header = StringUtils.split(line, Constants.TAB);
 				}
+				
+				String[] columns = StringUtils.split(line, Constants.TAB);
+				
+				Map<String, String> map = splitColumnsIntoKeyValuePairs(header, columns);
+				eventBus.post(map);
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -100,22 +94,13 @@ public class TranscriptParser implements Parser {
 		return new LineNumberReader(decoder);
 	}
 
-	private Map<String, String> splitCellsIntoKeyValuePairs(String... cells) {
+	private Map<String, String> splitColumnsIntoKeyValuePairs(String[] header, String[] columns) {
 		Map<String, String> result = new HashMap<>();
-		for (String cell : cells) {
-			String[] keyAndValue = StringUtils.split(StringUtils.trimToEmpty(cell), Constants.SPACE);
-			String value = StringUtils.replace(keyAndValue[1], Constants.DOUBLE_QUOTE, StringUtils.EMPTY);
-			result.put(keyAndValue[0], value);
+		for (int i = 0; i < header.length; i++) {
+			String value = i < columns.length ? columns[i] : StringUtils.EMPTY;
+			result.put(header[i], value);
 		}
 		return result;
-	}
-
-	private boolean isNotCommentRow(String line) {
-		return !line.startsWith("##");
-	}
-	
-	private boolean isTranscriptRow(String[] cells) {
-		return "transcript".equals(cells[2]);
 	}
 
 	private void registerSubscribers() {
@@ -133,7 +118,7 @@ public class TranscriptParser implements Parser {
 	}
 
 	private void generateHeaderFiles() {
-		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE, OutputFileType.TRANSCRIPT, OutputFileType.TRANSCRIPT_TO_GENE);
+		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE_TO_TERM);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
 
@@ -141,7 +126,7 @@ public class TranscriptParser implements Parser {
 		if ((args != null) && (args.length != 2)) {
 			throw new RuntimeException("Incorrect args: $1=inputFile, $2=outputFolder");
 		}
-		new TranscriptParser(args[0], args[1]).execute();
+		new GeneParser(args[0], args[1]).execute();
 		LOGGER.info("Finished");
 	}
 

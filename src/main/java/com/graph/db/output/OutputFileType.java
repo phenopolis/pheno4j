@@ -4,17 +4,12 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
-import com.graph.db.file.gene.domain.GeneSymbolToTerm;
 
 public enum OutputFileType {
 
-	GENE_SYMBOL_TO_TERM("GeneSymbolToTerm", GeneSymbolToTerm.class, new String[] {
-			"geneSymbol",
-			"termId"
-			}),
-	
-	GENE_ID("GeneId", TranscriptConsequence.class, new String[] {
-			"gene_id"
+	GENE_TO_TERM("GeneToTerm", null, new String[] {
+			"gene_id",
+			"HPO-ID"
 			}),
 	GENE_TO_GENETIC_VARIANT("GeneToGeneticVariant", Pair.class, new String[] {
 			"left",
