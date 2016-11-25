@@ -8,8 +8,8 @@ import com.graph.db.file.annotation.AnnotationParser;
 import com.graph.db.file.gene.GeneSymbolParser;
 import com.graph.db.file.person.PersonParser;
 import com.graph.db.file.term.TermParser;
+import com.graph.db.file.transcript.TranscriptParser;
 import com.graph.db.file.vcf.VcfParser;
-import com.graph.db.output.DuplicateRemover;
 
 public class Dispatcher {
 
@@ -20,7 +20,7 @@ public class Dispatcher {
 		ENTRY_POINTS.put("GeneSymbolParser", GeneSymbolParser.class);
 		ENTRY_POINTS.put("PersonParser", PersonParser.class);
 		ENTRY_POINTS.put("TermParser", TermParser.class);
-		ENTRY_POINTS.put("DuplicateRemover", DuplicateRemover.class);
+		ENTRY_POINTS.put("TranscriptParser", TranscriptParser.class);
 	}
 
 	public static void main(final String[] args) throws Exception {
