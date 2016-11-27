@@ -16,7 +16,6 @@ public class GeneticVariant {
 	private Integer HOM_COUNT;
 	private Integer MISS_COUNT;
 	private Double allele_freq;
-	private Double cadd;
 	private Boolean hasExac;
 	
 	public String getVariant_id() {
@@ -55,14 +54,6 @@ public class GeneticVariant {
 		return allele_freq;
 	}
 	
-	public Double getCadd() {
-		return cadd;
-	}
-
-	public void setCadd(Double cadd) {
-		this.cadd = cadd;
-	}
-
 	public boolean isHasExac() {
 		return hasExac;
 	}

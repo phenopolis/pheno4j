@@ -65,6 +65,10 @@ public class TranscriptConsequence {
 		return cadd;
 	}
 
+	public void setCadd(String cadd) {
+		this.cadd = cadd;
+	}
+
 	public String getVariant_allele() {
 		return variant_allele;
 	}

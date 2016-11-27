@@ -7,6 +7,7 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -28,6 +29,7 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 		updateVariantIdOnAnnotatedVariant(variant, transformedVariantId);
 		updateVariantIdOnTranscriptConsequences(variant.getTranscript_consequences(), transformedVariantId);
 		
+		clearNonDoubleCadds(variant);
 		setHasExac(variant);
 		
 		return variant;
@@ -52,6 +54,14 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 			String transformedVariantId) {
 		for (TranscriptConsequence consequence : transcriptConsequences) {
 			consequence.setVariant_id(transformedVariantId);
+		}
+	}
+	
+	private void clearNonDoubleCadds(GeneticVariant variant) {
+		for (TranscriptConsequence transcriptConsequence : variant.getTranscript_consequences()) {
+			if (!NumberUtils.isNumber(transcriptConsequence.getCadd())) {
+				transcriptConsequence.setCadd(null);
+			}
 		}
 	}
 	
