@@ -11,6 +11,7 @@ public enum OutputFileType {
 			"gene_id",
 			"HPO-ID"
 			}),
+	//TODO get rid of Pair usage
 	GENE_TO_GENETIC_VARIANT("GeneToGeneticVariant", Pair.class, new String[] {
 			"left",
 			"right"
@@ -131,6 +132,7 @@ public enum OutputFileType {
 	CONSEQUENCE_TERM("ConsequenceTerm", String.class, new String[] {
 			"this",
 			}),
+	//TODO get rid of Pair usage
 	TRANSCRIPT_VARIANT_TO_CONSEQUENCE_TERM("TranscriptVariantToConsequenceTerm", Pair.class, new String[] {
 			"left",
 			"right"
