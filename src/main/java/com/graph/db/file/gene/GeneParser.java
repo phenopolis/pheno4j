@@ -70,8 +70,10 @@ public class GeneParser implements Parser {
 				
 				String[] columns = StringUtils.split(line, Constants.TAB);
 				
-				Map<String, String> map = splitColumnsIntoKeyValuePairs(header, columns);
-				eventBus.post(map);
+				if (header.length == columns.length) {
+					Map<String, String> map = splitColumnsIntoKeyValuePairs(header, columns);
+					eventBus.post(map);
+				}
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -97,8 +99,7 @@ public class GeneParser implements Parser {
 	private Map<String, String> splitColumnsIntoKeyValuePairs(String[] header, String[] columns) {
 		Map<String, String> result = new HashMap<>();
 		for (int i = 0; i < header.length; i++) {
-			String value = i < columns.length ? columns[i] : StringUtils.EMPTY;
-			result.put(header[i], value);
+				result.put(header[i], columns[i]);
 		}
 		return result;
 	}
