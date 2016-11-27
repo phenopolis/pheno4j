@@ -39,13 +39,13 @@ import com.graph.db.Parser;
  * - Person
  * 
  * Relationships
- * - VariantToPerson
+ * - GeneticVariantToPerson
  */
 public class VcfParser implements Parser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(VcfParser.class);
 	
-	private final BlockingQueue<String> variantToPersonBlockingQueue = new ArrayBlockingQueue<>(1024);
+	private final BlockingQueue<String> geneticVariantToPersonBlockingQueue = new ArrayBlockingQueue<>(1024);
 	private final Map<Integer, String> indexToPerson = new HashMap<>();
 
 	private final String fileName;
@@ -64,8 +64,8 @@ public class VcfParser implements Parser {
 			
 			String fileTag = StringUtils.substringBefore(fileName, ".");
 			
-	        Runnable variantToPersonBlockingQueueConsumer = new QueueToFileConsumer(variantToPersonBlockingQueue, outputFolder, "VariantToPerson-" + fileTag + ".csv");
-	        new Thread(variantToPersonBlockingQueueConsumer).start();
+	        Runnable geneticVariantToPersonBlockingQueueConsumer = new QueueToFileConsumer(geneticVariantToPersonBlockingQueue, outputFolder, "GeneticVariantToPerson-" + fileTag + ".csv");
+	        new Thread(geneticVariantToPersonBlockingQueueConsumer).start();
 	        
 	        ForkJoinPool forkJoinPool = new ForkJoinPool();
 	        
@@ -107,7 +107,7 @@ public class VcfParser implements Parser {
 					}
 				}
 			}
-			sendPoisonPillToQueue(variantToPersonBlockingQueue);
+			sendPoisonPillToQueue(geneticVariantToPersonBlockingQueue);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -153,7 +153,7 @@ public class VcfParser implements Parser {
 					
 					if ("0/1".equals(substringBeforeFirstColon) || "1/1".equals(substringBeforeFirstColon)) {
 						try {
-							variantToPersonBlockingQueue.put(variantId + COMMA + indexToPerson.get(i));
+							geneticVariantToPersonBlockingQueue.put(variantId + COMMA + indexToPerson.get(i));
 						} catch (InterruptedException e) {
 							throw new RuntimeException(e);
 						}
