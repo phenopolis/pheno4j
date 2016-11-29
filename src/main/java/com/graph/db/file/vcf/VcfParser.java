@@ -8,6 +8,7 @@ import static com.graph.db.util.FileUtil.logLineNumber;
 import static com.graph.db.util.FileUtil.sendPoisonPillToQueue;
 import static com.graph.db.util.FileUtil.writeOutCsvFile;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,7 +63,7 @@ public class VcfParser implements Parser {
 			boolean found = false;
 			int personStartColumn = Integer.MAX_VALUE;
 			
-			String fileTag = StringUtils.substringBefore(fileName, ".");
+			String fileTag = StringUtils.substringBefore(new File(fileName).getName(), ".");
 			
 	        Runnable geneticVariantToPersonBlockingQueueConsumer = new QueueToFileConsumer(geneticVariantToPersonBlockingQueue, outputFolder, "GeneticVariantToPerson-" + fileTag + ".csv");
 	        new Thread(geneticVariantToPersonBlockingQueueConsumer).start();
@@ -85,7 +86,7 @@ public class VcfParser implements Parser {
 						}
 					}
 					LOGGER.info("Found header at line: {}", reader.getLineNumber());
-					writeOutCsvFile(outputFolder, getClass(),  "Person" + fileTag, indexToPerson.values());
+					writeOutCsvFile(outputFolder, getClass(),  "Person-" + fileTag, indexToPerson.values());
 					found = true;
 					continue;
 				}
