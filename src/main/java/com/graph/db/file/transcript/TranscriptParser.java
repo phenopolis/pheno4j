@@ -104,10 +104,27 @@ public class TranscriptParser implements Parser {
 		Map<String, String> result = new HashMap<>();
 		for (String cell : cells) {
 			String[] keyAndValue = StringUtils.split(StringUtils.trimToEmpty(cell), Constants.SPACE);
-			String value = StringUtils.replace(keyAndValue[1], Constants.DOUBLE_QUOTE, StringUtils.EMPTY);
-			result.put(keyAndValue[0], value);
+			
+			String originalValue = StringUtils.replace(keyAndValue[1], Constants.DOUBLE_QUOTE, StringUtils.EMPTY);
+			String newValue = getValueForKey(keyAndValue[0], originalValue);
+			
+			result.put(keyAndValue[0], newValue);
 		}
 		return result;
+	}
+
+	private String getValueForKey(String key, String originalValue) {
+		final String value;
+		switch (key) {
+		case "gene_id":
+		case "transcript_id":
+			value = StringUtils.substringBefore(originalValue, ".");
+			break;
+		default:
+			value = originalValue;
+			break;
+		}
+		return value;
 	}
 
 	private boolean isNotCommentRow(String line) {
