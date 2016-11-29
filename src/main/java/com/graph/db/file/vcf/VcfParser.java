@@ -100,10 +100,12 @@ public class VcfParser implements Parser {
 					
 					String[] alts = altField.split(COMMA);
 					for (String alt : alts) {
-						String variantId = DOUBLE_QUOTE + chrom + UNDERSCORE + pos + UNDERSCORE + ref + UNDERSCORE + alt + DOUBLE_QUOTE;
-						
-						RecursiveAction task = new RowAction(variantId, split, personStartColumn, split.length);
-						forkJoinPool.invoke(task);
+						if (isNotStar(alt)) {
+							String variantId = DOUBLE_QUOTE + chrom + UNDERSCORE + pos + UNDERSCORE + ref + UNDERSCORE + alt + DOUBLE_QUOTE;
+							
+							RecursiveAction task = new RowAction(variantId, split, personStartColumn, split.length);
+							forkJoinPool.invoke(task);
+						}
 					}
 				}
 			}
@@ -111,6 +113,10 @@ public class VcfParser implements Parser {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private boolean isNotStar(String alt) {
+		return !"*".equals(alt);
 	}
 
 	private LineNumberReader createLineNumberReader(String fileName) {
