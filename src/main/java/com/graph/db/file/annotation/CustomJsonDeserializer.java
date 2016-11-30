@@ -5,6 +5,7 @@ import static com.graph.db.util.Constants.UNDERSCORE;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -23,6 +24,9 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 	public GeneticVariant deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 			throws JsonParseException {
 		GeneticVariant variant = new Gson().fromJson(json, GeneticVariant.class);
+		if (variant.getTranscript_consequences() == null) {
+			variant.setTranscript_consequences(Collections.emptySet());
+		}
 		
 		String transformedVariantId = getTransformedVariantId(variant.getVariant_id());
 		

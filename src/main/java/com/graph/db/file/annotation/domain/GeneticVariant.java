@@ -34,6 +34,10 @@ public class GeneticVariant {
 		return transcript_consequences;
 	}
 
+	public void setTranscript_consequences(Set<TranscriptConsequence> transcript_consequences) {
+		this.transcript_consequences = transcript_consequences;
+	}
+
 	public Integer getHET_COUNT() {
 		return HET_COUNT;
 	}
