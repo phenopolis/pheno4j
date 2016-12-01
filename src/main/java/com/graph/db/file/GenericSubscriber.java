@@ -12,6 +12,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.google.common.eventbus.Subscribe;
 import com.graph.db.output.OutputFileType;
 import com.graph.db.util.Constants;
+import com.graph.db.util.ManagedEventBus.PoisonPill;
 
 public class GenericSubscriber<T> implements AutoCloseable {
 	
@@ -37,6 +38,9 @@ public class GenericSubscriber<T> implements AutoCloseable {
 
     @Subscribe
     public void processAnnotation(T object) {
+    	if (object instanceof PoisonPill) {
+    		return;
+    	}
     	try {
 			beanWriter.write(object);
     	} catch (IOException e) {

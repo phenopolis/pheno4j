@@ -10,15 +10,10 @@ import java.io.LineNumberReader;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.AsyncEventBus;
-import com.google.common.eventbus.EventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.graph.db.Parser;
@@ -32,6 +27,7 @@ import com.graph.db.file.annotation.subscriber.TranscriptVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.TranscriptVariantToConsequenceTermSubscriber;
 import com.graph.db.output.HeaderGenerator;
 import com.graph.db.output.OutputFileType;
+import com.graph.db.util.ManagedEventBus;
 
 /**
  * Nodes
@@ -54,8 +50,7 @@ public class AnnotationParser implements Parser {
 
 	private final Gson gson;
 	
-	private final ExecutorService threadPool;
-	private final EventBus eventBus;
+	private final ManagedEventBus eventBus;
 
 	private final List<GenericSubscriber<?>> subscribers;
 
@@ -65,8 +60,7 @@ public class AnnotationParser implements Parser {
 		
 		gson = createGson();
         
-		threadPool = Executors.newFixedThreadPool(10);
-		eventBus = new AsyncEventBus(threadPool);
+		eventBus = new ManagedEventBus(getClass().getSimpleName());
 		
 		subscribers = createSubscribers(outputFolder);
 	}
@@ -113,26 +107,24 @@ public class AnnotationParser implements Parser {
 				throw new RuntimeException(e);
 			}
 		}
-		
-		shutDownThreadPool();
+		closeEventBus();
 		closeSubscribers();
 		
 		generateHeaderFiles();
+	}
+
+	private void closeEventBus() {
+		try {
+			eventBus.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private void registerSubscribers() {
 		subscribers.forEach(subscriber -> eventBus.register(subscriber));
 	}
 
-	private void shutDownThreadPool() {
-		threadPool.shutdown();
-		try {
-			threadPool.awaitTermination(10, TimeUnit.MINUTES);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
 	private void closeSubscribers() {
 		subscribers.forEach(subscriber -> subscriber.close());
 	}
