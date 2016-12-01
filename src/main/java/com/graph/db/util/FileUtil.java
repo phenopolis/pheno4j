@@ -3,12 +3,17 @@ package com.graph.db.util;
 import static com.graph.db.util.Constants.POISON_PILL;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.Reader;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -69,5 +74,17 @@ public final class FileUtil {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static LineNumberReader createLineNumberReaderForGzipFile(String fileName) {
+		InputStream gzipStream;
+		try {
+			InputStream fileStream = new FileInputStream(fileName);
+			gzipStream = new GZIPInputStream(fileStream);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		Reader decoder = new InputStreamReader(gzipStream);
+		return new LineNumberReader(decoder);
 	}
 }

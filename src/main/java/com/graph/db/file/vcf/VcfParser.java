@@ -4,17 +4,14 @@ import static com.graph.db.util.Constants.COMMA;
 import static com.graph.db.util.Constants.DOUBLE_QUOTE;
 import static com.graph.db.util.Constants.TAB;
 import static com.graph.db.util.Constants.UNDERSCORE;
+import static com.graph.db.util.FileUtil.createLineNumberReaderForGzipFile;
 import static com.graph.db.util.FileUtil.logLineNumber;
 import static com.graph.db.util.FileUtil.sendPoisonPillToQueue;
 import static com.graph.db.util.FileUtil.writeOutCsvFile;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.io.Reader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +19,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
-import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -59,7 +55,7 @@ public class VcfParser implements Parser {
 	
 	@Override
 	public void execute() {
-		try (LineNumberReader reader = createLineNumberReader(fileName)) {
+		try (LineNumberReader reader = createLineNumberReaderForGzipFile(fileName)) {
 			boolean found = false;
 			int personStartColumn = Integer.MAX_VALUE;
 			
@@ -118,18 +114,6 @@ public class VcfParser implements Parser {
 
 	private boolean isNotStar(String alt) {
 		return !"*".equals(alt);
-	}
-
-	private LineNumberReader createLineNumberReader(String fileName) {
-		InputStream gzipStream;
-		try {
-			InputStream fileStream = new FileInputStream(fileName);
-			gzipStream = new GZIPInputStream(fileStream);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		Reader decoder = new InputStreamReader(gzipStream);
-		return new LineNumberReader(decoder);
 	}
 
 	private class RowAction extends RecursiveAction {

@@ -1,19 +1,15 @@
 package com.graph.db.file.gene;
 
+import static com.graph.db.util.FileUtil.createLineNumberReaderForGzipFile;
 import static com.graph.db.util.FileUtil.logLineNumber;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.io.Reader;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -57,7 +53,7 @@ public class GeneParser implements Parser {
 	public void execute() {
 		registerSubscribers();
 		
-		try (LineNumberReader reader = createLineNumberReader();) {
+		try (LineNumberReader reader = createLineNumberReaderForGzipFile(fileName);) {
 			String[] header = null;
 			String line;
 			
@@ -81,19 +77,6 @@ public class GeneParser implements Parser {
 		closeSubscribers();
 		
 		generateHeaderFiles();
-	}
-
-	//TODO duplicated from vcfparser
-	private LineNumberReader createLineNumberReader() {
-		InputStream gzipStream;
-		try {
-			InputStream fileStream = new FileInputStream(fileName);
-			gzipStream = new GZIPInputStream(fileStream);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		Reader decoder = new InputStreamReader(gzipStream);
-		return new LineNumberReader(decoder);
 	}
 
 	private Map<String, String> splitColumnsIntoKeyValuePairs(String[] header, String[] columns) {
