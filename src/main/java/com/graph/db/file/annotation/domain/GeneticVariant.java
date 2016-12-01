@@ -5,7 +5,7 @@ import java.util.Set;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class AnnotatedVariant {
+public class GeneticVariant {
 	
 	private String variant_id;
 	private Exac EXAC;
@@ -16,7 +16,6 @@ public class AnnotatedVariant {
 	private Integer HOM_COUNT;
 	private Integer MISS_COUNT;
 	private Double allele_freq;
-	private Double cadd;
 	private Boolean hasExac;
 	
 	public String getVariant_id() {
@@ -33,6 +32,10 @@ public class AnnotatedVariant {
 
 	public Set<TranscriptConsequence> getTranscript_consequences() {
 		return transcript_consequences;
+	}
+
+	public void setTranscript_consequences(Set<TranscriptConsequence> transcript_consequences) {
+		this.transcript_consequences = transcript_consequences;
 	}
 
 	public Integer getHET_COUNT() {
@@ -55,14 +58,6 @@ public class AnnotatedVariant {
 		return allele_freq;
 	}
 	
-	public Double getCadd() {
-		return cadd;
-	}
-
-	public void setCadd(Double cadd) {
-		this.cadd = cadd;
-	}
-
 	public boolean isHasExac() {
 		return hasExac;
 	}

@@ -8,6 +8,7 @@ import static com.graph.db.util.FileUtil.logLineNumber;
 import static com.graph.db.util.FileUtil.sendPoisonPillToQueue;
 import static com.graph.db.util.FileUtil.writeOutCsvFile;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,16 +38,15 @@ import com.graph.db.Parser;
 /**
  * Nodes
  * - Person
- * - Variant
  * 
  * Relationships
- * - VariantToPerson
+ * - GeneticVariantToPerson
  */
 public class VcfParser implements Parser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(VcfParser.class);
 	
-	private final BlockingQueue<String> variantToPersonBlockingQueue = new ArrayBlockingQueue<>(1024);
+	private final BlockingQueue<String> geneticVariantToPersonBlockingQueue = new ArrayBlockingQueue<>(1024);
 	private final Map<Integer, String> indexToPerson = new HashMap<>();
 
 	private final String fileName;
@@ -63,14 +63,10 @@ public class VcfParser implements Parser {
 			boolean found = false;
 			int personStartColumn = Integer.MAX_VALUE;
 			
-			String fileTag = StringUtils.substringBefore(fileName, ".");
+			String fileTag = StringUtils.substringBefore(new File(fileName).getName(), ".");
 			
-			BlockingQueue<String> variantIdsBlockingQueue = new ArrayBlockingQueue<>(1024);
-			Runnable variantIdsBlockingQueueConsumer = new QueueToFileConsumer(variantIdsBlockingQueue, outputFolder, "Variant-" + fileTag + ".csv");
-	        new Thread(variantIdsBlockingQueueConsumer).start();
-	        
-	        Runnable variantToPersonBlockingQueueConsumer = new QueueToFileConsumer(variantToPersonBlockingQueue, outputFolder, "VariantToPerson-" + fileTag + ".csv");
-	        new Thread(variantToPersonBlockingQueueConsumer).start();
+	        Runnable geneticVariantToPersonBlockingQueueConsumer = new QueueToFileConsumer(geneticVariantToPersonBlockingQueue, outputFolder, "GeneticVariantToPerson-" + fileTag + ".csv");
+	        new Thread(geneticVariantToPersonBlockingQueueConsumer).start();
 	        
 	        ForkJoinPool forkJoinPool = new ForkJoinPool();
 	        
@@ -90,7 +86,7 @@ public class VcfParser implements Parser {
 						}
 					}
 					LOGGER.info("Found header at line: {}", reader.getLineNumber());
-					writeOutCsvFile(outputFolder, getClass(),  "Person" + fileTag, indexToPerson.values());
+					writeOutCsvFile(outputFolder, getClass(),  "Person-" + fileTag, indexToPerson.values());
 					found = true;
 					continue;
 				}
@@ -105,19 +101,23 @@ public class VcfParser implements Parser {
 					
 					String[] alts = altField.split(COMMA);
 					for (String alt : alts) {
-						String variantId = DOUBLE_QUOTE + chrom + UNDERSCORE + pos + UNDERSCORE + ref + UNDERSCORE + alt + DOUBLE_QUOTE;
-						variantIdsBlockingQueue.put(variantId);
-						
-						RecursiveAction task = new RowAction(variantId, split, personStartColumn, split.length);
-						forkJoinPool.invoke(task);
+						if (isNotStar(alt)) {
+							String variantId = DOUBLE_QUOTE + chrom + UNDERSCORE + pos + UNDERSCORE + ref + UNDERSCORE + alt + DOUBLE_QUOTE;
+							
+							RecursiveAction task = new RowAction(variantId, split, personStartColumn, split.length);
+							forkJoinPool.invoke(task);
+						}
 					}
 				}
 			}
-			sendPoisonPillToQueue(variantIdsBlockingQueue);
-			sendPoisonPillToQueue(variantToPersonBlockingQueue);
-		} catch (IOException | InterruptedException e) {
+			sendPoisonPillToQueue(geneticVariantToPersonBlockingQueue);
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private boolean isNotStar(String alt) {
+		return !"*".equals(alt);
 	}
 
 	private LineNumberReader createLineNumberReader(String fileName) {
@@ -160,7 +160,7 @@ public class VcfParser implements Parser {
 					
 					if ("0/1".equals(substringBeforeFirstColon) || "1/1".equals(substringBeforeFirstColon)) {
 						try {
-							variantToPersonBlockingQueue.put(variantId + COMMA + indexToPerson.get(i));
+							geneticVariantToPersonBlockingQueue.put(variantId + COMMA + indexToPerson.get(i));
 						} catch (InterruptedException e) {
 							throw new RuntimeException(e);
 						}
