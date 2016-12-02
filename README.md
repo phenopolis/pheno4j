@@ -109,16 +109,17 @@ RETURN count;
 ```
 4. Create the constraints and indexes
 ```
-CREATE CONSTRAINT ON (p:Variant) ASSERT p.variantId IS UNIQUE;
-CREATE CONSTRAINT ON (p:Person) ASSERT p.personId IS UNIQUE;
-CREATE CONSTRAINT ON (p:GeneSymbol) ASSERT p.geneSymbol IS UNIQUE;
-CREATE CONSTRAINT ON (p:AnnotatedVariant) ASSERT p.variantId IS UNIQUE;
 CREATE CONSTRAINT ON (p:Term) ASSERT p.termId IS UNIQUE;
-CREATE CONSTRAINT ON (p:GeneId) ASSERT p.geneId IS UNIQUE;
+CREATE CONSTRAINT ON (p:Person) ASSERT p.personId IS UNIQUE;
+CREATE CONSTRAINT ON (p:GeneticVariant) ASSERT p.variantId IS UNIQUE;
+CREATE CONSTRAINT ON (p:Gene) ASSERT p.gene_id IS UNIQUE;
+CREATE CONSTRAINT ON (p:TranscriptVariant) ASSERT p.hgvsc IS UNIQUE;
+CREATE CONSTRAINT ON (p:Transcript) ASSERT p.transcript_id IS UNIQUE;
+CREATE CONSTRAINT ON (p:ConsequenceTerm) ASSERT p.consequenceTerm IS UNIQUE;
 
-CREATE INDEX ON :AnnotatedVariant(allele_freq);
-CREATE INDEX ON :AnnotatedVariant(cadd);
-CREATE INDEX ON :AnnotatedVariant(hasExac);
+CREATE INDEX ON :GeneticVariant(allele_freq);
+CREATE INDEX ON :TranscriptVariant(cadd);
+CREATE INDEX ON :GeneticVariant(hasExac);
 ```
 # Example Cypher Queries
 ## All Variants for an individual
