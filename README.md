@@ -124,20 +124,20 @@ CREATE INDEX ON :GeneticVariant(hasExac);
 # Example Cypher Queries
 ## All Variants for an individual
 ```
-MATCH (root:Variant)-[:PRESENT_IN]->(child:Person)
-WHERE child.personId ='XXX'
-RETURN count(root.variantId);
+MATCH (gv:GeneticVariant)-[:PRESENT_IN]->(p:Person)
+WHERE p.personId ='XXX'
+RETURN count(gv.variantId);
 ```
 ## Individuals who have a particular variant
 ```
-MATCH (root:Variant)-[:PRESENT_IN]->(child:Person)
-WHERE root.variantId ='xxx'
-RETURN child.personId;
+MATCH (gv:GeneticVariant)-[:PRESENT_IN]->(p:Person)
+WHERE gv.variantId ='xxx'
+RETURN p.personId;
 ```
 ## Find Variants shared by a list of Individuals
 ```
 WITH ["XXX","yyy"] as persons
-MATCH (p:Person)<-[:PRESENT_IN]-(v:Variant) 
+MATCH (p:Person)<-[:PRESENT_IN]-(v:GeneticVariant) 
 WHERE p.personId IN persons
 WITH v, count(*) as c, persons
 WHERE c = size(persons)
@@ -146,12 +146,12 @@ RETURN count( v.variantId);
 ## Find Variants shared by a list of Individuals, that no one else has
 ```
 WITH ["XXX","YYY"] as individuals
-MATCH (p:Person)<-[:PRESENT_IN]-(v:Variant) 
+MATCH (p:Person)<-[:PRESENT_IN]-(v:GeneticVariant) 
 WHERE p.personId IN individuals
 WITH v, count(*) as c, individuals
 WHERE c = size(individuals)
 with v, individuals
-MATCH (v:Variant)
+MATCH (v:GeneticVariant)
 where size((v)-[:PRESENT_IN]-()) = size(individuals)
 RETURN v.variantId;
 ```
@@ -161,23 +161,16 @@ MATCH (t:Term)<-[tp:HAS_OBSERVED_TERM]-(p:Person)
 WHERE t.termId = 'HP:XXX'
 RETURN p.personId;
 ```
-## Find Gene Symbols that have multiple Gene Ids
+## Find Genes that have no Term
 ```
-MATCH (s:GeneSymbol)-[:HAS_GENE_ID]->(i:GeneId)
-WITH count(*) AS count, s
-WHERE count > 1
-RETURN s.geneSymbol, count;
-```
-## Find Gene Symbols that have no Term
-```
-MATCH (s:GeneSymbol)
+MATCH (s:Gene)
 WHERE NOT (s)-[:INFLUENCES]->()
-RETURN s.geneSymbol;
+RETURN s.gene_id;
 ```
 ## Find Variants which have a frequency less than 0.001 and a CADD score greater than 20
 ```
-MATCH (n:AnnotatedVariant) 
-WHERE n.allele_freq < 0.001 and n.cadd > 20 
+MATCH (n:GeneticVariant)-[:HAS]->(tv:TranscriptVariant)
+WHERE n.allele_freq < 0.001 and tv.cadd > 20 
 RETURN count(*);
 ```
 ## For a Term, find all the Descendant Terms
@@ -191,14 +184,15 @@ return rows
 ## Find all Individuals with a specific Term (and any of its descendants)
 ```
 MATCH (p:Term)<-[:IS_A*]-(q:Term)
-where p.termId ='XXX'
+WHERE p.termId ='XXX'
 with  p + collect( distinct q) as allRows
 MATCH (p:Person)-[:HAS_OBSERVED_TERM]->(t:Term) 
-where t IN allRows
-return count(p);
+WHERE t IN allRows
+RETURN count(p);
 ```
 ## Find variants which have a frequency less than 0.001 and a CADD score greater than 20 seen in in people with HP:0000556 and belonging to a gene with HP:0000556
 ```
+//TODO fix this query
 MATCH (p:Term)<-[:IS_A*]-(q:Term)
 WHERE p.termId ='HP:0000556'
 WITH  p + collect( distinct q) as allTerms
@@ -207,10 +201,10 @@ WHERE t IN allTerms
 AND av.allele_freq < 0.001 
 AND av.cadd > 20 
 RETURN count(distinct av.variantId);
-
 ```
 ### For an Individual, rank their variants by the number of occurrences in other Individuals
 ```
+//TODO fix this query
 MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]->(av:AnnotatedVariant)
 where (av.allele_freq < 0.001 or av.hasExac = false)
 with size(()<-[:PRESENT_IN]-(v)) as count , v
@@ -221,6 +215,7 @@ order by count asc
 ```
 ### For a particular individual, show a list of individuals in decreasing order by the number of variants they share with the given individual, with a frequency less than 0.001 or NA in ExAC, and that appear in less than 5% of individuals
 ```
+//TODO fix this query
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
 MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]->(av:AnnotatedVariant)
@@ -236,6 +231,7 @@ RETURN p.personId,q.personId, c
 ```
 ### As above, but show the as a percentage the common variants (i.e. the intersection) over the shared variants (the union)
 ```
+//TODO fix this query
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
 MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]->(av:AnnotatedVariant)
