@@ -64,7 +64,7 @@ public class HeaderGenerator {
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", "gene_id:ID(Gene)");
 			break;
 		case TRANSCRIPT:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "transcript_id", "gene_id:ID(Transcript)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "transcript_id", "transcript_id:ID(Transcript)");
 			break;
 		case TRANSCRIPT_TO_GENE:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "transcript_id", ":START_ID(Transcript)");
