@@ -6,6 +6,7 @@ import static com.graph.db.util.Constants.UNDERSCORE;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -33,7 +34,7 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 		updateVariantIdOnAnnotatedVariant(variant, transformedVariantId);
 		updateVariantIdOnTranscriptConsequences(variant.getTranscript_consequences(), transformedVariantId);
 		
-		clearNonDoubleCadds(variant);
+		clearNonDoubleCadds(variant.getTranscript_consequences());
 		setHasExac(variant);
 		
 		return variant;
@@ -61,8 +62,8 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 		}
 	}
 	
-	private void clearNonDoubleCadds(GeneticVariant variant) {
-		for (TranscriptConsequence transcriptConsequence : variant.getTranscript_consequences()) {
+	private void clearNonDoubleCadds(Set<TranscriptConsequence> set) {
+		for (TranscriptConsequence transcriptConsequence : set) {
 			if (!NumberUtils.isNumber(transcriptConsequence.getCadd())) {
 				transcriptConsequence.setCadd(null);
 			}
