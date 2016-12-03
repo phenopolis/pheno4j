@@ -31,7 +31,7 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 		
 		String transformedVariantId = getTransformedVariantId(variant.getVariant_id());
 		
-		updateVariantIdOnAnnotatedVariant(variant, transformedVariantId);
+		updateVariantIdOnGeneticVariant(variant, transformedVariantId);
 		updateVariantIdOnTranscriptConsequences(variant.getTranscript_consequences(), transformedVariantId);
 		
 		clearNonDoubleCadds(variant.getTranscript_consequences());
@@ -51,7 +51,7 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 		return StringUtils.replace(variantIdWithHyphens, HYPHEN, UNDERSCORE);
 	}
 
-	private void updateVariantIdOnAnnotatedVariant(GeneticVariant variant, String transformedVariantId) {
+	private void updateVariantIdOnGeneticVariant(GeneticVariant variant, String transformedVariantId) {
 		variant.setVariant_id(transformedVariantId);
 	}
 	
