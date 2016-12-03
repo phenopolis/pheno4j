@@ -20,13 +20,22 @@ import com.graph.db.util.FileUtil;
 public class HeaderGenerator {
 	
 	public void generateHeaders(String outputFolder, Set<OutputFileType> set) {
+		Map<OutputFileType, String> headersForOutputFileTypes = generateHeadersForOutputFileTypes(set);
+		for (Entry<OutputFileType, String> entry : headersForOutputFileTypes.entrySet()) {
+			FileUtil.writeOutCsvHeader(outputFolder, entry.getKey().getFileTag(), Arrays.asList(entry.getValue()));
+		}
+	}
+	
+	protected Map<OutputFileType, String> generateHeadersForOutputFileTypes(Set<OutputFileType> set) {
+		Map<OutputFileType, String> result = new HashMap<>();
 		for (OutputFileType outputFileType : set) {
 			String joinedHeaders = StringUtils.join(outputFileType.getHeader(), Constants.COMMA);
 			joinedHeaders = relabelIdColumns(outputFileType, joinedHeaders);
 			joinedHeaders = relabelNonStringTypes(joinedHeaders);
 			
-			FileUtil.writeOutCsvHeader(outputFolder, outputFileType.getFileTag(), Arrays.asList(joinedHeaders));
+			result.put(outputFileType, joinedHeaders);
 		}
+		return result;
 	}
 
 	private String relabelIdColumns(OutputFileType outputFileType, String joinedHeaders) {
