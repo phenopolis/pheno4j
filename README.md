@@ -30,8 +30,7 @@ java -jar graph-db.jar VcfParser $vcfFile $outputFolder
 ```
 | Nodes | Relationships |
 | --- | --- |
-| Person  | VariantToPerson |
-| Variant |  |
+| Person  | GeneticVariantToPerson |
 ### AnnotationParser
 This parses the annotation file produced by the Variant Effect Predictor in the JSON format (VCF format to be supported soon):
 ```
@@ -39,9 +38,10 @@ java -jar graph-db.jar AnnotationParser $inputFolderWithJsonFiles $outputFolder
 ```
 | Nodes | Relationships |
 | --- | --- |
-| GeneId | GeneIdToVariant |
-| GeneSymbol | VariantToAnnotatedVariant |
-| AnnotatedVariant | GeneSymbolToGeneId |
+| GeneticVariant | GeneToGeneticVariant |
+| TranscriptVariant | GeneticVariantToTranscriptVariant |
+| ConsequenceTerm | TranscriptToTranscriptVariant |
+| Transcript | TranscriptVariantToConsequenceTerm |
 ### GeneParser
 This parses the OMIM-HPO file which links genes to the HPO terms to which they are associate:
 ```
@@ -49,7 +49,7 @@ java -jar graph-db.jar GeneParser $geneFile $outputFolder
 ```
 | Nodes | Relationships |
 | --- | --- |
-| GeneSymbol | GeneSymbolToTerm |
+| | GeneToTerm |
 
 ### PersonParser
 This parses the phenotype file which links individuals to their HPO terms:
@@ -60,7 +60,6 @@ java -jar graph-db.jar PersonParser $personFile $outputFolder
 | --- | --- |
 | GeneSymbol | PersonToObservedTerm |
 |  | PersonToNonObservedTerm |
-|  | PersonToGeneSymbol |
 ### HPOTermParser
 This loads the HPO ontology which links HPO terms to other HPO terms with "is a" relationships.
 ```
@@ -69,6 +68,14 @@ java -jar graph-db.jar TermParser $termFile $outputFolder
 | Nodes | Relationships |
 | --- | --- |
 | Term | TermToTerm |
+### TranscriptParser
+```
+java -jar graph-db.jar TranscriptParser $inputFile $outputFolder
+```
+| Nodes | Relationships |
+| --- | --- |
+| Transcript | TranscriptToGene |
+| Gene | |
 # Running the neo4j Bulk Csv Import Tool
 1. generate the database using the csv's
 ```
