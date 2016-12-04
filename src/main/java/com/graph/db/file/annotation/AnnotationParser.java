@@ -35,6 +35,7 @@ import com.graph.db.util.ManagedEventBus;
  * - GeneticVariant
  * - TranscriptVariant
  * - ConsequenceTerm
+ * - Transcript
  * 
  * Relationships
  * - GeneToGeneticVariant
