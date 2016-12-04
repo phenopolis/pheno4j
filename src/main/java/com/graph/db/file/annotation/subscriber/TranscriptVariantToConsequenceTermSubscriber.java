@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
+import com.graph.db.domain.output.TranscriptVariantToConsequenceTermOutput;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
@@ -18,12 +18,13 @@ public class TranscriptVariantToConsequenceTermSubscriber extends GenericSubscri
 	}
 
 	@Override
-	public void processAnnotation(GeneticVariant variant) {
+	public void processRow(GeneticVariant variant) {
         try {
 			for (TranscriptConsequence transcriptConsequence : variant.getTranscript_consequences()) {
 				if (StringUtils.isNoneBlank(transcriptConsequence.getHgvsc()) && CollectionUtils.isNotEmpty(transcriptConsequence.getConsequence_terms())) {
 					for (String consequenceTerm : transcriptConsequence.getConsequence_terms()) {
-						beanWriter.write(Pair.of(transcriptConsequence.getHgvsc(), consequenceTerm));
+						TranscriptVariantToConsequenceTermOutput output = new TranscriptVariantToConsequenceTermOutput(transcriptConsequence.getHgvsc(), consequenceTerm);
+						beanWriter.write(output);
 					}
 				}
 			}

@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.eventbus.EventBus;
 import com.graph.db.Parser;
-import com.graph.db.file.GenericMapSubscriber;
+import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.transcript.subscriber.GeneSubscriber;
 import com.graph.db.output.HeaderGenerator;
 import com.graph.db.output.OutputFileType;
@@ -51,8 +51,8 @@ public class TranscriptParser implements Parser {
 	
 	private List<? extends AutoCloseable> createSubscribers() {
 		GeneSubscriber geneSubscriber = new GeneSubscriber(outputFolder, getClass());
-		GenericMapSubscriber<HashMap<String, String>> transcriptSubscriber = new GenericMapSubscriber<>(outputFolder, getClass(), OutputFileType.TRANSCRIPT);
-		GenericMapSubscriber<HashMap<String, String>> transcriptToGeneSubscriber = new GenericMapSubscriber<>(outputFolder, getClass(), OutputFileType.TRANSCRIPT_TO_GENE);
+		GenericSubscriber<Object> transcriptSubscriber = new GenericSubscriber<>(outputFolder, getClass(), OutputFileType.TRANSCRIPT);
+		GenericSubscriber<Object> transcriptToGeneSubscriber = new GenericSubscriber<>(outputFolder, getClass(), OutputFileType.TRANSCRIPT_TO_GENE);
 		return Arrays.asList(geneSubscriber, transcriptSubscriber, transcriptToGeneSubscriber);
 	}
 

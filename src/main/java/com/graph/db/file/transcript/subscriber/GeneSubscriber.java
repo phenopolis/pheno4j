@@ -1,39 +1,35 @@
 package com.graph.db.file.transcript.subscriber;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.graph.db.file.GenericMapSubscriber;
+import com.graph.db.domain.output.GeneOutput;
+import com.graph.db.file.GenericSubscriber;
 import com.graph.db.output.OutputFileType;
 
-public class GeneSubscriber extends GenericMapSubscriber<Map<String, String>> {
+public class GeneSubscriber extends GenericSubscriber<Map<String, String>> {
 	
 	private static final OutputFileType GENE = OutputFileType.GENE;
 	
-	private final Set<Map<String, String>> set = ConcurrentHashMap.newKeySet();
+	private final Set<GeneOutput> set = ConcurrentHashMap.newKeySet();
 
 	public GeneSubscriber(String outputFolder, Class<?> parserClass) {
 		super(outputFolder, parserClass, GENE);
 	}
 	
 	@Override
-	public void processAnnotation(Map<String, String> object) {
-		Map<String, String> map = new HashMap<>();
-		for (String key : GENE.getHeader()) {
-			map.put(key, object.get(key));
-		}
-		
-		set.add(map);
+	public void processRow(Map<String, String> object) {
+		GeneOutput geneOutput = new GeneOutput(object);
+		set.add(geneOutput);
 	}
 	
 	@Override
 	public void close() {
 		try {
-			for (Map<String, String> s : set) {
-				beanWriter.write(s, GENE.getHeader());
+			for (GeneOutput s : set) {
+				beanWriter.write(s);
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);

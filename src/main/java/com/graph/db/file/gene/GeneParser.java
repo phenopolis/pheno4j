@@ -17,7 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.eventbus.EventBus;
 import com.graph.db.Parser;
-import com.graph.db.file.GenericMapSubscriber;
+import com.graph.db.domain.output.GeneToTermOutput;
+import com.graph.db.file.GenericSubscriber;
 import com.graph.db.output.HeaderGenerator;
 import com.graph.db.output.OutputFileType;
 import com.graph.db.util.Constants;
@@ -45,7 +46,7 @@ public class GeneParser implements Parser {
 	}
 	
 	private List<? extends AutoCloseable> createSubscribers() {
-		GenericMapSubscriber<HashMap<String, String>> geneToTermSubscriber = new GenericMapSubscriber<>(outputFolder, getClass(), OutputFileType.GENE_TO_TERM);
+		GenericSubscriber<GeneToTermOutput> geneToTermSubscriber = new GenericSubscriber<>(outputFolder, getClass(), OutputFileType.GENE_TO_TERM);
 		return Arrays.asList(geneToTermSubscriber);
 	}
 
@@ -68,7 +69,8 @@ public class GeneParser implements Parser {
 				
 				if (header.length == columns.length) {
 					Map<String, String> map = splitColumnsIntoKeyValuePairs(header, columns);
-					eventBus.post(map);
+					GeneToTermOutput output = new GeneToTermOutput(map);
+					eventBus.post(output);
 				}
 			}
 		} catch (IOException e) {

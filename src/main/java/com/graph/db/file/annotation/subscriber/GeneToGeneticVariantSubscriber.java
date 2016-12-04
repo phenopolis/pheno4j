@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang3.tuple.Pair;
-
+import com.graph.db.domain.output.GeneToGeneticVariantOutput;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
@@ -18,14 +17,15 @@ public class GeneToGeneticVariantSubscriber extends GenericSubscriber<GeneticVar
 	}
 
 	@Override
-	public void processAnnotation(GeneticVariant variant) {
-		Set<Pair<String, String>> set = new HashSet<>();
+	public void processRow(GeneticVariant variant) {
+		Set<GeneToGeneticVariantOutput> set = new HashSet<>();
 		for (TranscriptConsequence transcriptConsequence : variant.getTranscript_consequences()) {
-			set.add(Pair.of(transcriptConsequence.getGene_id(), transcriptConsequence.getVariant_id()));
+			GeneToGeneticVariantOutput output = new GeneToGeneticVariantOutput(transcriptConsequence);
+			set.add(output);
 		}
 		
     	try {
-			for (Pair<String, String> pair : set) {
+			for (GeneToGeneticVariantOutput pair : set) {
 				beanWriter.write(pair);
 			}
     	} catch (IOException e) {

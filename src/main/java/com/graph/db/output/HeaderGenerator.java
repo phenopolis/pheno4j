@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.graph.db.domain.output.TranscriptVariantOutput;
 import com.graph.db.file.annotation.domain.Exac;
 import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
@@ -44,12 +45,12 @@ public class HeaderGenerator {
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", "variantId:ID(GeneticVariant)");
 			break;
 		case GENE_TO_GENETIC_VARIANT:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "left", ":START_ID(Gene)");
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "right", ":END_ID(GeneticVariant)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", ":START_ID(Gene)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "variant_id", ":END_ID(GeneticVariant)");
 			break;
 		case GENE_TO_TERM:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", ":START_ID(Gene)");
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "HPO-ID", ":END_ID(Term)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "termId", ":END_ID(Term)");
 			break;
 		case TRANSCRIPT_VARIANT:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "hgvsc", "hgvsc:ID(TranscriptVariant)");
@@ -63,11 +64,11 @@ public class HeaderGenerator {
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "hgvsc", ":END_ID(TranscriptVariant)");
 			break;
 		case CONSEQUENCE_TERM:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "this", "consequenceTerm:ID(ConsequenceTerm)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "consequenceTerm", "consequenceTerm:ID(ConsequenceTerm)");
 			break;
 		case TRANSCRIPT_VARIANT_TO_CONSEQUENCE_TERM:
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "left", ":START_ID(TranscriptVariant)");
-			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "right", ":END_ID(ConsequenceTerm)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "hgvsc", ":START_ID(TranscriptVariant)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "consequenceTerm", ":END_ID(ConsequenceTerm)");
 			break;
 		case GENE:
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", "gene_id:ID(Gene)");
@@ -96,7 +97,7 @@ public class HeaderGenerator {
 	
 	private Map<String, String> createMapFromJavaTypeToGraphType() {
 		Map<String, String> nameToGraphType = new HashMap<>();
-		for (Class<?> c : Arrays.asList(GeneticVariant.class, Exac.class, TranscriptConsequence.class)) {
+		for (Class<?> c : Arrays.asList(GeneticVariant.class, Exac.class, TranscriptConsequence.class, TranscriptVariantOutput.class)) {
 			for (Field field : c.getDeclaredFields()) {
 				String name = field.getName();
 				switch (field.getType().getName()) {

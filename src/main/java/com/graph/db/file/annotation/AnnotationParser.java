@@ -22,6 +22,7 @@ import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.subscriber.ConsequenceTermSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneToGeneticVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.GeneticVariantToTranscriptVariantSubscriber;
+import com.graph.db.file.annotation.subscriber.TranscriptSubscriber;
 import com.graph.db.file.annotation.subscriber.TranscriptToTranscriptVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.TranscriptVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.TranscriptVariantToConsequenceTermSubscriber;
@@ -79,10 +80,11 @@ public class AnnotationParser implements Parser {
         TranscriptToTranscriptVariantSubscriber transcriptToTranscriptVariantSubscriber = new TranscriptToTranscriptVariantSubscriber(outputFolder, getClass());
         ConsequenceTermSubscriber consequenceTermSubscriber = new ConsequenceTermSubscriber(outputFolder, getClass());
         TranscriptVariantToConsequenceTermSubscriber transcriptVariantToConsequenceTermSubscriber = new TranscriptVariantToConsequenceTermSubscriber(outputFolder, getClass());
-        
+        TranscriptSubscriber transcriptSubscriber = new TranscriptSubscriber(outputFolder, getClass());
+
 		return Arrays.asList(geneToGeneticVariantSubscriber, geneticVariantSubscriber, transcriptVariantSubscriber,
 				geneticVariantToTranscriptVariantSubscriber, transcriptToTranscriptVariantSubscriber,
-				consequenceTermSubscriber, transcriptVariantToConsequenceTermSubscriber);
+				consequenceTermSubscriber, transcriptVariantToConsequenceTermSubscriber, transcriptSubscriber);
 	}
 
 	@Override

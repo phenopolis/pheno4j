@@ -4,12 +4,12 @@ import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.graph.db.domain.output.GeneticVariantToTranscriptVariantOutput;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.output.OutputFileType;
 
-//TODO almost a duplicate of TranscriptVariantSubscriber
 public class GeneticVariantToTranscriptVariantSubscriber extends GenericSubscriber<GeneticVariant> {
 	
 	public GeneticVariantToTranscriptVariantSubscriber(String outputFolder, Class<?> parserClass) {
@@ -17,11 +17,12 @@ public class GeneticVariantToTranscriptVariantSubscriber extends GenericSubscrib
 	}
 
 	@Override
-	public void processAnnotation(GeneticVariant variant) {
+	public void processRow(GeneticVariant variant) {
     	try {
 			for (TranscriptConsequence transcriptConsequence : variant.getTranscript_consequences()) {
 				if (StringUtils.isNoneBlank(transcriptConsequence.getHgvsc())) {
-					beanWriter.write(transcriptConsequence);
+					GeneticVariantToTranscriptVariantOutput output = new GeneticVariantToTranscriptVariantOutput(transcriptConsequence);
+					beanWriter.write(output);
 				}
 			}
     	} catch (IOException e) {
