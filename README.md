@@ -79,22 +79,25 @@ java -jar graph-db.jar TranscriptParser $inputFile $outputFolder
 # Running the neo4j Bulk Csv Import Tool
 1. generate the database using the csv's
 ```
-bin/neo4j-import   --into /generatedGraphOutputFolder/graph.db --id-type string --bad-tolerance 50000  --skip-bad-relationships true --skip-duplicate-nodes true \
---nodes:AnnotatedVariant /folder/AnnotatedVariant-header.csv,/folder/AnnotatedVariant-AnnotationParser.csv \
---nodes:GeneSymbol /folder/GeneSymbol-header.csv,/folder/GeneSymbol.csv \
---nodes:GeneId /folder/GeneId-header.csv,/folder/GeneId-AnnotationParser.csv \
---nodes:Person /folder/Person-header.csv,/folder/Person-mainset_July2016.csv \
+bin/neo4j-import   --into /generatedGraphOutputFolder/graph.db --id-type string --bad-tolerance 1000000  --skip-bad-relationships true --skip-duplicate-nodes true  \
+--nodes:GeneticVariant /folder/GeneticVariant-header.csv,/folder/GeneticVariant-AnnotationParser.csv \
+--nodes:Gene /folder/Gene-header.csv,/folder/Gene-TranscriptParser.csv \
+--nodes:Person /folder/Person-header.csv,/folder/Person-mainset_July2016-VcfParser.csv \
 --nodes:Term /folder/Term-header.csv,/folder/Term-TermParser.csv \
---nodes:Variant /folder/Variant-header.csv,/folder/Variant-mainset_July2016.csv \
---relationships:HAS_VARIANT /folder/GeneIdToVariant-header.csv,/folder/GeneIdToVariant-AnnotationParser.csv \
---relationships:HAS_GENE_ID /folder/GeneSymbolToGeneId-header.csv,/folder/GeneSymbolToGeneId-AnnotationParser.csv \
---relationships:INFLUENCES /folder/GeneSymbolToTerm-header.csv,/folder/GeneSymbolToTerm-GeneSymbolParser.csv \
---relationships:HAS_GENE_SYMBOL /folder/PersonToGeneSymbol-header.csv,/folder/PersonToGeneSymbol-PersonParser.csv \
+--nodes:TranscriptVariant /folder/TranscriptVariant-header.csv,/folder/TranscriptVariant-AnnotationParser.csv \
+--nodes:Transcript /folder/Transcript-header.csv,/folder/Transcript-TranscriptParser.csv \
+--nodes:ConsequenceTerm /folder/ConsequenceTerm-header.csv,/folder/ConsequenceTerm-AnnotationParser.csv \
+--relationships:HAS_VARIANT /folder/GeneToGeneticVariant-header.csv,/folder/GeneToGeneticVariant-AnnotationParser.csv \
+--relationships:INFLUENCES /folder/GeneToTerm-header.csv,/folder/GeneToTerm-GeneParser.csv \
+--relationships:IS_A /folder/TermToTerm-header.csv,/folder/TermToTerm-TermParser.csv \
+--relationships:PRESENT_IN /folder/GeneticVariantToPerson-header.csv,/folder/GeneticVariantToPerson-mainset_July2016.csv \
+--relationships:HAS /folder/GeneticVariantToTranscriptVariant-header.csv,/folder/GeneticVariantToTranscriptVariant-AnnotationParser.csv \
 --relationships:HAS_NON_OBSERVED_TERM /folder/PersonToNonObservedTerm-header.csv,/folder/PersonToNonObservedTerm-PersonParser.csv \
 --relationships:HAS_OBSERVED_TERM /folder/PersonToObservedTerm-header.csv,/folder/PersonToObservedTerm-PersonParser.csv \
---relationships:IS_A /folder/TermToTerm-header.csv,/folder/TermToTerm-TermParser.csv \
---relationships:HAS_ANNOTATION /folder/VariantToAnnotatedVariant-header.csv,/folder/VariantToAnnotatedVariant-AnnotationParser.csv \
---relationships:PRESENT_IN /folder/VariantToPerson-header.csv,/folder/VariantToPerson-mainset_July2016.csv > /folder/neo4j-log.txt &
+--relationships:PRESENT_IN /folder/TranscriptToGene-header.csv,/folder/TranscriptToGene-TranscriptParser.csv \
+--relationships:HAS_CONSEQUENCE /folder/TranscriptVariantToConsequenceTerm-header.csv,/folder/TranscriptVariantToConsequenceTerm-AnnotationParser.csv \
+--relationships:HAS_VARIANT /folder/TranscriptToTranscriptVariant-header.csv,/folder/TranscriptToTranscriptVariant-AnnotationParser.csv  > /folder/neo4j-log.txt &
+
 ```
 2. Create the symlink to the generated graph
 ```
