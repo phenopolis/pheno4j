@@ -192,62 +192,56 @@ RETURN count(p);
 ```
 ## Find variants which have a frequency less than 0.001 and a CADD score greater than 20 seen in in people with HP:0000556 and belonging to a gene with HP:0000556
 ```
-//TODO fix this query
-MATCH (p:Term)<-[:IS_A*]-(q:Term)
-WHERE p.termId ='HP:0000556'
-WITH  p + collect( distinct q) as allTerms
-MATCH (t:Term)<-[:INFLUENCES]-(gs:GeneSymbol) <-[:HAS_GENE_SYMBOL]-(p:Person)<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]-(av:AnnotatedVariant)
-WHERE t IN allTerms
-AND av.allele_freq < 0.001 
-AND av.cadd > 20 
-RETURN count(distinct av.variantId);
+//TODO needs validation, also slow (16 seconds)
+MATCH (p:Term)<-[:IS_A*]-(q:Term)<-[:INFLUENCES]-(gs:Gene)-[:HAS_VARIANT]->(gv:GeneticVariant)-[:HAS]->(ts:TranscriptVariant)
+WHERE (q.termId ='HP:0000556' or p.termId ='HP:0000556')
+AND gv.allele_freq < 0.001 
+AND ts.cadd > 20 
+RETURN count(distinct gv.variantId);
 ```
 ### For an Individual, rank their variants by the number of occurrences in other Individuals
 ```
-//TODO fix this query
-MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]->(av:AnnotatedVariant)
-where (av.allele_freq < 0.001 or av.hasExac = false)
-with size(()<-[:PRESENT_IN]-(v)) as count , v
-where count > 1 
-and count < 10
-return v.variantId, size(()<-[:PRESENT_IN]-(v)) as count
-order by count asc
+MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(gv:GeneticVariant)-[:HAS]->(tv:TranscriptVariant)
+WHERE (gv.allele_freq < 0.1 or tv.hasExac = false)
+WITH size(()<-[:PRESENT_IN]-(gv)) as count , gv
+WHERE count > 1 
+RETURN gv.variantId, size(()<-[:PRESENT_IN]-(gv)) as count
+ORDER BY count asc
+LIMIT 10;
 ```
 ### For a particular individual, show a list of individuals in decreasing order by the number of variants they share with the given individual, with a frequency less than 0.001 or NA in ExAC, and that appear in less than 5% of individuals
 ```
-//TODO fix this query
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
-MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]->(av:AnnotatedVariant)
-WHERE (av.allele_freq < 0.001 or av.hasExac = false)
-WITH size(()<-[:PRESENT_IN]-(v)) as count , v, p, numberOfPeople
+MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(gv:GeneticVariant)
+WHERE (gv.allele_freq < 0.001 or gv.hasExac = false)
+WITH size(()<-[:PRESENT_IN]-(gv)) as count , gv, p, numberOfPeople
 WHERE count > 1 
 AND ((count / toFloat(numberOfPeople))  <= 0.05)
-match (v)-[:PRESENT_IN]->(q:Person)
+MATCH (gv)-[:PRESENT_IN]->(q:Person)
 WHERE p <> q
-WITH p,q,count(v) as c
+WITH p,q,count(gv) as c
 ORDER BY c desc LIMIT 10
 RETURN p.personId,q.personId, c
 ```
 ### As above, but show the as a percentage the common variants (i.e. the intersection) over the shared variants (the union)
 ```
-//TODO fix this query
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
-MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]->(av:AnnotatedVariant)
-WHERE (av.allele_freq < 0.001 or av.hasExac = false)
-WITH size(()<-[:PRESENT_IN]-(v)) as count , v, p, numberOfPeople
+MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(gv:GeneticVariant)
+WHERE (gv.allele_freq < 0.001 or gv.hasExac = false)
+WITH size(()<-[:PRESENT_IN]-(gv)) as count , gv, p, numberOfPeople
 WHERE count > 1 
 AND ((count / toFloat(numberOfPeople))  <= 0.05)
-MATCH (v)-[:PRESENT_IN]->(q:Person)
+MATCH (gv)-[:PRESENT_IN]->(q:Person)
 WHERE p <> q
-WITH p,q,count(v) as intersection, numberOfPeople
-order by intersection DESC limit 1
-MATCH (x:Person)<-[:PRESENT_IN]-(v:Variant)-[:HAS_ANNOTATION]->(av:AnnotatedVariant)
+WITH p,q,count(gv) as intersection, numberOfPeople
+ORDER BY intersection DESC limit 1
+MATCH (x:Person)<-[:PRESENT_IN]-(v:GeneticVariant)
 WHERE (x.personId = p.personId or x.personId = q.personId)
-AND (av.allele_freq < 0.001 or av.hasExac = false)
+AND (v.allele_freq < 0.001 or v.hasExac = false)
 AND ((size(()<-[:PRESENT_IN]-(v)) / toFloat(numberOfPeople))  <= 0.05)
 WITH p, q, v, intersection
 RETURN p.personId, q.personId, intersection, size(collect(distinct v)) as unionSum, (round((intersection/toFloat(size(collect(distinct v))))*100.0*10)/10) as PercentShared
-ORDER BY PercentShared DESC
+ORDER BY PercentShared DESC;
 ```
