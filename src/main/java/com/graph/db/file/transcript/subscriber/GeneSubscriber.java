@@ -5,11 +5,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.google.common.eventbus.Subscribe;
 import com.graph.db.domain.output.GeneOutput;
-import com.graph.db.file.GenericSubscriber;
+import com.graph.db.file.AbstractSubscriber;
+import com.graph.db.file.annotation.domain.GeneticVariant;
+import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.output.OutputFileType;
 
-public class GeneSubscriber extends GenericSubscriber<Map<String, String>> {
+public class GeneSubscriber extends AbstractSubscriber<Map<String, String>> {
 	
 	private static final OutputFileType GENE = OutputFileType.GENE;
 	
@@ -19,10 +22,18 @@ public class GeneSubscriber extends GenericSubscriber<Map<String, String>> {
 		super(outputFolder, parserClass, GENE);
 	}
 	
-	@Override
+	@Subscribe
 	public void processRow(Map<String, String> object) {
 		GeneOutput geneOutput = new GeneOutput(object);
 		set.add(geneOutput);
+	}
+	
+	@Subscribe
+	public void processRow(GeneticVariant geneticVariant) {
+		for (TranscriptConsequence transcriptConsequence : geneticVariant.getTranscript_consequences()) {
+			GeneOutput geneOutput = new GeneOutput(transcriptConsequence);
+			set.add(geneOutput);
+		}
 	}
 	
 	@Override

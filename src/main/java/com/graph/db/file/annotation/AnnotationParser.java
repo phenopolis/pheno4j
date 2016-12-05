@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.graph.db.Parser;
+import com.graph.db.file.AbstractSubscriber;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.annotation.domain.GeneticVariant;
 import com.graph.db.file.annotation.subscriber.ConsequenceTermSubscriber;
@@ -26,6 +27,7 @@ import com.graph.db.file.annotation.subscriber.TranscriptSubscriber;
 import com.graph.db.file.annotation.subscriber.TranscriptToTranscriptVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.TranscriptVariantSubscriber;
 import com.graph.db.file.annotation.subscriber.TranscriptVariantToConsequenceTermSubscriber;
+import com.graph.db.file.transcript.subscriber.GeneSubscriber;
 import com.graph.db.output.HeaderGenerator;
 import com.graph.db.output.OutputFileType;
 import com.graph.db.util.ManagedEventBus;
@@ -54,7 +56,7 @@ public class AnnotationParser implements Parser {
 	
 	private final ManagedEventBus eventBus;
 
-	private final List<GenericSubscriber<?>> subscribers;
+	private final List<AbstractSubscriber<?>> subscribers;
 
 	public AnnotationParser(String inputFolder, String outputFolder) {
 		this.inputFolder = inputFolder;
@@ -73,7 +75,7 @@ public class AnnotationParser implements Parser {
         return b.create();
 	}
 
-	private List<GenericSubscriber<? extends Object>> createSubscribers(String outputFolder) {
+	private List<AbstractSubscriber<?>> createSubscribers(String outputFolder) {
         GeneToGeneticVariantSubscriber geneToGeneticVariantSubscriber = new GeneToGeneticVariantSubscriber(outputFolder, getClass());
         GenericSubscriber<Object> geneticVariantSubscriber = new GenericSubscriber<Object>(outputFolder, getClass(), OutputFileType.GENETIC_VARIANT);
         TranscriptVariantSubscriber transcriptVariantSubscriber = new TranscriptVariantSubscriber(outputFolder, getClass());
@@ -82,10 +84,11 @@ public class AnnotationParser implements Parser {
         ConsequenceTermSubscriber consequenceTermSubscriber = new ConsequenceTermSubscriber(outputFolder, getClass());
         TranscriptVariantToConsequenceTermSubscriber transcriptVariantToConsequenceTermSubscriber = new TranscriptVariantToConsequenceTermSubscriber(outputFolder, getClass());
         TranscriptSubscriber transcriptSubscriber = new TranscriptSubscriber(outputFolder, getClass());
-
+        GeneSubscriber geneSubscriber = new GeneSubscriber(outputFolder, getClass());
+        
 		return Arrays.asList(geneToGeneticVariantSubscriber, geneticVariantSubscriber, transcriptVariantSubscriber,
 				geneticVariantToTranscriptVariantSubscriber, transcriptToTranscriptVariantSubscriber,
-				consequenceTermSubscriber, transcriptVariantToConsequenceTermSubscriber, transcriptSubscriber);
+				consequenceTermSubscriber, transcriptVariantToConsequenceTermSubscriber, transcriptSubscriber, geneSubscriber);
 	}
 
 	@Override
@@ -129,7 +132,13 @@ public class AnnotationParser implements Parser {
 	}
 
 	private void closeSubscribers() {
-		subscribers.forEach(subscriber -> subscriber.close());
+		subscribers.forEach(subscriber -> {
+			try {
+				subscriber.close();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
 	}
 
 	private void generateHeaderFiles() {

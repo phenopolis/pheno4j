@@ -5,6 +5,8 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.graph.db.file.annotation.domain.TranscriptConsequence;
+
 public class GeneOutput {
 	
 	private final String gene_id;
@@ -13,6 +15,11 @@ public class GeneOutput {
 	public GeneOutput(Map<String, String> map) {
 		this.gene_id = map.get("gene_id");
 		this.gene_name = map.get("gene_name");
+	}
+
+	public GeneOutput(TranscriptConsequence transcriptConsequence) {
+		this.gene_id = transcriptConsequence.getGene_id();
+		this.gene_name = transcriptConsequence.getGene_symbol();
 	}
 
 	public String getGene_id() {
