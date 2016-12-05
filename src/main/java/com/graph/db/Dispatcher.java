@@ -10,6 +10,7 @@ import com.graph.db.file.person.PersonParser;
 import com.graph.db.file.term.TermParser;
 import com.graph.db.file.transcript.TranscriptParser;
 import com.graph.db.file.vcf.VcfParser;
+import com.graph.db.output.FileUnion;
 
 public class Dispatcher {
 
@@ -21,6 +22,7 @@ public class Dispatcher {
 		ENTRY_POINTS.put("PersonParser", PersonParser.class);
 		ENTRY_POINTS.put("TermParser", TermParser.class);
 		ENTRY_POINTS.put("TranscriptParser", TranscriptParser.class);
+		ENTRY_POINTS.put("FileUnion", FileUnion.class);
 	}
 
 	public static void main(final String[] args) throws Exception {

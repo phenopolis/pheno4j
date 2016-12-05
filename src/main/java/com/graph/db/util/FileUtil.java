@@ -67,10 +67,14 @@ public final class FileUtil {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static List<String> getLines(String fileName) {
+		return getLines(new File(fileName));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<String> getLines(File file) {
 		try {
-			return FileUtils.readLines(new File(fileName));
+			return FileUtils.readLines(file);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
