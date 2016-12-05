@@ -42,6 +42,7 @@ java -jar graph-db.jar AnnotationParser $inputFolderWithJsonFiles $outputFolder
 | TranscriptVariant | GeneticVariantToTranscriptVariant |
 | ConsequenceTerm | TranscriptToTranscriptVariant |
 | Transcript | TranscriptVariantToConsequenceTerm |
+| Gene | |
 ### GeneParser
 This parses the OMIM-HPO file which links genes to the HPO terms to which they are associate:
 ```
