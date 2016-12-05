@@ -5,10 +5,10 @@ import java.io.IOException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.graph.db.domain.input.annotation.GeneticVariant;
+import com.graph.db.domain.input.annotation.TranscriptConsequence;
 import com.graph.db.domain.output.TranscriptVariantToConsequenceTermOutput;
 import com.graph.db.file.GenericSubscriber;
-import com.graph.db.file.annotation.domain.GeneticVariant;
-import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.output.OutputFileType;
 
 public class TranscriptVariantToConsequenceTermSubscriber extends GenericSubscriber<GeneticVariant> {

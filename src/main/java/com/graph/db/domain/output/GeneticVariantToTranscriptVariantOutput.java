@@ -1,6 +1,6 @@
 package com.graph.db.domain.output;
 
-import com.graph.db.file.annotation.domain.TranscriptConsequence;
+import com.graph.db.domain.input.annotation.TranscriptConsequence;
 
 public class GeneticVariantToTranscriptVariantOutput {
 	

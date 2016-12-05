@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.graph.db.domain.input.annotation.GeneticVariant;
+import com.graph.db.domain.input.annotation.TranscriptConsequence;
 import com.graph.db.domain.output.GeneToGeneticVariantOutput;
 import com.graph.db.file.GenericSubscriber;
-import com.graph.db.file.annotation.domain.GeneticVariant;
-import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.output.OutputFileType;
 
 public class GeneToGeneticVariantSubscriber extends GenericSubscriber<GeneticVariant> {

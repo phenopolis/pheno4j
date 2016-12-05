@@ -16,8 +16,8 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.graph.db.file.annotation.domain.GeneticVariant;
-import com.graph.db.file.annotation.domain.TranscriptConsequence;
+import com.graph.db.domain.input.annotation.GeneticVariant;
+import com.graph.db.domain.input.annotation.TranscriptConsequence;
 
 public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> {
 	

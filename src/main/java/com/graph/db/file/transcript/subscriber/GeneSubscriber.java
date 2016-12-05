@@ -6,10 +6,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.common.eventbus.Subscribe;
+import com.graph.db.domain.input.annotation.GeneticVariant;
+import com.graph.db.domain.input.annotation.TranscriptConsequence;
 import com.graph.db.domain.output.GeneOutput;
 import com.graph.db.file.AbstractSubscriber;
-import com.graph.db.file.annotation.domain.GeneticVariant;
-import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.output.OutputFileType;
 
 public class GeneSubscriber extends AbstractSubscriber<Map<String, String>> {

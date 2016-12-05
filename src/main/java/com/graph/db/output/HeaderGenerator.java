@@ -11,10 +11,10 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.graph.db.domain.input.annotation.Exac;
+import com.graph.db.domain.input.annotation.GeneticVariant;
+import com.graph.db.domain.input.annotation.TranscriptConsequence;
 import com.graph.db.domain.output.TranscriptVariantOutput;
-import com.graph.db.file.annotation.domain.Exac;
-import com.graph.db.file.annotation.domain.GeneticVariant;
-import com.graph.db.file.annotation.domain.TranscriptConsequence;
 import com.graph.db.util.Constants;
 import com.graph.db.util.FileUtil;
 

@@ -1,4 +1,4 @@
-package com.graph.db.file.annotation.domain;
+package com.graph.db.domain.input.annotation;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

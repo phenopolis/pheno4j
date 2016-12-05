@@ -1,4 +1,4 @@
-package com.graph.db.file.annotation.domain;
+package com.graph.db.domain.input.annotation;
 
 import java.util.Set;
 

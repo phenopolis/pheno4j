@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
-import com.graph.db.file.annotation.domain.TranscriptConsequence;
+import com.graph.db.domain.input.annotation.TranscriptConsequence;
 
 public class TranscriptVariantOutput {
 

@@ -1,6 +1,6 @@
 package com.graph.db.domain.output;
 
-import com.graph.db.file.annotation.domain.GeneticVariant;
+import com.graph.db.domain.input.annotation.GeneticVariant;
 
 public class GeneticVariantOutput {
 	

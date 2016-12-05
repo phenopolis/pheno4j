@@ -3,7 +3,7 @@ package com.graph.db.domain.output;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.graph.db.file.annotation.domain.TranscriptConsequence;
+import com.graph.db.domain.input.annotation.TranscriptConsequence;
 
 public class GeneToGeneticVariantOutput {
 	
