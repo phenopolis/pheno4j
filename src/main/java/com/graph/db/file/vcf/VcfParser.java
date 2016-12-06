@@ -8,6 +8,7 @@ import static com.graph.db.util.FileUtil.createLineNumberReaderForGzipFile;
 import static com.graph.db.util.FileUtil.logLineNumber;
 import static com.graph.db.util.FileUtil.sendPoisonPillToQueue;
 import static com.graph.db.util.FileUtil.writeOutCsvFile;
+import static com.graph.db.util.FileUtil.writeOutCsvHeader;
 
 import java.io.File;
 import java.io.IOException;
@@ -110,10 +111,17 @@ public class VcfParser implements Parser {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		
+		writeOutHeaders();
 	}
 
 	private boolean isNotStar(String alt) {
 		return !"*".equals(alt);
+	}
+	
+	private void writeOutHeaders() {
+		writeOutCsvHeader(outputFolder, "Person", Arrays.asList("personId:ID(Person)"));
+		writeOutCsvHeader(outputFolder, "GeneticVariantToPerson", Arrays.asList(":START_ID(GeneticVariant),:END_ID(Person)"));
 	}
 
 	private class RowAction extends RecursiveAction {
