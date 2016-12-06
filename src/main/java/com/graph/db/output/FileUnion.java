@@ -23,7 +23,8 @@ public class FileUnion {
 	
 	private final List<String> SOURCE_FILES = Arrays.asList(
 			"Gene-TranscriptParser.csv",
-			"Transcript-TranscriptParser.csv");
+			"Transcript-TranscriptParser.csv",
+			"Person-PersonParser.csv");
 
 	private final String inputFolder;
 	private final String outputFolder;

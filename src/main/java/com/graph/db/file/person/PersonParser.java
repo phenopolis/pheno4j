@@ -41,6 +41,7 @@ public class PersonParser implements Parser {
 	public void execute() {
 		List<String> lines = getLines(fileName, true);
 		
+		Set<String> person = new HashSet<>();
 		Set<String> personToObservedTerm = new HashSet<>();
 		Set<String> personToNonObservedTerm = new HashSet<>();
 		
@@ -52,10 +53,12 @@ public class PersonParser implements Parser {
 			String observedTermsField = fields[2];
 			String nonObservedTermsField = fields[3];
 			
+			person.add(personId);
 			splitAndAddToSet(personToObservedTerm, personId, observedTermsField, returnPersonIdAndValue);
 			splitAndAddToSet(personToNonObservedTerm, personId, nonObservedTermsField, returnPersonIdAndValue);
 		}
 		
+		writeOutCsvFile(outputFolder, getClass(), "Person", person);
 		writeOutHeaderAndRows("PersonToObservedTerm", "Term", personToObservedTerm);
 		writeOutHeaderAndRows("PersonToNonObservedTerm", "Term", personToNonObservedTerm);
 	}
