@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.graph.db.Parser;
+import com.graph.db.util.Constants;
 
 /**
  * Relationships
@@ -47,7 +48,7 @@ public class PersonParser implements Parser {
 		
 		for (String line : lines) {
 			String[] fields = line.split(COMMA);
-			String personId = StringUtils.wrap(fields[0], DOUBLE_QUOTE);
+			String personId = wrapIfConstainsComma(fields[0]);
 			String observedTermsField = fields[2];
 			String nonObservedTermsField = fields[3];
 			
@@ -59,13 +60,16 @@ public class PersonParser implements Parser {
 		writeOutHeaderAndRows("PersonToNonObservedTerm", "Term", personToNonObservedTerm);
 	}
 
-	//TODO double quote is causing problems
 	private void splitAndAddToSet(Set<String> set, String personId, String field, BiFunction<String, String, String> function) {
 		String[] fields = StringUtils.split(field, SEMI_COLON);
 		for (String cell : fields) {
-			String wrappedCell = StringUtils.wrap(cell, DOUBLE_QUOTE);
-			set.add(function.apply(personId, wrappedCell));
+			cell = wrapIfConstainsComma(cell);
+			set.add(function.apply(personId, cell));
 		}
+	}
+
+	private String wrapIfConstainsComma(String cell) {
+		return cell.contains(Constants.COMMA) ? StringUtils.wrap(cell, DOUBLE_QUOTE) : cell;
 	}
 	
 	private void writeOutHeaderAndRows(String fileTag, String targetEntity, Set<String> set) {
