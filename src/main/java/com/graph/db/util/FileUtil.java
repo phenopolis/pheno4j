@@ -71,6 +71,14 @@ public final class FileUtil {
 		return getLines(new File(fileName));
 	}
 	
+	public static List<String> getLines(String fileName, boolean skipHeader) {
+		List<String> lines = getLines(new File(fileName));
+		if (skipHeader) {
+			lines.remove(0);
+		}
+		return lines;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static List<String> getLines(File file) {
 		try {

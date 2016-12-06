@@ -39,7 +39,7 @@ public class PersonParser implements Parser {
 	
 	@Override
 	public void execute() {
-		List<String> lines = getLines(fileName);
+		List<String> lines = getLines(fileName, true);
 		
 		Set<String> personToObservedTerm = new HashSet<>();
 		Set<String> personToNonObservedTerm = new HashSet<>();
