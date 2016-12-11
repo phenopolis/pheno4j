@@ -15,13 +15,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.EventBus;
 import com.graph.db.Parser;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.transcript.subscriber.GeneSubscriber;
 import com.graph.db.output.HeaderGenerator;
 import com.graph.db.output.OutputFileType;
 import com.graph.db.util.Constants;
+import com.graph.db.util.ManagedEventBus;
 
 /**
  * Nodes
@@ -38,14 +38,14 @@ public class TranscriptParser implements Parser {
 	private final String fileName;
 	private final String outputFolder;
 	
-	private final EventBus eventBus;
+	private final ManagedEventBus eventBus;
 	private final List<? extends AutoCloseable> subscribers;
 	
 	public TranscriptParser(String fileName, String outputFolder) {
 		this.fileName = fileName;
 		this.outputFolder = outputFolder;
 		
-		eventBus = new EventBus();
+		eventBus = new ManagedEventBus(getClass().getSimpleName());
 		subscribers = createSubscribers();
 	}
 	
@@ -78,6 +78,7 @@ public class TranscriptParser implements Parser {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		closeEventBus();
 		closeSubscribers();
 		
 		generateHeaderFiles();
@@ -120,6 +121,14 @@ public class TranscriptParser implements Parser {
 
 	private void registerSubscribers() {
 		subscribers.forEach(subscriber -> eventBus.register(subscriber));
+	}
+	
+	private void closeEventBus() {
+		try {
+			eventBus.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private void closeSubscribers() {
