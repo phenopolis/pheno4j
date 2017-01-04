@@ -84,7 +84,7 @@ java -jar graph-db.jar TranscriptParser $inputFile $outputFolder
 bin/neo4j-import   --into /generatedGraphOutputFolder/graph.db --id-type string --bad-tolerance 1000000  --skip-bad-relationships true --skip-duplicate-nodes true  \
 --nodes:GeneticVariant /folder/GeneticVariant-header.csv,/folder/GeneticVariant-AnnotationParser.csv \
 --nodes:Gene /folder/Gene-header.csv,/folder/Gene.csv \
---nodes:Person /folder/Person-header.csv,/folder/Person-mainset_July2016-VcfParser.csv \
+--nodes:Person /folder/Person-header.csv,/folder/Person-VcfParser.csv,/folder/Person-PersonParser.csv \
 --nodes:Term /folder/Term-header.csv,/folder/Term-TermParser.csv \
 --nodes:TranscriptVariant /folder/TranscriptVariant-header.csv,/folder/TranscriptVariant-AnnotationParser.csv \
 --nodes:Transcript /folder/Transcript-header.csv,/folder/Transcript.csv \
