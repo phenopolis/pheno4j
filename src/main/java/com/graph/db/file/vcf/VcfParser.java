@@ -83,7 +83,7 @@ public class VcfParser implements Parser {
 						}
 					}
 					LOGGER.info("Found header at line: {}", reader.getLineNumber());
-					writeOutCsvFile(outputFolder, getClass(),  "Person-" + fileTag, indexToPerson.values());
+					writeOutCsvFile(outputFolder, getClass(),  "Person", indexToPerson.values());
 					found = true;
 					continue;
 				}
