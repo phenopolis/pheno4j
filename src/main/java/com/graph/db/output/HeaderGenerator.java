@@ -80,6 +80,17 @@ public class HeaderGenerator {
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "transcript_id", ":START_ID(Transcript)");
 			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "gene_id", ":END_ID(Gene)");
 			break;
+		case TERM:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "termId", "termId:ID(Term)");
+			break;
+		case TERM_TO_DESCENDANT_TERMS:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "parent", ":START_ID(Term)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "child", ":END_ID(Term)");
+			break;
+		case TERM_TO_PARENT_TERM:
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "parent", ":END_ID(Term)");
+			joinedHeaders = StringUtils.replaceOnce(joinedHeaders, "child", ":START_ID(Term)");
+			break;
 		default:
 			throw new IllegalStateException("Unknown outputFileType: " + outputFileType);
 		}

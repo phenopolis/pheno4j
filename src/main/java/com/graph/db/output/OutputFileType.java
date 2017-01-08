@@ -10,6 +10,9 @@ import com.graph.db.domain.output.GeneToGeneticVariantOutput;
 import com.graph.db.domain.output.GeneToTermOutput;
 import com.graph.db.domain.output.GeneticVariantOutput;
 import com.graph.db.domain.output.GeneticVariantToTranscriptVariantOutput;
+import com.graph.db.domain.output.TermOutput;
+import com.graph.db.domain.output.TermToDescendantTermsOutput;
+import com.graph.db.domain.output.TermToParentTermOutput;
 import com.graph.db.domain.output.TranscriptOutput;
 import com.graph.db.domain.output.TranscriptToGeneOutput;
 import com.graph.db.domain.output.TranscriptToTranscriptVariantOutput;
@@ -29,6 +32,9 @@ public enum OutputFileType {
 	GENE("Gene", GeneOutput.class),
 	TRANSCRIPT("Transcript", TranscriptOutput.class),
 	TRANSCRIPT_TO_GENE("TranscriptToGene", TranscriptToGeneOutput.class),
+	TERM("Term", TermOutput.class),
+	TERM_TO_PARENT_TERM("TermToParentTerm", TermToParentTermOutput.class),
+	TERM_TO_DESCENDANT_TERMS("TermToDescendantTerms", TermToDescendantTermsOutput.class),
 	;
 	
 	private final String fileTag;

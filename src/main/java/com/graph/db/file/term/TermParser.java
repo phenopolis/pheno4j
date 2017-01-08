@@ -1,30 +1,38 @@
 package com.graph.db.file.term;
 
 import static com.graph.db.util.Constants.COLON;
-import static com.graph.db.util.Constants.COMMA;
-import static com.graph.db.util.Constants.DOUBLE_QUOTE;
-import static com.graph.db.util.FileUtil.getLines;
+import static com.graph.db.util.FileUtil.logLineNumber;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.graph.db.Parser;
+import com.graph.db.domain.output.TermOutput;
+import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.term.domain.RawTerm;
-import com.graph.db.util.FileUtil;
+import com.graph.db.file.term.subscriber.TermToDescendantTermsSubscriber;
+import com.graph.db.file.term.subscriber.TermToParentTermSubscriber;
+import com.graph.db.output.HeaderGenerator;
+import com.graph.db.output.OutputFileType;
+import com.graph.db.util.ManagedEventBus;
 
 /**
  * Nodes
  * - Term
  * 
  * Relationships
- * - TermToTerm
+ * - TermToParentTerm
+ * - TermToDescendantTerms
  */
 public class TermParser implements Parser {
 	
@@ -32,102 +40,110 @@ public class TermParser implements Parser {
 	
 	private final String fileName;
 	private final String outputFolder;
+	
+	private final ManagedEventBus eventBus;
+	private final List<? extends AutoCloseable> subscribers;
 
 	public TermParser(String fileName, String outputFolder) {
 		this.fileName = fileName;
 		this.outputFolder = outputFolder;
+		
+		eventBus = new ManagedEventBus(getClass().getSimpleName());
+		subscribers = createSubscribers();
 	}
-
+	
+	private List<? extends AutoCloseable> createSubscribers() {
+		GenericSubscriber<TermOutput> termSubscriber = new GenericSubscriber<>(outputFolder, getClass(), OutputFileType.TERM);
+		GenericSubscriber<RawTerm> termToParentTerm = new TermToParentTermSubscriber(outputFolder, getClass());
+		GenericSubscriber<RawTerm> termToDescendantTerms = new TermToDescendantTermsSubscriber(outputFolder, getClass());
+		return Arrays.asList(termSubscriber, termToParentTerm, termToDescendantTerms);
+	}
+	
 	@Override
 	public void execute() {
-		List<String> lines = getLines(fileName);
-		List<Pair<Integer, Integer>> pairs = getPairsOfIndexes(lines);
-		List<RawTerm> rawTerms = getRawTerms(lines, pairs);
-		
-		writeOutTerms(rawTerms);
-		writeOutTermRelationships(rawTerms);
-	}
-	
-	private List<Pair<Integer, Integer>> getPairsOfIndexes(List<String> lines) {
-		List<Pair<Integer, Integer>> pairs = new ArrayList<>();
-		for (int i = 0; i < lines.size();) {
-			int start = indexOfNextTerm(lines, i);
-			int finish = indexOfNextTerm(lines, start+1);
+		registerSubscribers();
+		try (LineNumberReader reader = new LineNumberReader(new FileReader(fileName))) {
+			String line;
 			
-			if (finish == -1) {
-				finish = lines.size() - 1;
-				i = lines.size();
-			} else {
-				i = finish;
-			}
-			pairs.add(new ImmutablePair<Integer, Integer>(start, finish));
-		}
-		return pairs;
-	}
-	
-	private int indexOfNextTerm(List<String> list, int index) {
-		for (int i = index; i < list.size(); i++) {
-			if ("[Term]".equals(list.get(i))) {
-				return i;
-			}
-		}
-		return -1;
-	}
-	
-	private List<RawTerm> getRawTerms(List<String> lines, List<Pair<Integer, Integer>> pairs) {
-		List<RawTerm> terms = new ArrayList<>();
-		for (Pair<Integer, Integer> pair : pairs) {
-			List<String> subList = lines.subList(pair.getLeft()+1, pair.getRight());
-			
-			String termId = null;
-			String name = null;
-			List<String> is = new ArrayList<>();
-			for (String line : subList) {
-				if (StringUtils.isNotBlank(line)) {
-					String key = StringUtils.substringBefore(line, COLON);
-					switch (key) {
-					case "id":
-						termId = StringUtils.trim(StringUtils.substringAfter(line, COLON));
-						break;
-					case "is_a":
-						String isA = StringUtils.substringBetween(line, COLON, "!");
-						is.add(StringUtils.trim(isA));
-						break;
-					case "name":
-						name = StringUtils.trim(StringUtils.substringAfter(line, COLON));
-						name = StringUtils.replace(name, "\"", "\"\"");
-						break;
+			while (( line = reader.readLine()) != null) {
+				logLineNumber(reader, 1000);
+				
+				if ("[Term]".equals(line)) {
+					List<String> linesForTerm = new ArrayList<>();
+					while (( line = reader.readLine()) != null) {
+						if (EMPTY.equals(line)) {
+							break;
+						} else {
+							linesForTerm.add(line);
+						}
 					}
+					
+					RawTerm rawTerm = createRawTermFromLines(linesForTerm);
+					eventBus.post(rawTerm);
 				}
 			}
-			RawTerm term = new RawTerm(termId, name, is);
-			terms.add(term);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
-		return terms;
+		closeEventBus();
+		closeSubscribers();
+		
+		generateHeaderFiles();
 	}
 	
-	private void writeOutTerms(List<RawTerm> rawTerms) {
-		List<String> csvStrings = new ArrayList<>();
-		for (RawTerm rawTerm : rawTerms) {
-			String csvString = rawTerm.getTermId() + COMMA + StringUtils.wrap(rawTerm.getName(), DOUBLE_QUOTE);
-			csvStrings.add(csvString);
-		}
-		FileUtil.writeOutCsvHeader(outputFolder, "Term", Arrays.asList("termId:ID(Term),name"));
-		FileUtil.writeOutCsvFile(outputFolder, getClass(), "Term", csvStrings);
+	private void registerSubscribers() {
+		subscribers.forEach(subscriber -> eventBus.register(subscriber));
 	}
 	
-	private void writeOutTermRelationships(List<RawTerm> rawTerms) {
-		List<String> csvStrings = new ArrayList<>();
-		for (RawTerm rawTerm : rawTerms) {
-			for (String isA : rawTerm.getIsA()) {
-				String csvString = rawTerm.getTermId() + COMMA + isA;
-				csvStrings.add(csvString);
+	protected RawTerm createRawTermFromLines(List<String> linesForTerm) {
+		String termId = null;
+		String name = null;
+		List<String> is = new ArrayList<>();
+		for (String line : linesForTerm) {
+			if (StringUtils.isNotBlank(line)) {
+				String key = StringUtils.substringBefore(line, COLON);
+				switch (key) {
+				case "id":
+					termId = StringUtils.trim(StringUtils.substringAfter(line, COLON));
+					break;
+				case "is_a":
+					String isA = StringUtils.substringBetween(line, COLON, "!");
+					is.add(StringUtils.trim(isA));
+					break;
+				case "name":
+					name = StringUtils.trim(StringUtils.substringAfter(line, COLON));
+					name = StringUtils.replace(name, "\"", "\"\"");
+					break;
+				}
 			}
 		}
-		FileUtil.writeOutCsvHeader(outputFolder, "TermToTerm", Arrays.asList(":START_ID(Term),:END_ID(Term)"));
-		FileUtil.writeOutCsvFile(outputFolder, getClass(), "TermToTerm", csvStrings);
+		return new RawTerm(termId, name, is);
 	}
-	
+
+	private void closeEventBus() {
+		try {
+			eventBus.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void closeSubscribers() {
+		subscribers.forEach(subscriber -> {
+			try {
+				subscriber.close();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
+	}
+
+	private void generateHeaderFiles() {
+		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.TERM,
+				OutputFileType.TERM_TO_DESCENDANT_TERMS, OutputFileType.TERM_TO_PARENT_TERM);
+		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
+	}
+
 	public static void main(String[] args) {
 		if ((args != null) && (args.length != 2)) {
 			throw new RuntimeException("Incorrect args: $1=termFile, $2=outputFolder");

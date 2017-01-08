@@ -53,7 +53,7 @@ public class TermParserIT {
 
 	@Test
 	public void correctNumberOfFilesProduced() throws IOException {
-		assertThat(getNumberOfFilesInFolder(tempFolder), equalTo(4));
+		assertThat(getNumberOfFilesInFolder(tempFolder), equalTo(6));
 	}
 	
 	@Test
@@ -64,8 +64,10 @@ public class TermParserIT {
 		
 		assertThat(fileNames, hasItem("Term-header.csv"));
 		assertThat(fileNames, hasItem("Term-TermParser.csv"));
-		assertThat(fileNames, hasItem("TermToTerm-header.csv"));
-		assertThat(fileNames, hasItem("TermToTerm-TermParser.csv"));
+		assertThat(fileNames, hasItem("TermToParentTerm-header.csv"));
+		assertThat(fileNames, hasItem("TermToParentTerm-TermParser.csv"));
+		assertThat(fileNames, hasItem("TermToDescendantTerms-header.csv"));
+		assertThat(fileNames, hasItem("TermToDescendantTerms-TermParser.csv"));
 	}
 
 	@Test
@@ -79,13 +81,23 @@ public class TermParserIT {
 	}
 	
 	@Test
-	public void termToTermHeaderHasCorrectNumberOfRows() {
-		assertRowCountForFile("TermToTerm-header.csv", 1);
+	public void termToParentTermHeaderHasCorrectNumberOfRows() {
+		assertRowCountForFile("TermToParentTerm-header.csv", 1);
 	}
 	
 	@Test
-	public void termToTermHasCorrectNumberOfRows() {
-		assertRowCountForFile("TermToTerm-TermParser.csv", 15459);
+	public void termToParentTermHasCorrectNumberOfRows() {
+		assertRowCountForFile("TermToParentTerm-TermParser.csv", 15459);
+	}
+	
+	@Test
+	public void termToDescendantTermsHeaderHasCorrectNumberOfRows() {
+		assertRowCountForFile("TermToDescendantTerms-header.csv", 1);
+	}
+	
+	@Test
+	public void termToDescendantTermsHasCorrectNumberOfRows() {
+		assertRowCountForFile("TermToDescendantTerms-TermParser.csv", 135948);
 	}
 
 }

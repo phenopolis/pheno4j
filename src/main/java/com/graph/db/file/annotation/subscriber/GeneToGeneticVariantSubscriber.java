@@ -25,8 +25,8 @@ public class GeneToGeneticVariantSubscriber extends GenericSubscriber<GeneticVar
 		}
 		
     	try {
-			for (GeneToGeneticVariantOutput pair : set) {
-				beanWriter.write(pair);
+			for (GeneToGeneticVariantOutput output : set) {
+				beanWriter.write(output);
 			}
     	} catch (IOException e) {
     		throw new RuntimeException(e);
