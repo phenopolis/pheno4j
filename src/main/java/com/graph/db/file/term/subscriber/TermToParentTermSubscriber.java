@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.graph.db.domain.input.term.RawTerm;
 import com.graph.db.domain.output.TermToParentTermOutput;
 import com.graph.db.file.GenericSubscriber;
-import com.graph.db.file.term.domain.RawTerm;
 import com.graph.db.output.OutputFileType;
 
 public class TermToParentTermSubscriber extends GenericSubscriber<RawTerm> {

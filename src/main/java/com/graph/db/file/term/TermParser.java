@@ -17,9 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.graph.db.Parser;
+import com.graph.db.domain.input.term.RawTerm;
 import com.graph.db.domain.output.TermOutput;
 import com.graph.db.file.GenericSubscriber;
-import com.graph.db.file.term.domain.RawTerm;
 import com.graph.db.file.term.subscriber.TermToDescendantTermsSubscriber;
 import com.graph.db.file.term.subscriber.TermToParentTermSubscriber;
 import com.graph.db.output.HeaderGenerator;

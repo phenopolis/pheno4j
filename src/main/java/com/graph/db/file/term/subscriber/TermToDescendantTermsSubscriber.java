@@ -10,9 +10,9 @@ import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.traverse.DepthFirstIterator;
 
+import com.graph.db.domain.input.term.RawTerm;
 import com.graph.db.domain.output.TermToDescendantTermsOutput;
 import com.graph.db.file.GenericSubscriber;
-import com.graph.db.file.term.domain.RawTerm;
 import com.graph.db.output.OutputFileType;
 
 public class TermToDescendantTermsSubscriber extends GenericSubscriber<RawTerm> {

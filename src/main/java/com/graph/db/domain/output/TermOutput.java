@@ -1,6 +1,6 @@
 package com.graph.db.domain.output;
 
-import com.graph.db.file.term.domain.RawTerm;
+import com.graph.db.domain.input.term.RawTerm;
 
 public class TermOutput {
 	

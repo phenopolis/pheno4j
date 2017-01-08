@@ -1,4 +1,4 @@
-package com.graph.db.file.term.domain;
+package com.graph.db.domain.input.term;
 
 import java.util.List;
 
