@@ -49,7 +49,15 @@ public class HeaderGeneratorTest {
 			case TRANSCRIPT_VARIANT_TO_CONSEQUENCE_TERM:
 				expectedHeader = ":START_ID(TranscriptVariant),:END_ID(ConsequenceTerm)";
 				break;
-				//TODO add missing enums
+			case TERM:
+				expectedHeader = "termId:ID(Term),name";
+				break;
+			case TERM_TO_DESCENDANT_TERMS:
+				expectedHeader = ":START_ID(Term),:END_ID(Term)";
+				break;
+			case TERM_TO_PARENT_TERM:
+				expectedHeader = ":START_ID(Term),:END_ID(Term)";
+				break;
 			default:
 				throw new IllegalStateException();
 			}
