@@ -1,6 +1,7 @@
 package com.graph.db.file;
 
-import java.io.File;
+import static com.graph.db.util.FileUtil.createFileName;
+
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -10,7 +11,6 @@ import org.supercsv.io.dozer.CsvDozerBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
 import com.graph.db.output.OutputFileType;
-import com.graph.db.util.Constants;
 
 /**
  * Subclasses are responsible for annotating the appropriate method
@@ -26,7 +26,7 @@ public abstract class AbstractSubscriber<T> implements AutoCloseable {
 
 	public AbstractSubscriber(String outputFolder, Class<?> parserClass, OutputFileType outputFileType) {
 		this.outputFileType = outputFileType;
-		fileName = outputFolder + File.separator + outputFileType.getFileTag() + Constants.HYPHEN + parserClass.getSimpleName() + ".csv";
+		fileName = createFileName(outputFolder, parserClass, outputFileType);
 		FileWriter writer = createFileWriter();
 		beanWriter = new CsvDozerBeanWriter(writer, CsvPreference.STANDARD_PREFERENCE);
 		beanWriter.configureBeanMapping(outputFileType.getBeanClass(), outputFileType.getHeader());

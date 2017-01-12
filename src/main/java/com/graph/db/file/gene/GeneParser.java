@@ -116,6 +116,11 @@ public class GeneParser implements Parser {
 		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE_TO_TERM);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
+	
+	@Override
+	public EnumSet<OutputFileType> getNonHeaderOutputFileTypes() {
+		return EnumSet.of(OutputFileType.GENE_TO_TERM);
+	}
 
 	public static void main(String[] args) {
 		if ((args != null) && (args.length != 2)) {
@@ -124,5 +129,4 @@ public class GeneParser implements Parser {
 		new GeneParser(args[0], args[1]).execute();
 		LOGGER.info("Finished");
 	}
-
 }

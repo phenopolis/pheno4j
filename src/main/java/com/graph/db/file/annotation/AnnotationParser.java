@@ -143,11 +143,19 @@ public class AnnotationParser implements Parser {
 	}
 
 	private void generateHeaderFiles() {
-		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENETIC_VARIANT,
-				OutputFileType.GENE_TO_GENETIC_VARIANT, OutputFileType.TRANSCRIPT_VARIANT,
-				OutputFileType.GENETIC_VARIANT_TO_TRANSCRIPT_VARIANT, OutputFileType.TRANSCRIPT_TO_TRANSCRIPT_VARIANT,
-				OutputFileType.CONSEQUENCE_TERM, OutputFileType.TRANSCRIPT_VARIANT_TO_CONSEQUENCE_TERM);
+		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENETIC_VARIANT, OutputFileType.GENE_TO_GENETIC_VARIANT,
+				OutputFileType.TRANSCRIPT_VARIANT, OutputFileType.GENETIC_VARIANT_TO_TRANSCRIPT_VARIANT,
+				OutputFileType.TRANSCRIPT_TO_TRANSCRIPT_VARIANT, OutputFileType.CONSEQUENCE_TERM,
+				OutputFileType.TRANSCRIPT_VARIANT_TO_CONSEQUENCE_TERM);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
+	}
+	
+	@Override
+	public EnumSet<OutputFileType> getNonHeaderOutputFileTypes() {
+		return EnumSet.of(OutputFileType.GENETIC_VARIANT, OutputFileType.TRANSCRIPT_VARIANT,
+				OutputFileType.CONSEQUENCE_TERM, OutputFileType.TRANSCRIPT, OutputFileType.GENE,
+				OutputFileType.GENE_TO_GENETIC_VARIANT, OutputFileType.GENETIC_VARIANT_TO_TRANSCRIPT_VARIANT,
+				OutputFileType.TRANSCRIPT_TO_TRANSCRIPT_VARIANT, OutputFileType.TRANSCRIPT_VARIANT_TO_CONSEQUENCE_TERM);
 	}
 
 	public static void main(String[] args) {

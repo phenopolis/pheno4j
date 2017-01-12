@@ -19,17 +19,19 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.graph.db.output.OutputFileType;
+
 public final class FileUtil {
 	
     private static final Logger LOGGER = LoggerFactory.getLogger(FileUtil.class);
     
 	private FileUtil() {}
 	
-	public static void writeOutCsvHeader(String outputFolder, String fileName, Collection<String> collection) {
-		String pathname = outputFolder + File.separator + fileName + "-header.csv";
+	public static void writeOutCsvHeader(String outputFolder, String fileTag, Collection<String> collection) {
+		String pathname = createHeaderFileName(outputFolder, fileTag);
 		writeFile(collection, pathname);
 	}
-	
+
 	public static void writeOutCsvFile(String outputFolder, Class<?> c, String fileName, Collection<String> collection) {
 		String pathname = outputFolder + File.separator + fileName + Constants.HYPHEN + c.getSimpleName() + ".csv";
 		writeFile(collection, pathname);
@@ -98,5 +100,17 @@ public final class FileUtil {
 		}
 		Reader decoder = new InputStreamReader(gzipStream);
 		return new LineNumberReader(decoder);
+	}
+	
+	public static String createHeaderFileName(String outputFolder, String fileTag) {
+		return outputFolder + File.separator + fileTag + "-header.csv";
+	}
+	
+	public static String createFileName(String outputFolder, Class<?> parserClass, OutputFileType outputFileType) {
+		return outputFolder + File.separator + outputFileType.getFileTag() + Constants.HYPHEN + parserClass.getSimpleName() + ".csv";
+	}
+	
+	public static String createUnionedFileName(String outputFolder, String fileTag) {
+		return outputFolder + File.separator + fileTag + ".csv";
 	}
 }

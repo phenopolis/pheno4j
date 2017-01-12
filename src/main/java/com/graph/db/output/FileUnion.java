@@ -1,9 +1,10 @@
 package com.graph.db.output;
 
+import static com.graph.db.util.FileUtil.createUnionedFileName;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -21,10 +22,10 @@ public class FileUnion {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileUnion.class);
 	
-	private final List<String> SOURCE_FILES = Arrays.asList(
-			"Gene-TranscriptParser.csv",
-			"Transcript-TranscriptParser.csv",
-			"Person-PersonParser.csv");
+	public static final List<OutputFileType> SOURCE_OUTPUTFILETYPES = Arrays.asList(
+			OutputFileType.GENE,
+			OutputFileType.TRANSCRIPT,
+			OutputFileType.PERSON);
 
 	private final String inputFolder;
 	private final String outputFolder;
@@ -35,42 +36,28 @@ public class FileUnion {
 	}
 	
 	private void execute() {
-		for (String sourceFile : SOURCE_FILES) {
+		for (OutputFileType sourceFile : SOURCE_OUTPUTFILETYPES) {
 			LOGGER.info("Processing: {}", sourceFile);
 			Map<String, String> keyToRow = new HashMap<>();
 			
-			List<String> sourceFileLines = FileUtil.getLines(inputFolder + File.separator + sourceFile);
-			putRowsIntoMap(keyToRow, sourceFileLines);
-			
-			String fileTag = StringUtils.substringBefore(sourceFile, Constants.HYPHEN);
-			List<File> allRemainingFilesForFileTag = getAllRemainingFilesForFileTag(inputFolder, sourceFile, fileTag);
-			for (File file : allRemainingFilesForFileTag) {
+			List<File> allFilesForFileTag = getAllFilesForFileTag(inputFolder, sourceFile.getFileTag());
+			for (File file : allFilesForFileTag) {
 				LOGGER.info("Processing: {}", file.getName());
 				List<String> lines = FileUtil.getLines(file);
 				putRowsIntoMap(keyToRow, lines);
 			}
 			
-			writeOutMergedFile(keyToRow, fileTag);
+			writeOutMergedFile(keyToRow, sourceFile.getFileTag());
 		}
 	}
 
-	private List<File> getAllRemainingFilesForFileTag(String folder, String sourceFile, String fileTag) {
+	private List<File> getAllFilesForFileTag(String folder, String fileTag) {
 		File dir = new File(folder);
 		FilenameFilter filter = (directory, name) -> name.startsWith(fileTag + Constants.HYPHEN) && !name.contains("header");
 		File[] listFiles = dir.listFiles(filter);
-		return removeSourceFile(listFiles, sourceFile);
+		return Arrays.asList(listFiles);
 	}
 	
-	private List<File> removeSourceFile(File[] listFiles, String sourceFile) {
-		List<File> result = new ArrayList<>();
-		for (File file : listFiles) {
-			if (!file.getName().equals(sourceFile)) {
-				result.add(file);
-			}
-		}
-		return result;
-	}
-
 	private void putRowsIntoMap(Map<String, String> keyToRow, List<String> sourceFileLines) {
 		for (String row : sourceFileLines) {
 			String[] cells = StringUtils.split(row, Constants.COMMA);
@@ -79,7 +66,7 @@ public class FileUnion {
 	}
 	
 	private void writeOutMergedFile(Map<String, String> keyToRow, String fileTag) {
-		String pathname = outputFolder + File.separator + fileTag + ".csv";
+		String pathname = createUnionedFileName(outputFolder, fileTag);
 		LOGGER.info("Writing out file: {}", pathname);
 		File outputFile = new File(pathname);
 		try {

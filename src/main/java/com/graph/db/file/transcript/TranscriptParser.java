@@ -142,8 +142,14 @@ public class TranscriptParser implements Parser {
 	}
 
 	private void generateHeaderFiles() {
-		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE, OutputFileType.TRANSCRIPT, OutputFileType.TRANSCRIPT_TO_GENE);
+		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE, OutputFileType.TRANSCRIPT,
+				OutputFileType.TRANSCRIPT_TO_GENE);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
+	}
+	
+	@Override
+	public EnumSet<OutputFileType> getNonHeaderOutputFileTypes() {
+		return EnumSet.of(OutputFileType.TRANSCRIPT, OutputFileType.GENE, OutputFileType.TRANSCRIPT_TO_GENE);
 	}
 
 	public static void main(String[] args) {
@@ -153,5 +159,4 @@ public class TranscriptParser implements Parser {
 		new TranscriptParser(args[0], args[1]).execute();
 		LOGGER.info("Finished");
 	}
-
 }

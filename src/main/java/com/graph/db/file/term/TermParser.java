@@ -143,7 +143,13 @@ public class TermParser implements Parser {
 				OutputFileType.TERM_TO_DESCENDANT_TERMS, OutputFileType.TERM_TO_PARENT_TERM);
 		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
 	}
-
+	
+	@Override
+	public EnumSet<OutputFileType> getNonHeaderOutputFileTypes() {
+		return EnumSet.of(OutputFileType.TERM, OutputFileType.TERM_TO_PARENT_TERM,
+				OutputFileType.TERM_TO_DESCENDANT_TERMS);
+	}
+	
 	public static void main(String[] args) {
 		if ((args != null) && (args.length != 2)) {
 			throw new RuntimeException("Incorrect args: $1=termFile, $2=outputFolder");

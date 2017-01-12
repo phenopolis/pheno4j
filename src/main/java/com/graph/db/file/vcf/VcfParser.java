@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -26,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.graph.db.Parser;
+import com.graph.db.output.OutputFileType;
 
 /**
  * Writes data to the file as it is available
@@ -160,6 +162,11 @@ public class VcfParser implements Parser {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public EnumSet<OutputFileType> getNonHeaderOutputFileTypes() {
+		return EnumSet.of(OutputFileType.PERSON, OutputFileType.GENETIC_VARIANT_TO_PERSON);
 	}
 	
 	public static void main(String[] args) {

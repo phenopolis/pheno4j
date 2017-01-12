@@ -8,6 +8,7 @@ import static com.graph.db.util.FileUtil.writeOutCsvFile;
 import static com.graph.db.util.FileUtil.writeOutCsvHeader;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.graph.db.Parser;
+import com.graph.db.output.OutputFileType;
 import com.graph.db.util.Constants;
 
 /**
@@ -80,6 +82,11 @@ public class PersonParser implements Parser {
 		writeOutCsvFile(outputFolder, getClass(), fileTag, set);
 	}
 	
+	@Override
+	public EnumSet<OutputFileType> getNonHeaderOutputFileTypes() {
+		return EnumSet.of(OutputFileType.PERSON_TO_OBSERVED_TERM, OutputFileType.PERSON_TO_NON_OBSERVED_TERM);
+	}
+	
 	public static void main(String[] args) {
 		if ((args != null) && (args.length != 2)) {
 			throw new RuntimeException("Incorrect args: $1=termFile, $2=outputFolder");
@@ -87,5 +94,4 @@ public class PersonParser implements Parser {
 		new PersonParser(args[0], args[1]).execute();
 		LOGGER.info("Finished");
 	}
-
 }
