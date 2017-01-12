@@ -119,7 +119,7 @@ public class ImportCommandGenerator {
 	
 	private void appendContentFiles(StringBuilder builder, Multimap<OutputFileType, String> outputFileTypeToFileNames,OutputFileType outputFileType) {
 		if (relevantForFileUnion(outputFileType)) {
-			builder.append(FileUtil.createUnionedFileName(outputFolderPath, outputFileType.getFileTag()));
+			builder.append(FileUtil.createUnionedFileName(inputFolderPath, outputFileType.getFileTag()));
 		} else {
 			Collection<String> collection = outputFileTypeToFileNames.get(outputFileType);
 			if (collection.isEmpty()) {
