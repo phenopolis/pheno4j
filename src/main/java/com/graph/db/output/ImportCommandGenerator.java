@@ -113,7 +113,7 @@ public class ImportCommandGenerator {
 	}
 	
 	private void appendHeaderFileName(StringBuilder builder, OutputFileType outputFileType) {
-		String headerFileName = createHeaderFileName(outputFolderPath, outputFileType.getFileTag());
+		String headerFileName = createHeaderFileName(inputFolderPath, outputFileType.getFileTag());
 		builder.append(headerFileName).append(COMMA);
 	}
 	
