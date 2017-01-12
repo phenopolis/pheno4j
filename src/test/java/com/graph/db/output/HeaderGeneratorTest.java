@@ -58,8 +58,13 @@ public class HeaderGeneratorTest {
 			case TERM_TO_PARENT_TERM:
 				expectedHeader = ":START_ID(Term),:END_ID(Term)";
 				break;
+			case PERSON:
+			case PERSON_TO_OBSERVED_TERM:
+			case PERSON_TO_NON_OBSERVED_TERM:
+			case GENETIC_VARIANT_TO_PERSON:
+				continue;
 			default:
-				throw new IllegalStateException();
+				throw new IllegalStateException("outputFileType: " + outputFileType);
 			}
 			
 			String actualHeader = headerGenerator.generateHeadersForOutputFileTypes(EnumSet.of(outputFileType)).values().iterator().next();
