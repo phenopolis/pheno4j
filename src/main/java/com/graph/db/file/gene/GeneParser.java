@@ -63,6 +63,7 @@ public class GeneParser implements Parser {
 				
 				if (header == null) {
 					header = StringUtils.split(line, Constants.TAB);
+					continue;
 				}
 				
 				String[] columns = StringUtils.split(line, Constants.TAB);
