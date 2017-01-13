@@ -1,6 +1,7 @@
 package com.graph.db.file;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 
@@ -19,13 +20,28 @@ public class GenericSubscriber<T> extends AbstractSubscriber<T> {
     	if (object instanceof PoisonPill) {
     		return;
     	}
-    	try {
-    		Constructor<?> constructor = ConstructorUtils.getMatchingAccessibleConstructor(outputFileType.getBeanClass(), object.getClass());
-    		Object v = constructor.newInstance(object);
-			beanWriter.write(v);
-    	} catch (Exception e) {
-    		throw new RuntimeException(e);
-    	}
+    	
+    	final Object objectToWrite = getObjectToWrite(object);
+    	
+		try {
+			beanWriter.write(objectToWrite);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
     }
 
+	private Object getObjectToWrite(T object) {
+		// if the input bean is the same type as the output bean to be written
+		// out, then there's nothing to do
+    	if (object.getClass().equals(outputFileType.getBeanClass())) {
+    		return object;
+    	} else {
+			Constructor<?> constructor = ConstructorUtils.getMatchingAccessibleConstructor(outputFileType.getBeanClass(), object.getClass());
+			try {
+				return constructor.newInstance(object);
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				throw new RuntimeException(e);
+			}
+    	}
+	}
 }

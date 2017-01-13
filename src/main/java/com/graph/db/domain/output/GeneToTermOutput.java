@@ -19,5 +19,4 @@ public class GeneToTermOutput {
 	public String getTermId() {
 		return termId;
 	}
-
 }
