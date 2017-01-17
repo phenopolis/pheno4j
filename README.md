@@ -137,88 +137,83 @@ CREATE INDEX ON :GeneticVariant(hasExac);
 # Example Cypher Queries
 ## All Variants for an individual
 ```
-MATCH (gv:GeneticVariant)-[:PRESENT_IN]->(p:Person)
+MATCH (gv:GeneticVariant)-[:GeneticVariantToPerson]->(p:Person)
 WHERE p.personId ='XXX'
 RETURN count(gv.variantId);
 ```
 ## Individuals who have a particular variant
 ```
-MATCH (gv:GeneticVariant)-[:PRESENT_IN]->(p:Person)
+MATCH (gv:GeneticVariant)-[:GeneticVariantToPerson]->(p:Person)
 WHERE gv.variantId ='xxx'
 RETURN p.personId;
 ```
 ## Find Variants shared by a list of Individuals
 ```
 WITH ["XXX","yyy"] as persons
-MATCH (p:Person)<-[:PRESENT_IN]-(v:GeneticVariant) 
+MATCH (p:Person)<-[:GeneticVariantToPerson]-(v:GeneticVariant) 
 WHERE p.personId IN persons
 WITH v, count(*) as c, persons
 WHERE c = size(persons)
-RETURN count( v.variantId);
+RETURN count(v.variantId);
 ```
 ## Find Variants shared by a list of Individuals, that no one else has
 ```
 WITH ["XXX","YYY"] as individuals
-MATCH (p:Person)<-[:PRESENT_IN]-(v:GeneticVariant) 
+MATCH (p:Person)<-[:GeneticVariantToPerson]-(v:GeneticVariant) 
 WHERE p.personId IN individuals
 WITH v, count(*) as c, individuals
 WHERE c = size(individuals)
 with v, individuals
 MATCH (v:GeneticVariant)
-where size((v)-[:PRESENT_IN]-()) = size(individuals)
+where size((v)-[:GeneticVariantToPerson]-()) = size(individuals)
 RETURN v.variantId;
 ```
 ## Individuals who have a Term
 ```
-MATCH (t:Term)<-[tp:HAS_OBSERVED_TERM]-(p:Person)
+MATCH (t:Term)<-[tp:PersonToObservedTerm]-(p:Person)
 WHERE t.termId = 'HP:XXX'
 RETURN p.personId;
 ```
 ## Find Genes that have no Term
 ```
 MATCH (s:Gene)
-WHERE NOT (s)-[:INFLUENCES]->()
-RETURN s.gene_id;
+WHERE NOT (s)-[:GeneToTerm]->()
+RETURN count(s.gene_id);
 ```
 ## Find Variants which have a frequency less than 0.001 and a CADD score greater than 20
 ```
-MATCH (n:GeneticVariant)-[:HAS]->(tv:TranscriptVariant)
+MATCH (n:GeneticVariant)-[:GeneticVariantToTranscriptVariant]->(tv:TranscriptVariant)
 WHERE n.allele_freq < 0.001 and tv.cadd > 20 
 RETURN count(*);
 ```
 ## For a Term, find all the Descendant Terms
 ```
-MATCH (p:Term)<-[:IS_A*]-(q:Term)
+MATCH (p:Term)-[:TermToDescendantTerms]->(q:Term)
 where p.termId ='XXX'
-with  p + collect( distinct q) as allRows
-unwind allRows as rows
-return rows
+return q
 ```
 ## Find all Individuals with a specific Term (and any of its descendants)
 ```
-MATCH (p:Term)<-[:IS_A*]-(q:Term)
+MATCH (p:Term)-[:TermToDescendantTerms]->(q:Term)<-[:PersonToObservedTerm]-(r:Person)
 WHERE p.termId ='XXX'
-with  p + collect( distinct q) as allRows
-MATCH (p:Person)-[:HAS_OBSERVED_TERM]->(t:Term) 
-WHERE t IN allRows
-RETURN count(p);
+RETURN count(r);
 ```
 ## Find variants which have a frequency less than 0.001 and a CADD score greater than 20 seen in in people with HP:0000556 and belonging to a gene with HP:0000556
 ```
-//TODO needs validation, also slow (16 seconds)
-MATCH (p:Term)<-[:IS_A*]-(q:Term)<-[:INFLUENCES]-(gs:Gene)-[:HAS_VARIANT]->(gv:GeneticVariant)-[:HAS]->(ts:TranscriptVariant)
-WHERE (q.termId ='HP:0000556' or p.termId ='HP:0000556')
+//TODO needs validation, also slow (was 17 seconds, now 13 with new relationship)
+MATCH (p:Term)-[:TermToDescendantTerms]->(q:Term)<-[:GeneToTerm]-(gs:Gene)-[:GeneToGeneticVariant]->(gv:GeneticVariant)-[:GeneticVariantToTranscriptVariant]->(ts:TranscriptVariant)
+WHERE p.termId ='HP:0000556'
 AND gv.allele_freq < 0.001 
 AND ts.cadd > 20 
 RETURN count(distinct gv.variantId);
 ```
 ### For an Individual, rank their variants by the number of occurrences in other Individuals
 ```
-MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(gv:GeneticVariant)-[:HAS]->(tv:TranscriptVariant)
+MATCH (p:Person {personId:"XXX"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)-[:GeneticVariantToTranscriptVariant]->(tv:TranscriptVariant)
 WHERE (gv.allele_freq < 0.1 or tv.hasExac = false)
-WITH size(()<-[:PRESENT_IN]-(gv)) as count , gv
+WITH size(()<-[:GeneticVariantToPerson]-(gv)) as count, gv
 WHERE count > 1 
-RETURN gv.variantId, size(()<-[:PRESENT_IN]-(gv)) as count
+RETURN gv.variantId, size(()<-[:GeneticVariantToPerson]-(gv)) as count
 ORDER BY count asc
 LIMIT 10;
 ```
@@ -226,12 +221,12 @@ LIMIT 10;
 ```
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
-MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(gv:GeneticVariant)
+MATCH (p:Person {personId:"XXX"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)
 WHERE (gv.allele_freq < 0.001 or gv.hasExac = false)
-WITH size(()<-[:PRESENT_IN]-(gv)) as count , gv, p, numberOfPeople
+WITH size(()<-[:GeneticVariantToPerson]-(gv)) as count , gv, p, numberOfPeople
 WHERE count > 1 
 AND ((count / toFloat(numberOfPeople))  <= 0.05)
-MATCH (gv)-[:PRESENT_IN]->(q:Person)
+MATCH (gv)-[:GeneticVariantToPerson]->(q:Person)
 WHERE p <> q
 WITH p,q,count(gv) as c
 ORDER BY c desc LIMIT 10
@@ -241,19 +236,19 @@ RETURN p.personId,q.personId, c
 ```
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
-MATCH (p:Person {personId:"XXX"})<-[:PRESENT_IN]-(gv:GeneticVariant)
+MATCH (p:Person {personId:"XXX"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)
 WHERE (gv.allele_freq < 0.001 or gv.hasExac = false)
-WITH size(()<-[:PRESENT_IN]-(gv)) as count , gv, p, numberOfPeople
+WITH size(()<-[:GeneticVariantToPerson]-(gv)) as count , gv, p, numberOfPeople
 WHERE count > 1 
 AND ((count / toFloat(numberOfPeople))  <= 0.05)
-MATCH (gv)-[:PRESENT_IN]->(q:Person)
+MATCH (gv)-[:GeneticVariantToPerson]->(q:Person)
 WHERE p <> q
 WITH p,q,count(gv) as intersection, numberOfPeople
 ORDER BY intersection DESC limit 1
-MATCH (x:Person)<-[:PRESENT_IN]-(v:GeneticVariant)
+MATCH (x:Person)<-[:GeneticVariantToPerson]-(v:GeneticVariant)
 WHERE (x.personId = p.personId or x.personId = q.personId)
 AND (v.allele_freq < 0.001 or v.hasExac = false)
-AND ((size(()<-[:PRESENT_IN]-(v)) / toFloat(numberOfPeople))  <= 0.05)
+AND ((size(()<-[:GeneticVariantToPerson]-(v)) / toFloat(numberOfPeople))  <= 0.05)
 WITH p, q, v, intersection
 RETURN p.personId, q.personId, intersection, size(collect(distinct v)) as unionSum, (round((intersection/toFloat(size(collect(distinct v))))*100.0*10)/10) as PercentShared
 ORDER BY PercentShared DESC;
