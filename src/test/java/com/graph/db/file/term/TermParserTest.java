@@ -25,7 +25,12 @@ public class TermParserTest {
 	@Before
 	public void before() throws IOException {
 		File tempFolder = testFolder.newFolder(getClass().getSimpleName());
-		termParser = new TermParser(null, tempFolder.getAbsolutePath());
+		termParser = new TermParser(null) {
+			@Override
+			protected String getOutputFolder() {
+				return tempFolder.toString();
+			}
+		};
 	}
 
 	@Test

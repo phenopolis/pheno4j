@@ -4,11 +4,13 @@ import static com.graph.db.util.Constants.COLON;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
 
 import com.graph.db.domain.input.annotation.Exac;
@@ -17,11 +19,29 @@ import com.graph.db.domain.input.annotation.TranscriptConsequence;
 import com.graph.db.domain.output.TranscriptVariantOutput;
 import com.graph.db.util.Constants;
 import com.graph.db.util.FileUtil;
+import com.graph.db.util.PropertiesHolder;
 
 public class HeaderGenerator {
 	
-	public void generateHeaders(String outputFolder, Set<OutputFileType> set) {
-		Map<OutputFileType, String> headersForOutputFileTypes = generateHeadersForOutputFileTypes(set);
+	private final String outputFolder;
+	
+	private static final EnumSet<OutputFileType> EXCLUSION_SET = EnumSet.of(OutputFileType.PERSON,
+			OutputFileType.PERSON_TO_OBSERVED_TERM, OutputFileType.PERSON_TO_NON_OBSERVED_TERM,
+			OutputFileType.GENETIC_VARIANT_TO_PERSON);
+
+	public HeaderGenerator() {
+		PropertiesConfiguration config = PropertiesHolder.getInstance();
+		this.outputFolder = config.getString("output.folder");
+	}
+	
+	public HeaderGenerator(String outputFolder) {
+		this.outputFolder = outputFolder;
+	}
+	
+	public void execute() {
+		EnumSet<OutputFileType> headersToGenerate = EnumSet.complementOf(EXCLUSION_SET);
+		
+		Map<OutputFileType, String> headersForOutputFileTypes = generateHeadersForOutputFileTypes(headersToGenerate);
 		for (Entry<OutputFileType, String> entry : headersForOutputFileTypes.entrySet()) {
 			FileUtil.writeOutCsvHeader(outputFolder, entry.getKey().getFileTag(), Arrays.asList(entry.getValue()));
 		}
@@ -126,5 +146,9 @@ public class HeaderGenerator {
 		}
 		return nameToGraphType;
 	}
-
+	
+	public static void main(String[] args) {
+		HeaderGenerator headerGenerator = new HeaderGenerator();
+		headerGenerator.execute();
+	}
 }

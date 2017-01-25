@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.graph.db.Parser;
+import com.graph.db.file.LegacyParser;
 import com.graph.db.output.OutputFileType;
 import com.graph.db.util.Constants;
 
@@ -27,12 +27,15 @@ import com.graph.db.util.Constants;
  * - PersonToObservedTerm
  * - PersonToNonObservedTerm
  */
-public class PersonParser implements Parser {
+public class PersonParser extends LegacyParser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(PersonParser.class);
 	
 	private final String fileName;
-	private final String outputFolder;
+	
+	public PersonParser() {
+		this.fileName = config.getString("personParser.input.fileName");
+	}
 
 	public PersonParser(String fileName, String outputFolder) {
 		this.fileName = fileName;

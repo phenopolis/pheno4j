@@ -6,26 +6,30 @@ import static com.graph.db.util.FileUtil.createFileName;
 import static com.graph.db.util.FileUtil.createHeaderFileName;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.graph.db.Parser;
+import com.google.common.collect.Sets;
+import com.graph.db.file.Parser;
+import com.graph.db.file.annotation.AnnotationParser;
+import com.graph.db.file.gene.GeneParser;
+import com.graph.db.file.person.PersonParser;
+import com.graph.db.file.term.TermParser;
+import com.graph.db.file.transcript.TranscriptParser;
+import com.graph.db.file.vcf.VcfParser;
 import com.graph.db.util.FileUtil;
+import com.graph.db.util.PropertiesHolder;
 
-import sun.reflect.ReflectionFactory;
-
-@SuppressWarnings("restriction")
 public class ImportCommandGenerator {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImportCommandGenerator.class);
@@ -33,15 +37,16 @@ public class ImportCommandGenerator {
 	private final String inputFolderPath;
 	private final String outputFolderPath;
 	
-	public ImportCommandGenerator(String inputFolderPath, String outputFolderPath) {
-		this.inputFolderPath = inputFolderPath;
-		this.outputFolderPath = outputFolderPath;
+	public ImportCommandGenerator() {
+		PropertiesConfiguration config = PropertiesHolder.getInstance();
+		
+		this.inputFolderPath = config.getString("output.folder");
+		this.outputFolderPath = config.getString("output.folder") + File.separator + "graph.db";
 	}
 	
 	public void execute() {
 		List<String> commandLines = new ArrayList<>();
-		commandLines.add("bin/neo4j-import  --into " + outputFolderPath + File.separator + "graph.db --id-type string --bad-tolerance 1000000 --skip-bad-relationships true --skip-duplicate-nodes true \\");
-		
+		commandLines.add("bin/neo4j-import --stacktrace --into " + outputFolderPath + " --id-type string --bad-tolerance 1000000 --skip-bad-relationships true --skip-duplicate-nodes true \\");
 		Set<Class<? extends Parser>> parserImplementations = getSubclassesOfParser();
 		Multimap<OutputFileType, String> outputFileTypeToFileNames = createOutputFileTypeToFileNamesMap(parserImplementations);
 		for (Neo4jMapping neo4jMapping : Neo4jMapping.values()) {
@@ -67,14 +72,14 @@ public class ImportCommandGenerator {
 	}
 
 	private Set<Class<? extends Parser>> getSubclassesOfParser() {
-		Reflections reflections = new Reflections("com.graph.db");
-		return reflections.getSubTypesOf(Parser.class);
+		return Sets.newHashSet(Arrays.asList(AnnotationParser.class, GeneParser.class, TermParser.class,
+				TranscriptParser.class, PersonParser.class, VcfParser.class));
 	}
 
 	private Multimap<OutputFileType, String> createOutputFileTypeToFileNamesMap(Set<Class<? extends Parser>> parserImplementations) {
 		Multimap<OutputFileType, String> outputFileTypeToFileNames = ArrayListMultimap.create();
 		for (Class<? extends Parser> clazz : parserImplementations) {
-			Parser parser = createClassWithoutUsingConstructor(clazz);
+			Parser parser = createParser(clazz);
 			for (OutputFileType outputFileType : parser.getNonHeaderOutputFileTypes()) {
 				String fileName = createFileName(inputFolderPath, clazz, outputFileType);
 				outputFileTypeToFileNames.put(outputFileType, fileName);
@@ -82,15 +87,11 @@ public class ImportCommandGenerator {
 		}
 		return outputFileTypeToFileNames;
 	}
-	
-	private <T> T createClassWithoutUsingConstructor(Class<T> clazz) {
+
+	private Parser createParser(Class<? extends Parser> clazz) {
 		try {
-			ReflectionFactory rf = ReflectionFactory.getReflectionFactory();
-			Constructor<Object> objDef;
-			objDef = Object.class.getDeclaredConstructor();
-			Constructor<?> intConstr = rf.newConstructorForSerialization(clazz, objDef);
-			return clazz.cast(intConstr.newInstance());
-		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			return clazz.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -134,11 +135,7 @@ public class ImportCommandGenerator {
 	}
 	
 	public static void main(String[] args) {
-		if ((args != null) && (args.length != 2)) {
-			throw new RuntimeException("Incorrect args: $1=inputFolder, $2=outputFolder");
-		}
-		new ImportCommandGenerator(args[0], args[1]).execute();
+		new ImportCommandGenerator().execute();
 		LOGGER.info("Finished");
 	}
-
 }

@@ -4,21 +4,26 @@ import static com.graph.db.util.Constants.POISON_PILL;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.io.Resources;
 import com.graph.db.output.OutputFileType;
 
 public final class FileUtil {
@@ -48,8 +53,12 @@ public final class FileUtil {
 	
 	public static File[] getAllJsonFiles(String folder) {
 		File dir = new File(folder);
-		FilenameFilter filter = (directory, name) -> name.toLowerCase().endsWith(".json");
-		return dir.listFiles(filter);
+		FilenameFilter filter = (directory, name) -> name.toLowerCase().contains(".json");
+		File[] files = dir.listFiles(filter);
+		if (ArrayUtils.isEmpty(files)) {
+			throw new RuntimeException("No files in folder: " + folder);
+		}
+		return files;
 	}
 	
 	public static void logLineNumber(LineNumberReader reader, int threshold) {
@@ -81,7 +90,6 @@ public final class FileUtil {
 		return lines;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static List<String> getLines(File file) {
 		try {
 			return FileUtils.readLines(file);
@@ -90,10 +98,43 @@ public final class FileUtil {
 		}
 	}
 	
-	public static LineNumberReader createLineNumberReaderForGzipFile(String fileName) {
+	public static LineNumberReader getLineNumberReaderForFile(String fileName) {
+		return getLineNumberReaderForFile(new File(fileName));
+	}
+	
+	public static LineNumberReader getLineNumberReaderForFile(File file) {
+		if(isGzipFile(file)) {
+			return createLineNumberReaderForGzipFile(file);
+		} else {
+			try {
+				File f;
+				if (!file.isFile()) {
+					URL resource = Resources.getResource(file.toString());
+					f = new File(resource.getFile());
+				} else {
+					f = file;
+				}
+				return new LineNumberReader(new FileReader(f));
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+	
+	private static boolean isGzipFile(File fileName) {
+		return StringUtils.endsWith(fileName.getName(), "gz");
+	}
+
+	private static LineNumberReader createLineNumberReaderForGzipFile(File file) {
 		InputStream gzipStream;
 		try {
-			InputStream fileStream = new FileInputStream(fileName);
+			final InputStream fileStream;
+			if (file.isFile()) {
+				fileStream = new FileInputStream(file);
+			} else {
+				URL resource = FileUtil.class.getResource(file.getName());
+				fileStream = resource.openStream();
+			}
 			gzipStream = new GZIPInputStream(fileStream);
 		} catch (IOException e) {
 			throw new RuntimeException(e);

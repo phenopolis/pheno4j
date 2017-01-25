@@ -4,7 +4,7 @@ import static com.graph.db.util.Constants.COMMA;
 import static com.graph.db.util.Constants.DOUBLE_QUOTE;
 import static com.graph.db.util.Constants.TAB;
 import static com.graph.db.util.Constants.UNDERSCORE;
-import static com.graph.db.util.FileUtil.createLineNumberReaderForGzipFile;
+import static com.graph.db.util.FileUtil.getLineNumberReaderForFile;
 import static com.graph.db.util.FileUtil.logLineNumber;
 import static com.graph.db.util.FileUtil.sendPoisonPillToQueue;
 import static com.graph.db.util.FileUtil.writeOutCsvFile;
@@ -26,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.graph.db.Parser;
+import com.graph.db.file.LegacyParser;
 import com.graph.db.output.OutputFileType;
 
 /**
@@ -41,7 +41,7 @@ import com.graph.db.output.OutputFileType;
  * Relationships
  * - GeneticVariantToPerson
  */
-public class VcfParser implements Parser {
+public class VcfParser extends LegacyParser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(VcfParser.class);
 	
@@ -49,7 +49,13 @@ public class VcfParser implements Parser {
 	private final Map<Integer, String> indexToPerson = new HashMap<>();
 
 	private final String fileName;
-	private final String outputFolder;
+	
+	public VcfParser() {
+		this.fileName = config.getString("vcfParser.input.fileName");
+		if (StringUtils.isBlank(fileName)) {
+			throw new RuntimeException("fileName cannot be empty");
+		}
+	}
 	
 	public VcfParser(String fileName, String outputFolder) {
 		this.fileName = fileName;
@@ -58,7 +64,7 @@ public class VcfParser implements Parser {
 	
 	@Override
 	public void execute() {
-		try (LineNumberReader reader = createLineNumberReaderForGzipFile(fileName)) {
+		try (LineNumberReader reader = getLineNumberReaderForFile(fileName)) {
 			boolean found = false;
 			int personStartColumn = Integer.MAX_VALUE;
 			
@@ -170,10 +176,7 @@ public class VcfParser implements Parser {
 	}
 	
 	public static void main(String[] args) {
-		if ((args != null) && (args.length != 2)) {
-			throw new RuntimeException("Incorrect args: $1=vcfFile, $2=outputFolder");
-		}
-		new VcfParser(args[0], args[1]).execute();;
+		new VcfParser().execute();
 		LOGGER.info("Finished");
 	}
 

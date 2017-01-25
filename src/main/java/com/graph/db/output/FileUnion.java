@@ -6,10 +6,13 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,25 +20,27 @@ import org.slf4j.LoggerFactory;
 
 import com.graph.db.util.Constants;
 import com.graph.db.util.FileUtil;
+import com.graph.db.util.PropertiesHolder;
 
 public class FileUnion {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileUnion.class);
 	
-	public static final List<OutputFileType> SOURCE_OUTPUTFILETYPES = Arrays.asList(
+	public static final Set<OutputFileType> SOURCE_OUTPUTFILETYPES = EnumSet.of(
 			OutputFileType.GENE,
 			OutputFileType.TRANSCRIPT,
 			OutputFileType.PERSON);
 
 	private final String inputFolder;
 	private final String outputFolder;
-	
-	public FileUnion(String inputFolder, String outputFolder) {
-		this.inputFolder = inputFolder;
-		this.outputFolder = outputFolder;
+
+	public FileUnion() {
+		PropertiesConfiguration config = PropertiesHolder.getInstance();
+		this.inputFolder = config.getString("output.folder");
+		this.outputFolder = config.getString("output.folder");
 	}
 	
-	private void execute() {
+	public void execute() {
 		for (OutputFileType sourceFile : SOURCE_OUTPUTFILETYPES) {
 			LOGGER.info("Processing: {}", sourceFile);
 			Map<String, String> keyToRow = new HashMap<>();
@@ -77,10 +82,7 @@ public class FileUnion {
 	}
 
 	public static void main(String[] args) {
-		if ((args != null) && (args.length != 2)) {
-			throw new RuntimeException("Incorrect args: $1=inputFolder, $2=outputFolder");
-		}
-		new FileUnion(args[0], args[1]).execute();
+		new FileUnion().execute();
 		LOGGER.info("Finished");
 	}
 }

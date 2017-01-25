@@ -1,6 +1,6 @@
 package com.graph.db.file.transcript;
 
-import static com.graph.db.util.FileUtil.createLineNumberReaderForGzipFile;
+import static com.graph.db.util.FileUtil.getLineNumberReaderForFile;
 import static com.graph.db.util.FileUtil.logLineNumber;
 
 import java.io.IOException;
@@ -15,13 +15,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.graph.db.Parser;
+import com.graph.db.file.AbstractParser;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.file.transcript.subscriber.GeneSubscriber;
-import com.graph.db.output.HeaderGenerator;
 import com.graph.db.output.OutputFileType;
 import com.graph.db.util.Constants;
-import com.graph.db.util.ManagedEventBus;
 
 /**
  * Nodes
@@ -31,35 +29,35 @@ import com.graph.db.util.ManagedEventBus;
  * Relationships
  * - TranscriptToGene
  */
-public class TranscriptParser implements Parser {
+public class TranscriptParser extends AbstractParser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TranscriptParser.class);
 
 	private final String fileName;
-	private final String outputFolder;
 	
-	private final ManagedEventBus eventBus;
-	private final List<? extends AutoCloseable> subscribers;
-	
-	public TranscriptParser(String fileName, String outputFolder) {
-		this.fileName = fileName;
-		this.outputFolder = outputFolder;
-		
-		eventBus = new ManagedEventBus(getClass().getSimpleName());
-		subscribers = createSubscribers();
+	public TranscriptParser() {
+		this.fileName = config.getString("transcriptParser.input.fileName");
+		if (StringUtils.isBlank(fileName)) {
+			throw new RuntimeException("fileName cannot be empty");
+		}
 	}
 	
-	private List<? extends AutoCloseable> createSubscribers() {
-		GeneSubscriber geneSubscriber = new GeneSubscriber(outputFolder, getClass());
-		GenericSubscriber<Object> transcriptSubscriber = new GenericSubscriber<>(outputFolder, getClass(), OutputFileType.TRANSCRIPT);
-		GenericSubscriber<Object> transcriptToGeneSubscriber = new GenericSubscriber<>(outputFolder, getClass(), OutputFileType.TRANSCRIPT_TO_GENE);
+	public TranscriptParser(String fileName) {
+		this.fileName = fileName;
+	}
+	
+	@Override
+	protected List<? extends AutoCloseable> createSubscribers() {
+		GeneSubscriber geneSubscriber = new GeneSubscriber(outputFolder, getParserClass());
+		GenericSubscriber<Object> transcriptSubscriber = new GenericSubscriber<>(outputFolder, getParserClass(), OutputFileType.TRANSCRIPT);
+		GenericSubscriber<Object> transcriptToGeneSubscriber = new GenericSubscriber<>(outputFolder, getParserClass(), OutputFileType.TRANSCRIPT_TO_GENE);
 		return Arrays.asList(geneSubscriber, transcriptSubscriber, transcriptToGeneSubscriber);
 	}
 
 	@Override
 	public void execute() {
 		registerSubscribers();
-		try (LineNumberReader reader = createLineNumberReaderForGzipFile(fileName);) {
+		try (LineNumberReader reader = getLineNumberReaderForFile(fileName);) {
 			String line;
 			
 			while (( line = reader.readLine()) != null) {
@@ -80,8 +78,6 @@ public class TranscriptParser implements Parser {
 		}
 		closeEventBus();
 		closeSubscribers();
-		
-		generateHeaderFiles();
 	}
 
 	private Map<String, String> splitCellsIntoKeyValuePairs(String... cells) {
@@ -119,44 +115,18 @@ public class TranscriptParser implements Parser {
 		return "transcript".equals(cells[2]);
 	}
 
-	private void registerSubscribers() {
-		subscribers.forEach(subscriber -> eventBus.register(subscriber));
-	}
-	
-	private void closeEventBus() {
-		try {
-			eventBus.close();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private void closeSubscribers() {
-		subscribers.forEach(subscriber -> {
-			try {
-				subscriber.close();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		});
-	}
-
-	private void generateHeaderFiles() {
-		EnumSet<OutputFileType> outputFileTypes = EnumSet.of(OutputFileType.GENE, OutputFileType.TRANSCRIPT,
-				OutputFileType.TRANSCRIPT_TO_GENE);
-		new HeaderGenerator().generateHeaders(outputFolder, outputFileTypes);
-	}
-	
 	@Override
 	public EnumSet<OutputFileType> getNonHeaderOutputFileTypes() {
 		return EnumSet.of(OutputFileType.TRANSCRIPT, OutputFileType.GENE, OutputFileType.TRANSCRIPT_TO_GENE);
 	}
+	
+	@Override
+	public Class<?> getParserClass() {
+		return TranscriptParser.class;
+	}
 
 	public static void main(String[] args) {
-		if ((args != null) && (args.length != 2)) {
-			throw new RuntimeException("Incorrect args: $1=inputFile, $2=outputFolder");
-		}
-		new TranscriptParser(args[0], args[1]).execute();
+		new TranscriptParser().execute();
 		LOGGER.info("Finished");
 	}
 }

@@ -34,7 +34,11 @@ public class TermParserIT {
 		assertThat(getNumberOfFilesInFolder(tempFolder), equalTo(0));
 		
 		File file = getTestFile("hp.obo");
-		new TermParser(file.getAbsolutePath(), tempFolder.toString()).execute();
+		TermParser termParser = new TermParser(file.getAbsolutePath()){
+			@Override
+			protected String getOutputFolder() { return tempFolder.toString(); };
+		};
+		termParser.execute();
 	}
 	
 	private File getTestFile(String filename) {
