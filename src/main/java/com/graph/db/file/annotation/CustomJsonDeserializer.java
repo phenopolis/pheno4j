@@ -1,14 +1,10 @@
 package com.graph.db.file.annotation;
 
-import static com.graph.db.util.Constants.HYPHEN;
-import static com.graph.db.util.Constants.UNDERSCORE;
-
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.google.gson.Gson;
@@ -29,10 +25,8 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 			variant.setTranscript_consequences(Collections.emptySet());
 		}
 		
-		String transformedVariantId = getTransformedVariantId(variant.getVariant_id());
-		
-		updateVariantIdOnGeneticVariant(variant, transformedVariantId);
-		updateVariantIdOnTranscriptConsequences(variant.getTranscript_consequences(), transformedVariantId);
+		//TODO is this needed?
+		updateVariantIdOnTranscriptConsequences(variant.getTranscript_consequences(), variant.getVariant_id());
 		
 		clearNonDoubleCadds(variant.getTranscript_consequences());
 		setHasExac(variant);
@@ -40,25 +34,10 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 		return variant;
 	}
 
-	/**
-	 * Convert hyphen delimited Variant Id to underscore delimited
-	 */
-	private String getTransformedVariantId(String variantIdWithHyphens) {
-		int matches = StringUtils.countMatches(variantIdWithHyphens, HYPHEN);
-		if (matches != 3) {
-			throw new RuntimeException(variantIdWithHyphens + " does not have 3 hyphens");
-		}
-		return StringUtils.replace(variantIdWithHyphens, HYPHEN, UNDERSCORE);
-	}
-
-	private void updateVariantIdOnGeneticVariant(GeneticVariant variant, String transformedVariantId) {
-		variant.setVariant_id(transformedVariantId);
-	}
-	
 	private void updateVariantIdOnTranscriptConsequences(Collection<TranscriptConsequence> transcriptConsequences,
-			String transformedVariantId) {
+			String variantId) {
 		for (TranscriptConsequence consequence : transcriptConsequences) {
-			consequence.setVariant_id(transformedVariantId);
+			consequence.setVariant_id(variantId);
 		}
 	}
 	

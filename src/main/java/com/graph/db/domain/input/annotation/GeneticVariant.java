@@ -22,10 +22,6 @@ public class GeneticVariant {
 		return variant_id;
 	}
 	
-	public void setVariant_id(String transformedVariantId) {
-		variant_id = transformedVariantId;
-	}
-
 	public Exac getEXAC() {
 		return EXAC;
 	}

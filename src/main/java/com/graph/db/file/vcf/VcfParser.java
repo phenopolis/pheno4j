@@ -2,8 +2,8 @@ package com.graph.db.file.vcf;
 
 import static com.graph.db.util.Constants.COMMA;
 import static com.graph.db.util.Constants.DOUBLE_QUOTE;
+import static com.graph.db.util.Constants.HYPHEN;
 import static com.graph.db.util.Constants.TAB;
-import static com.graph.db.util.Constants.UNDERSCORE;
 import static com.graph.db.util.FileUtil.getLineNumberReaderForFile;
 import static com.graph.db.util.FileUtil.logLineNumber;
 import static com.graph.db.util.FileUtil.sendPoisonPillToQueue;
@@ -107,7 +107,7 @@ public class VcfParser extends LegacyParser {
 					String[] alts = altField.split(COMMA);
 					for (String alt : alts) {
 						if (isNotStar(alt)) {
-							String variantId = DOUBLE_QUOTE + chrom + UNDERSCORE + pos + UNDERSCORE + ref + UNDERSCORE + alt + DOUBLE_QUOTE;
+							String variantId = DOUBLE_QUOTE + chrom + HYPHEN + pos + HYPHEN + ref + HYPHEN + alt + DOUBLE_QUOTE;
 							
 							RecursiveAction task = new RowAction(variantId, split, personStartColumn, split.length);
 							forkJoinPool.invoke(task);

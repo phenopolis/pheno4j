@@ -5,3 +5,6 @@
 /.springBeans
 /*.csv
 /Thumbs.db
+/bin/
+/.idea
+/db.iml
