@@ -78,24 +78,15 @@ public class ImportCommandGenerator {
 
 	private Multimap<OutputFileType, String> createOutputFileTypeToFileNamesMap(Set<Class<? extends Parser>> parserImplementations) {
 		Multimap<OutputFileType, String> outputFileTypeToFileNames = ArrayListMultimap.create();
-		for (Class<? extends Parser> clazz : parserImplementations) {
-			Parser parser = createParser(clazz);
-			for (OutputFileType outputFileType : parser.getNonHeaderOutputFileTypes()) {
-				String fileName = createFileName(inputFolderPath, clazz, outputFileType);
+		for (OutputFileType outputFileType : OutputFileType.values()) {
+			for (Class<? extends Parser> parser : outputFileType.getCreatedBy()) {
+				String fileName = createFileName(inputFolderPath, parser, outputFileType);
 				outputFileTypeToFileNames.put(outputFileType, fileName);
 			}
 		}
 		return outputFileTypeToFileNames;
 	}
 
-	private Parser createParser(Class<? extends Parser> clazz) {
-		try {
-			return clazz.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
 	private void appendNeo4jType(StringBuilder builder, Neo4jMapping neo4jMapping) {
 		switch(neo4jMapping.getParent()) {
 		case NODE:
