@@ -6,7 +6,6 @@ import static com.graph.db.util.FileUtil.logLineNumber;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,11 +114,6 @@ public class TranscriptParser extends AbstractParser {
 		return "transcript".equals(cells[2]);
 	}
 
-	@Override
-	public EnumSet<OutputFileType> getNonHeaderOutputFileTypes() {
-		return EnumSet.of(OutputFileType.TRANSCRIPT, OutputFileType.GENE, OutputFileType.TRANSCRIPT_TO_GENE);
-	}
-	
 	@Override
 	public Class<?> getParserClass() {
 		return TranscriptParser.class;

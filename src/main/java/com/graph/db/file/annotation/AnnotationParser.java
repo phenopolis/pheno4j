@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -108,14 +107,6 @@ public class AnnotationParser extends AbstractParser {
 		closeSubscribers();
 	}
 
-	@Override
-	public EnumSet<OutputFileType> getNonHeaderOutputFileTypes() {
-		return EnumSet.of(OutputFileType.GENETIC_VARIANT, OutputFileType.TRANSCRIPT_VARIANT,
-				OutputFileType.CONSEQUENCE_TERM, OutputFileType.TRANSCRIPT, OutputFileType.GENE,
-				OutputFileType.GENE_TO_GENETIC_VARIANT, OutputFileType.GENETIC_VARIANT_TO_TRANSCRIPT_VARIANT,
-				OutputFileType.TRANSCRIPT_TO_TRANSCRIPT_VARIANT, OutputFileType.TRANSCRIPT_VARIANT_TO_CONSEQUENCE_TERM);
-	}
-	
 	@Override
 	public Class<?> getParserClass() {
 		return AnnotationParser.class;

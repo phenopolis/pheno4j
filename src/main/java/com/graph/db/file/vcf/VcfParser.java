@@ -10,11 +10,9 @@ import static com.graph.db.util.FileUtil.sendPoisonPillToQueue;
 import static com.graph.db.util.FileUtil.writeOutCsvFile;
 import static com.graph.db.util.FileUtil.writeOutCsvHeader;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -27,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.graph.db.file.LegacyParser;
-import com.graph.db.output.OutputFileType;
 
 /**
  * Writes data to the file as it is available
@@ -68,9 +65,7 @@ public class VcfParser extends LegacyParser {
 			boolean found = false;
 			int personStartColumn = Integer.MAX_VALUE;
 			
-			String fileTag = StringUtils.substringBefore(new File(fileName).getName(), ".");
-			
-	        Runnable geneticVariantToPersonBlockingQueueConsumer = new QueueToFileConsumer(geneticVariantToPersonBlockingQueue, outputFolder, "GeneticVariantToPerson-" + fileTag + ".csv");
+	        Runnable geneticVariantToPersonBlockingQueueConsumer = new QueueToFileConsumer(geneticVariantToPersonBlockingQueue, outputFolder, getClass());
 	        new Thread(geneticVariantToPersonBlockingQueueConsumer).start();
 	        
 	        ForkJoinPool forkJoinPool = new ForkJoinPool();
@@ -168,11 +163,6 @@ public class VcfParser extends LegacyParser {
 				}
 			}
 		}
-	}
-	
-	@Override
-	public EnumSet<OutputFileType> getNonHeaderOutputFileTypes() {
-		return EnumSet.of(OutputFileType.PERSON, OutputFileType.GENETIC_VARIANT_TO_PERSON);
 	}
 	
 	public static void main(String[] args) {

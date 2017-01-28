@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -112,12 +111,6 @@ public class TermParser extends AbstractParser {
 		return new RawTerm(termId, name, is);
 	}
 
-	@Override
-	public EnumSet<OutputFileType> getNonHeaderOutputFileTypes() {
-		return EnumSet.of(OutputFileType.TERM, OutputFileType.TERM_TO_PARENT_TERM,
-				OutputFileType.TERM_TO_DESCENDANT_TERMS);
-	}
-	
 	@Override
 	public Class<?> getParserClass() {
 		return TermParser.class;
