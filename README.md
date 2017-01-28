@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/sajid-mughal/pheno4j.svg?branch=master)](https://travis-ci.org/sajid-mughal/pheno4j)
 # Pheno4j: a graph based HPO to NGS database
 
 # Purpose
