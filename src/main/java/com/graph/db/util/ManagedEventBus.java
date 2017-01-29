@@ -115,7 +115,7 @@ public class ManagedEventBus implements Closeable {
 		@Override
 		public void handleException(final Throwable e, final SubscriberExceptionContext context) {
 			if ((e instanceof ClassCastException) && e.getMessage().contains(PoisonPill.class.getName())) {
-				LOG.info("Poision Pill processed on: {}", context.getSubscriber().getClass().getSimpleName());
+				LOG.debug("Poision Pill processed on: {}", context.getSubscriber().getClass().getSimpleName());
 			} else {
 				String msg = String.format("Could not call %s/%s on bus %s", context.getSubscriber().getClass().getSimpleName(),
 						context.getSubscriberMethod().getName(), name);

@@ -54,8 +54,7 @@ public class TranscriptParser extends AbstractParser {
 	}
 
 	@Override
-	public void execute() {
-		registerSubscribers();
+	public void processData() {
 		try (LineNumberReader reader = getLineNumberReaderForFile(fileName);) {
 			String line;
 			
@@ -75,8 +74,6 @@ public class TranscriptParser extends AbstractParser {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		closeEventBus();
-		closeSubscribers();
 	}
 
 	private Map<String, String> splitCellsIntoKeyValuePairs(String... cells) {

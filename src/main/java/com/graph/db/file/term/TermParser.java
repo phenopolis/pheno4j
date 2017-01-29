@@ -57,8 +57,7 @@ public class TermParser extends AbstractParser {
 	}
 	
 	@Override
-	public void execute() {
-		registerSubscribers();
+	public void processData() {
 		try (LineNumberReader reader = getLineNumberReaderForFile(fileName)) {
 			String line;
 			
@@ -82,8 +81,6 @@ public class TermParser extends AbstractParser {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		closeEventBus();
-		closeSubscribers();
 	}
 	
 	protected RawTerm createRawTermFromLines(List<String> linesForTerm) {

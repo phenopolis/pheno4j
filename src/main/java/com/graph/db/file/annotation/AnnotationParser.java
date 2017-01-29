@@ -81,12 +81,10 @@ public class AnnotationParser extends AbstractParser {
 	}
 
 	@Override
-	public void execute() {
+	public void processData() {
 		Gson gson = createGson();
 		File[] jsonFiles = getAllJsonFiles(inputFolder);
 
-		registerSubscribers();
-		
 		for (File jsonFile : jsonFiles) {
 			LOGGER.info("Processing file: {}", jsonFile);
 			
@@ -103,8 +101,6 @@ public class AnnotationParser extends AbstractParser {
 				throw new RuntimeException(e);
 			}
 		}
-		closeEventBus();
-		closeSubscribers();
 	}
 
 	@Override

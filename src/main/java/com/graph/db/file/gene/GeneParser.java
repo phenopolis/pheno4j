@@ -45,9 +45,7 @@ public class GeneParser extends AbstractParser {
 	}
 
 	@Override
-	public void execute() {
-		registerSubscribers();
-		
+	public void processData() {
 		try (LineNumberReader reader = getLineNumberReaderForFile(fileName);) {
 			String[] header = null;
 			String line;
@@ -71,8 +69,6 @@ public class GeneParser extends AbstractParser {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		closeEventBus();
-		closeSubscribers();
 	}
 
 	private Map<String, String> splitColumnsIntoKeyValuePairs(String[] header, String[] columns) {

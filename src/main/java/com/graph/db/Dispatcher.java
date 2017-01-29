@@ -25,7 +25,7 @@ public class Dispatcher {
 		ENTRY_POINTS.put("TranscriptParser", TranscriptParser.class);
 		ENTRY_POINTS.put("FileUnion", FileUnion.class);
 		ENTRY_POINTS.put("ImportCommandGenerator", ImportCommandGenerator.class);
-		ENTRY_POINTS.put("AllRunner", AllRunner.class);
+		ENTRY_POINTS.put("GraphDatabaseBuilder", GraphDatabaseBuilder.class);
 	}
 
 	public static void main(final String[] args) throws Exception {

@@ -45,7 +45,7 @@ public class ImportCommandGenerator {
 		PropertiesConfiguration config = PropertiesHolder.getInstance();
 		
 		this.inputFolderPath = config.getString("output.folder");
-		this.outputFolderPath = config.getString("output.folder") + File.separator + "data" + File.separator +"databases" + File.separator + "graph.db";
+		this.outputFolderPath = config.getString("output.folder") + File.separator + "graph-db" + File.separator + "data" + File.separator +"databases" + File.separator + "graph.db";
 	}
 	
 	public String[] execute() {
@@ -77,15 +77,24 @@ public class ImportCommandGenerator {
 		
 //		map.put("> " + inputFolderPath + File.separator + "neo4j-log.txt &");
 		
+		logImportCommandToConsole(map);
+		return convertMapToStringArray(map);
+	}
+	
+	private void logImportCommandToConsole(Map<String, String> map) {
+		LOGGER.info("Following command will be passed into neo4j-import");
+		for (Entry<String, String> entry : map.entrySet()) {
+			String lineForConsole = StringUtils.join(entry.getKey(), EQUALS, DOUBLE_QUOTE, entry.getValue(), DOUBLE_QUOTE);
+			System.out.println(lineForConsole);
+		}
+	}
+
+	private String[] convertMapToStringArray(Map<String, String> map) {
 		List<String> result = new ArrayList<>();
 		for (Entry<String, String> entry : map.entrySet()) {
 			String lineForJava = StringUtils.join(entry.getKey(), EQUALS, entry.getValue());
 			result.add(lineForJava);
-
-			String lineForConsole = StringUtils.join(entry.getKey(), EQUALS, DOUBLE_QUOTE, entry.getValue(), DOUBLE_QUOTE);
-			System.out.println(lineForConsole);
 		}
-		
 		return result.toArray(new String[0]);
 	}
 
