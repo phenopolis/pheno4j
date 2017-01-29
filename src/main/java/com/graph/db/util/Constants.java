@@ -12,4 +12,5 @@ public final class Constants {
 	public static final String COLON = ":";
 	public static final String SEMI_COLON = ";";
 	public static final String SPACE = " ";
+	public static final String EQUALS = "=";
 }

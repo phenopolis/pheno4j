@@ -1,7 +1,8 @@
 package com.graph.db.output;
 
 import static com.graph.db.util.Constants.COMMA;
-import static com.graph.db.util.Constants.SPACE;
+import static com.graph.db.util.Constants.DOUBLE_QUOTE;
+import static com.graph.db.util.Constants.EQUALS;
 import static com.graph.db.util.FileUtil.createFileName;
 import static com.graph.db.util.FileUtil.createHeaderFileName;
 
@@ -9,7 +10,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -41,34 +45,48 @@ public class ImportCommandGenerator {
 		PropertiesConfiguration config = PropertiesHolder.getInstance();
 		
 		this.inputFolderPath = config.getString("output.folder");
-		this.outputFolderPath = config.getString("output.folder") + File.separator + "graph.db";
+		this.outputFolderPath = config.getString("output.folder") + File.separator + "data" + File.separator +"databases" + File.separator + "graph.db";
 	}
 	
-	public void execute() {
-		List<String> commandLines = new ArrayList<>();
-		commandLines.add("bin/neo4j-import --stacktrace --into " + outputFolderPath + " --id-type string --bad-tolerance 1000000 --skip-bad-relationships true --skip-duplicate-nodes true \\");
+	public String[] execute() {
+		Map<String, String> map = new LinkedHashMap<>();
+		map.put("--stacktrace", "true");
+		map.put("--into", outputFolderPath);
+		map.put("--id-type", "string");
+		map.put("--bad-tolerance", "1000000");
+		map.put("--skip-bad-relationships", "true");
+		map.put("--skip-duplicate-nodes", "true");
+		
 		Set<Class<? extends Parser>> parserImplementations = getSubclassesOfParser();
 		Multimap<OutputFileType, String> outputFileTypeToFileNames = createOutputFileTypeToFileNamesMap(parserImplementations);
 		for (Neo4jMapping neo4jMapping : Neo4jMapping.values()) {
 			if (neo4jMapping.getParent() != null) {
 				OutputFileType outputFileType = OutputFileType.toOutputFileType(neo4jMapping);
 				
-				StringBuilder builder = new StringBuilder();
-				appendNeo4jType(builder, neo4jMapping);
-				appendNeo4jMapping(builder, neo4jMapping);
-				appendHeaderFileName(builder, outputFileType);
-				appendContentFiles(builder, outputFileTypeToFileNames, outputFileType);
-				builder.append(" \\");
+				StringBuilder key = new StringBuilder();
+				appendNeo4jType(key, neo4jMapping);
+				appendNeo4jMapping(key, neo4jMapping);
 				
-				commandLines.add(builder.toString());
+				StringBuilder value = new StringBuilder();
+				appendHeaderFileName(value, outputFileType);
+				appendContentFiles(value, outputFileTypeToFileNames, outputFileType);
+				
+				map.put(key.toString(), value.toString());
 			}
 		}
 		
-		commandLines.add("> " + inputFolderPath + File.separator + "neo4j-log.txt &");
+//		map.put("> " + inputFolderPath + File.separator + "neo4j-log.txt &");
 		
-		for (String line : commandLines) {
-			System.out.println(line);
+		List<String> result = new ArrayList<>();
+		for (Entry<String, String> entry : map.entrySet()) {
+			String lineForJava = StringUtils.join(entry.getKey(), EQUALS, entry.getValue());
+			result.add(lineForJava);
+
+			String lineForConsole = StringUtils.join(entry.getKey(), EQUALS, DOUBLE_QUOTE, entry.getValue(), DOUBLE_QUOTE);
+			System.out.println(lineForConsole);
 		}
+		
+		return result.toArray(new String[0]);
 	}
 
 	private Set<Class<? extends Parser>> getSubclassesOfParser() {
@@ -101,7 +119,7 @@ public class ImportCommandGenerator {
 	}
 	
 	private StringBuilder appendNeo4jMapping(StringBuilder builder, Neo4jMapping neo4jMapping) {
-		return builder.append(neo4jMapping).append(SPACE);
+		return builder.append(neo4jMapping);
 	}
 	
 	private void appendHeaderFileName(StringBuilder builder, OutputFileType outputFileType) {
