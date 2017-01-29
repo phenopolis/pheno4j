@@ -6,6 +6,12 @@ jdk:
 cache:
   directories:
     - '$HOME/.m2/repository'
+ 
+install:
+  - mvn test-compile -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  
+script:
+  - mvn test jacoco:report
   
 after_success:
-  coveralls
+  - mvn coveralls:report
