@@ -85,7 +85,9 @@ public enum OutputFileType {
 	public String[] getHeader() {
 		List<String> fields = new ArrayList<>();
 		for (Field field : getBeanClass().getDeclaredFields()) {
-			fields.add(field.getName());
+			if (!field.isSynthetic()) {
+				fields.add(field.getName());
+			}
 		}
 		return fields.toArray(new String[0]);
 	}
