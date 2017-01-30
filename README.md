@@ -24,7 +24,7 @@ Once loaded into neo4j, the following schema is produced:
 - Maven 3
 
 ### Build Graph and Start up Neo4j ###
-Run the following, and then browse to http://localhost:7474/
+Run the following in the checkout directory, and then browse to http://localhost:7474/
 ```
 mvn clean compile -P build-graph,run-neo4j
 ```
@@ -34,7 +34,7 @@ mvn clean compile -P build-graph,run-neo4j
 - Neo4j installation - download from https://neo4j.com/download/community-edition/, extract the archive
 
 ### Deploy code ###
-Run the following, which will generate a zip file, "graph-bundle.zip", in the target folder. Deploy this to your target server and extract it.
+Run the following in the checkout directory, which will generate a zip file, "graph-bundle.zip", in the target folder. Deploy this to your target server and extract it.
 ```
 mvn clean package
 ```
@@ -64,6 +64,7 @@ OPTIONAL MATCH (n)-[r]->()
 RETURN count(n.prop) + count(r.prop);
 ```
 ### Create the constraints and indexes ###
+These only need to be run once i.e. they are persisted after a restart.
 ```
 CREATE CONSTRAINT ON (p:Term) ASSERT p.termId IS UNIQUE;
 CREATE CONSTRAINT ON (p:Person) ASSERT p.personId IS UNIQUE;
@@ -77,11 +78,8 @@ CREATE INDEX ON :GeneticVariant(allele_freq);
 CREATE INDEX ON :TranscriptVariant(cadd);
 CREATE INDEX ON :GeneticVariant(hasExac);
 ```
-
-# Further reading
-[Additional Documentation](docs/Additional Documentation.md)
-
 # Example Cypher Queries
+These can be run in the browser interface or via the neo4j-shell ([See here for more information](http://neo4j.com/docs/operations-manual/current/tools/cypher-shell/))
 ## All Variants for an individual
 ```
 MATCH (gv:GeneticVariant)-[:GeneticVariantToPerson]->(p:Person)
@@ -200,3 +198,5 @@ WITH p, q, v, intersection
 RETURN p.personId, q.personId, intersection, size(collect(distinct v)) as unionSum, (round((intersection/toFloat(size(collect(distinct v))))*100.0*10)/10) as PercentShared
 ORDER BY PercentShared DESC;
 ```
+# Further reading
+[Additional Documentation](docs/Additional Documentation.md)
