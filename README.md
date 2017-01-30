@@ -39,18 +39,18 @@ mvn clean compile -P build-graph,run-neo4j
 ## All Variants for an individual
 ```
 MATCH (gv:GeneticVariant)-[:GeneticVariantToPerson]->(p:Person)
-WHERE p.personId ='XXX'
+WHERE p.personId ='person1'
 RETURN count(gv.variantId);
 ```
 ## Individuals who have a particular variant
 ```
 MATCH (gv:GeneticVariant)-[:GeneticVariantToPerson]->(p:Person)
-WHERE gv.variantId ='xxx'
+WHERE gv.variantId ='22-51171497-G-A'
 RETURN p.personId;
 ```
 ## Find Variants shared by a list of Individuals
 ```
-WITH ["XXX","yyy"] as persons
+WITH ["person1","person2"] as persons
 MATCH (p:Person)<-[:GeneticVariantToPerson]-(v:GeneticVariant) 
 WHERE p.personId IN persons
 WITH v, count(*) as c, persons
@@ -59,7 +59,7 @@ RETURN count(v.variantId);
 ```
 ## Find Variants shared by a list of Individuals, that no one else has
 ```
-WITH ["XXX","YYY"] as individuals
+WITH ["person1","person2"] as individuals
 MATCH (p:Person)<-[:GeneticVariantToPerson]-(v:GeneticVariant) 
 WHERE p.personId IN individuals
 WITH v, count(*) as c, individuals
@@ -72,7 +72,7 @@ RETURN v.variantId;
 ## Individuals who have a Term
 ```
 MATCH (t:Term)<-[tp:PersonToObservedTerm]-(p:Person)
-WHERE t.termId = 'HP:XXX'
+WHERE t.termId = 	'HP:0000505'
 RETURN p.personId;
 ```
 ## Find Genes that have no Term
@@ -90,13 +90,13 @@ RETURN count(*);
 ## For a Term, find all the Descendant Terms
 ```
 MATCH (p:Term)-[:TermToDescendantTerms]->(q:Term)
-where p.termId ='XXX'
+where p.termId ='HP:0000505'
 return q
 ```
 ## Find all Individuals with a specific Term (and any of its descendants)
 ```
 MATCH (p:Term)-[:TermToDescendantTerms]->(q:Term)<-[:PersonToObservedTerm]-(r:Person)
-WHERE p.termId ='XXX'
+WHERE p.termId ='HP:0000505'
 RETURN count(r);
 ```
 ## Find variants which have a frequency less than 0.001 and a CADD score greater than 20 seen in in people with HP:0000556 and belonging to a gene with HP:0000556
@@ -122,7 +122,7 @@ LIMIT 10;
 ```
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
-MATCH (p:Person {personId:"XXX"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)
+MATCH (p:Person {personId:"person1"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)
 WHERE (gv.allele_freq < 0.001 or gv.hasExac = false)
 WITH size(()<-[:GeneticVariantToPerson]-(gv)) as count , gv, p, numberOfPeople
 WHERE count > 1 
@@ -137,7 +137,7 @@ RETURN p.personId,q.personId, c
 ```
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
-MATCH (p:Person {personId:"XXX"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)
+MATCH (p:Person {personId:"person1"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)
 WHERE (gv.allele_freq < 0.001 or gv.hasExac = false)
 WITH size(()<-[:GeneticVariantToPerson]-(gv)) as count , gv, p, numberOfPeople
 WHERE count > 1 
