@@ -84,7 +84,7 @@ These can be run in the browser interface or via the neo4j-shell ([See here for 
 ```
 MATCH (gv:GeneticVariant)-[:GeneticVariantToPerson]->(p:Person)
 WHERE p.personId ='person1'
-RETURN count(gv.variantId);
+RETURN count(gv);
 ```
 ## Individuals who have a particular variant
 ```
