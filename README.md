@@ -86,7 +86,7 @@ CREATE INDEX ON :GeneticVariant(hasExac);
 ```
 MATCH (gv:GeneticVariant)-[:GeneticVariantToPerson]->(p:Person)
 WHERE p.personId ='person1'
-RETURN count(gv.variantId);
+RETURN count(gv);
 ```
 ## Individuals who have a particular variant
 ```
