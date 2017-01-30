@@ -57,6 +57,7 @@ cd $NEO4J_HOME/bin
 ```
 ### Run 'warmup' query ###
 This query will basically hit the entire graph, the result will be all the data stored on the disk will be loaded into memory.
+This takes up to 10 minutes for our data.
 ```
 MATCH (a)-[b]-(c)
 with count(b) as count
