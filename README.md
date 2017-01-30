@@ -30,6 +30,52 @@ mvn clean compile -P build-graph,run-neo4j
 ```
 ## Server Installation ##
 ### Prerequisites ###
+- Java 1.8
+- Neo4j installation - download from https://neo4j.com/download/community-edition/, extract the archive
+
+### Deploy code ###
+Run the following, which will generate a zip file, "graph-bundle.zip", in the target folder. Deploy this to your target server and extract it.
+```
+mvn clean package
+```
+### Update config file to reference your input data ###
+In the conf folder of the extracted zip above, update config.properties to reference your input data.
+### Run the GraphDatabaseBuilder ###
+//TODO
+### Link the generated database above to your Neo4j installation #
+//TODO validate the path
+```
+cd $NEO4J_HOME/data/databases
+ln -s /generatedGraphOutputFolder/graph.db graph.db 
+```
+### Update Neo4j config ###
+//TODO the properties file to load the data into memory
+### Start Neo4j ###
+```
+cd $NEO4J_HOME/bin
+./neo4j start
+```
+### Run 'warmup' query ###
+This query will basically hit the entire graph, the result will be all the data stored on the disk will be loaded into memory.
+```
+MATCH (a)-[b]-(c)
+with count(b) as count
+RETURN count;
+```
+### Create the constraints and indexes ###
+```
+CREATE CONSTRAINT ON (p:Term) ASSERT p.termId IS UNIQUE;
+CREATE CONSTRAINT ON (p:Person) ASSERT p.personId IS UNIQUE;
+CREATE CONSTRAINT ON (p:GeneticVariant) ASSERT p.variantId IS UNIQUE;
+CREATE CONSTRAINT ON (p:Gene) ASSERT p.gene_id IS UNIQUE;
+CREATE CONSTRAINT ON (p:TranscriptVariant) ASSERT p.hgvsc IS UNIQUE;
+CREATE CONSTRAINT ON (p:Transcript) ASSERT p.transcript_id IS UNIQUE;
+CREATE CONSTRAINT ON (p:ConsequenceTerm) ASSERT p.consequenceTerm IS UNIQUE;
+
+CREATE INDEX ON :GeneticVariant(allele_freq);
+CREATE INDEX ON :TranscriptVariant(cadd);
+CREATE INDEX ON :GeneticVariant(hasExac);
+```
 
 # Further reading
 [Additional Documentation](docs/Additional Documentation.md)
