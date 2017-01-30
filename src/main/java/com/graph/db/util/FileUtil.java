@@ -12,6 +12,9 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -153,5 +156,16 @@ public final class FileUtil {
 	
 	public static String createUnionedFileName(String outputFolder, String fileTag) {
 		return outputFolder + File.separator + fileTag + ".csv";
+	}
+	
+	public static void createFolderIfNotPresent(String folder) {
+		Path path = Paths.get(folder);
+		if (!Files.isDirectory(path)) {
+			try {
+				Files.createDirectory(path);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 }

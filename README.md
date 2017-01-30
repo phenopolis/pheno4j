@@ -14,12 +14,24 @@ Take raw input files and convert them into csv files that represent Nodes and Re
 | 3 | HPO-Gene | [http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt](http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt) |
 | 4 | Tissue-Transcript | [http://www.gtexportal.org/home/](http://www.gtexportal.org/home/) |
 
-# How to run the program?
-
 # Domain Model
 Once loaded into neo4j, the following schema is produced:
 ![](https://github.com/sajid-mughal/a/blob/master/complete_diagram.png?raw=true)
 
+# Installation
+## Local Installation ##
+### Prerequisites ###
+- Java 1.8
+- Maven 3
+### Build Graph and Start up Neo4j ###
+Run the following, and then browse to http://localhost:7474/
+```
+mvn clean compile -P build-graph,run-neo4j
+```
+## Server Installation ##
+### Prerequisites ###
+
+# Further reading
 [Additional Documentation](docs/Additional Documentation.md)
 
 # Example Cypher Queries

@@ -1,5 +1,7 @@
 package com.graph.db.file;
 
+import static com.graph.db.util.FileUtil.createFolderIfNotPresent;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -23,11 +25,12 @@ public abstract class AbstractParser implements Parser {
 		config = PropertiesHolder.getInstance();
 		
 		this.outputFolder = getOutputFolder();
+		createFolderIfNotPresent(outputFolder);
 		
 		eventBus = new ManagedEventBus(getParserClass().getSimpleName());
 		subscribers = createSubscribers();
 	}
-	
+
 	@Override
 	public void execute() {
 		LOGGER.info("Entering execute");
