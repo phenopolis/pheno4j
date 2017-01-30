@@ -56,12 +56,12 @@ cd $NEO4J_HOME/bin
 ./neo4j start
 ```
 ### Run 'warmup' query ###
-This query will basically hit the entire graph, the result will be all the data stored on the disk will be loaded into memory.
+This query will basically hit the entire graph, the result will be all the data stored on the disk will be loaded into memory. ([See here for more information](https://neo4j.com/developer/kb/warm-the-cache-to-improve-performance-from-cold-start/))
 This takes up to 10 minutes for our data.
 ```
-MATCH (a)-[b]-(c)
-with count(b) as count
-RETURN count;
+MATCH (n)
+OPTIONAL MATCH (n)-[r]->()
+RETURN count(n.prop) + count(r.prop);
 ```
 ### Create the constraints and indexes ###
 ```
