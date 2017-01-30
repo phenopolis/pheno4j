@@ -23,6 +23,7 @@ Once loaded into neo4j, the following schema is produced:
 ### Prerequisites ###
 - Java 1.8
 - Maven 3
+
 ### Build Graph and Start up Neo4j ###
 Run the following, and then browse to http://localhost:7474/
 ```
