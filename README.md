@@ -31,7 +31,7 @@ mvn clean compile -P build-graph,run-neo4j
 ## Server Installation ##
 ### Prerequisites ###
 - Java 1.8
-- Neo4j installation - download from https://neo4j.com/download/community-edition/, extract the archive
+- Neo4j installation - download from https://neo4j.com/download/community-edition/, extract the archive. The location of the extract will be referred to as **$NEO4J_HOME**
 
 ### Deploy code ###
 Run the following in the checkout directory, which will generate a zip file, "graph-bundle.zip", in the target folder. Deploy this to your target server and extract it.
@@ -145,12 +145,15 @@ RETURN count(r);
 ```
 ## Find variants which have a frequency less than 0.001 and a CADD score greater than 20 seen in in people with HP:0000556 and belonging to a gene with HP:0000556
 ```
-//TODO needs validation, also slow (was 17 seconds, now 13 with new relationship)
-MATCH (p:Term)-[:TermToDescendantTerms]->(q:Term)<-[:GeneToTerm]-(gs:Gene)-[:GeneToGeneticVariant]->(gv:GeneticVariant)-[:GeneticVariantToTranscriptVariant]->(ts:TranscriptVariant)
+MATCH (p:Term)-[:TermToDescendantTerms]->(q:Term)<-[:GeneToTerm]-(gs:Gene)
 WHERE p.termId ='HP:0000556'
-AND gv.allele_freq < 0.001 
-AND ts.cadd > 20 
-RETURN count(distinct gv.variantId);
+WITH distinct gs
+MATCH (gs)-[:GeneToGeneticVariant]->(gv:GeneticVariant)
+WHERE gv.allele_freq < 0.001 
+WITH distinct gv
+MATCH (gv)-[:GeneticVariantToTranscriptVariant]->(ts:TranscriptVariant)
+WHERE ts.cadd > 20 
+RETURN count(distinct gv);
 ```
 ### For an Individual, rank their variants by the number of occurrences in other Individuals
 ```
