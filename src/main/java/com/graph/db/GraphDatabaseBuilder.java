@@ -1,8 +1,5 @@
 package com.graph.db;
 
-import java.io.IOException;
-
-import org.neo4j.tooling.ImportTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +11,6 @@ import com.graph.db.file.transcript.TranscriptParser;
 import com.graph.db.file.vcf.VcfParser;
 import com.graph.db.output.FileUnion;
 import com.graph.db.output.HeaderGenerator;
-import com.graph.db.output.ImportCommandGenerator;
 
 public class GraphDatabaseBuilder {
 	
@@ -35,15 +31,8 @@ public class GraphDatabaseBuilder {
 		//Generate the headers
 		new HeaderGenerator().execute();
 		
-		//Generate the Import Command
-		String[] execute = new ImportCommandGenerator().execute();
-		
-		//Generate the graph database
-		try {
-			ImportTool.main(execute);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		//Run the Neo4j import tool
+		new ImportToolRunner().execute();
 		
 		LOGGER.info("Finished");
 	}
