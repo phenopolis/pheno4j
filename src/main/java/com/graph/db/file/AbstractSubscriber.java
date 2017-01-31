@@ -41,8 +41,9 @@ public abstract class AbstractSubscriber implements AutoCloseable {
 	}
 	
 	@Override
-	public void close() {
+	public final void close() {
 		try {
+			preClose();
 			beanWriter.close();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -50,4 +51,6 @@ public abstract class AbstractSubscriber implements AutoCloseable {
 		LOGGER.info("Wrote out: {}", fileName);
 	}
 
+	protected void preClose() {
+	}
 }

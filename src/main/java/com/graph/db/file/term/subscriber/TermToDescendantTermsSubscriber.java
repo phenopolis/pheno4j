@@ -3,8 +3,6 @@ package com.graph.db.file.term.subscriber;
 import static com.graph.db.util.Constants.HYPHEN;
 
 import java.io.IOException;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.SimpleDirectedGraph;
@@ -12,12 +10,10 @@ import org.jgrapht.traverse.DepthFirstIterator;
 
 import com.graph.db.domain.input.term.RawTerm;
 import com.graph.db.domain.output.TermToDescendantTermsOutput;
-import com.graph.db.file.GenericSubscriber;
+import com.graph.db.file.SetBasedGenericSubscriber;
 import com.graph.db.output.OutputFileType;
 
-public class TermToDescendantTermsSubscriber extends GenericSubscriber<RawTerm> {
-	
-	private final Set<RawTerm> set = ConcurrentHashMap.newKeySet();
+public class TermToDescendantTermsSubscriber extends SetBasedGenericSubscriber<RawTerm, RawTerm> {
 	
 	public TermToDescendantTermsSubscriber(String outputFolder, Class<?> parserClass) {
 		super(outputFolder, parserClass, OutputFileType.TERM_TO_DESCENDANT_TERMS);
@@ -29,7 +25,7 @@ public class TermToDescendantTermsSubscriber extends GenericSubscriber<RawTerm> 
 	}
 	
 	@Override
-	public void close() {
+	public void preClose() {
 		DirectedGraph<String, String> graph = new SimpleDirectedGraph<>(String.class);
 		addVerticesToGraph(graph);
 		addEdgesToGraph(graph);
@@ -67,8 +63,6 @@ public class TermToDescendantTermsSubscriber extends GenericSubscriber<RawTerm> 
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
-		} finally {
-			super.close();
 		}
 	}
 }

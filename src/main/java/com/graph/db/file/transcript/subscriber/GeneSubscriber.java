@@ -37,15 +37,13 @@ public class GeneSubscriber extends AbstractSubscriber {
 	}
 	
 	@Override
-	public void close() {
+	public void preClose() {
 		try {
 			for (GeneOutput s : set) {
 				beanWriter.write(s);
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
-		} finally {
-			super.close();
 		}
 	}
 }

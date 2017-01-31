@@ -1,20 +1,14 @@
 package com.graph.db.file.annotation.subscriber;
 
-import java.io.IOException;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.apache.commons.collections.CollectionUtils;
 
 import com.graph.db.domain.input.annotation.GeneticVariant;
 import com.graph.db.domain.input.annotation.TranscriptConsequence;
 import com.graph.db.domain.output.ConsequenceTermOutput;
-import com.graph.db.file.GenericSubscriber;
+import com.graph.db.file.SetBasedGenericSubscriber;
 import com.graph.db.output.OutputFileType;
 
-public class ConsequenceTermSubscriber extends GenericSubscriber<GeneticVariant> {
-	
-	private final Set<ConsequenceTermOutput> set = ConcurrentHashMap.newKeySet();
+public class ConsequenceTermSubscriber extends SetBasedGenericSubscriber<GeneticVariant, ConsequenceTermOutput> {
 	
 	public ConsequenceTermSubscriber(String outputFolder, Class<?> parserClass) {
 		super(outputFolder, parserClass, OutputFileType.CONSEQUENCE_TERM);
@@ -28,19 +22,6 @@ public class ConsequenceTermSubscriber extends GenericSubscriber<GeneticVariant>
     				set.add(new ConsequenceTermOutput(consequenceTerm));
     			}
     		}
-		}
-	}
-	
-	@Override
-	public void close() {
-		try {
-			for (ConsequenceTermOutput s : set) {
-				beanWriter.write(s);
-			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} finally {
-			super.close();
 		}
 	}
 }
