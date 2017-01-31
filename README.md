@@ -78,6 +78,12 @@ CREATE INDEX ON :GeneticVariant(allele_freq);
 CREATE INDEX ON :TranscriptVariant(cadd);
 CREATE INDEX ON :GeneticVariant(hasExac);
 ```
+### Additional Steps ###
+If you would like to connect to your instance from your application tier, you can change the password to the Neo4j instance with the following; the port is the value of "dbms.connector.http.listen_address" in $NEO4J_HOME/conf/neo4j.conf, the password with the following will be set to "1".
+```
+curl -H "Content-Type: application/json" -X POST -d '{"password":"1"}' -u neo4j:neo4j http://**{HOST}**:**{PORT}**/user/neo4j/password
+```
+
 # Example Cypher Queries
 These can be run in the browser interface or via the neo4j-shell ([See here for more information](http://neo4j.com/docs/operations-manual/current/tools/cypher-shell/))
 ## All Variants for an individual
