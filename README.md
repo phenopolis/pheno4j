@@ -43,13 +43,14 @@ In the conf folder of the extracted zip above, update config.properties to refer
 ### Run the GraphDatabaseBuilder ###
 //TODO
 ### Link the generated database above to your Neo4j installation #
-//TODO validate the path
+${output.folder} is defined in config.properties
 ```
 cd $NEO4J_HOME/data/databases
-ln -s /generatedGraphOutputFolder/graph.db graph.db 
+ln -s ${output.folder}/graph-db/data/databases/graph.db graph.db 
 ```
 ### Update Neo4j config ###
-//TODO the properties file to load the data into memory
+Ideally you should hold as much of the data in memory as possible ([See here for more information](https://neo4j.com/docs/operations-manual/current/performance/))
+Set the value of `dbms.memory.pagecache.size` in ${NEO4J_HOME}/conf/neo4j.conf to the size of the files: `NEO4J_HOME/data/databases/graph.db/*store.db*`
 ### Start Neo4j ###
 ```
 cd $NEO4J_HOME/bin
