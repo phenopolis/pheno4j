@@ -32,5 +32,4 @@ public class TranscriptVariantToConsequenceTermSubscriber extends GenericSubscri
     		throw new RuntimeException(e);
     	}
 	}
-	
 }

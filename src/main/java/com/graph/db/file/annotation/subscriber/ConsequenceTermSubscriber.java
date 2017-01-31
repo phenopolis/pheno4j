@@ -43,5 +43,4 @@ public class ConsequenceTermSubscriber extends GenericSubscriber<GeneticVariant>
 			super.close();
 		}
 	}
-	
 }

@@ -12,7 +12,7 @@ import com.graph.db.domain.output.GeneOutput;
 import com.graph.db.file.AbstractSubscriber;
 import com.graph.db.output.OutputFileType;
 
-public class GeneSubscriber extends AbstractSubscriber<Map<String, String>> {
+public class GeneSubscriber extends AbstractSubscriber {
 	
 	private static final OutputFileType GENE = OutputFileType.GENE;
 	
@@ -48,5 +48,4 @@ public class GeneSubscriber extends AbstractSubscriber<Map<String, String>> {
 			super.close();
 		}
 	}
-
 }

@@ -37,5 +37,4 @@ public class TermToParentTermSubscriber extends GenericSubscriber<RawTerm> {
 			super.close();
 		}
 	}
-	
 }

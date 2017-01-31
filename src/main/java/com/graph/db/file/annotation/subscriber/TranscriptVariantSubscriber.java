@@ -29,5 +29,4 @@ public class TranscriptVariantSubscriber extends GenericSubscriber<GeneticVarian
     		throw new RuntimeException(e);
     	}
 	}
-	
 }

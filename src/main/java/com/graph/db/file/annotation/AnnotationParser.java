@@ -64,7 +64,7 @@ public class AnnotationParser extends AbstractParser {
 	}
 
 	@Override
-	protected List<AbstractSubscriber<?>> createSubscribers() {
+	protected List<AbstractSubscriber> createSubscribers() {
         GeneToGeneticVariantSubscriber geneToGeneticVariantSubscriber = new GeneToGeneticVariantSubscriber(outputFolder, getParserClass());
         GenericSubscriber<Object> geneticVariantSubscriber = new GenericSubscriber<Object>(outputFolder, getParserClass(), OutputFileType.GENETIC_VARIANT);
         TranscriptVariantSubscriber transcriptVariantSubscriber = new TranscriptVariantSubscriber(outputFolder, getParserClass());

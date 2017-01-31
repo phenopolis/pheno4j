@@ -38,5 +38,4 @@ public class TranscriptSubscriber extends GenericSubscriber<GeneticVariant> {
 			super.close();
 		}
 	}
-
 }

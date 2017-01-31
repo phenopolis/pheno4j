@@ -16,7 +16,7 @@ import com.graph.db.output.OutputFileType;
  * Subclasses are responsible for annotating the appropriate method
  * with @Subscribe
  */
-public abstract class AbstractSubscriber<T> implements AutoCloseable {
+public abstract class AbstractSubscriber implements AutoCloseable {
 	
 	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	

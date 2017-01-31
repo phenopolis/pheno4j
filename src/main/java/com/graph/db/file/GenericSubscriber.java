@@ -9,20 +9,19 @@ import com.google.common.eventbus.Subscribe;
 import com.graph.db.output.OutputFileType;
 import com.graph.db.util.ManagedEventBus.PoisonPill;
 
-public class GenericSubscriber<T> extends AbstractSubscriber<T> {
+public class GenericSubscriber<InputType> extends AbstractSubscriber {
 	
 	public GenericSubscriber(String outputFolder, Class<?> parserClass, OutputFileType outputFileType) {
 		super(outputFolder, parserClass, outputFileType);
 	}
 
 	@Subscribe
-    public void processRow(T object) {
+    public void processRow(InputType object) {
     	if (object instanceof PoisonPill) {
     		return;
     	}
     	
     	final Object objectToWrite = getObjectToWrite(object);
-    	
 		try {
 			beanWriter.write(objectToWrite);
 		} catch (Exception e) {
@@ -30,7 +29,7 @@ public class GenericSubscriber<T> extends AbstractSubscriber<T> {
 		}
     }
 
-	private Object getObjectToWrite(T object) {
+	private Object getObjectToWrite(InputType object) {
 		// if the input bean is the same type as the output bean to be written
 		// out, then there's nothing to do
     	if (object.getClass().equals(outputFileType.getBeanClass())) {
