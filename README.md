@@ -15,7 +15,7 @@ Take raw input files and convert them into csv files that represent Nodes and Re
 
 # Domain Model
 Once loaded into neo4j, the following schema is produced:
-![](https://github.com/sajid-mughal/a/blob/master/complete_diagram.png?raw=true)
+![](https://github.com/sajid-mughal/pheno4j/blob/master/docs/complete_diagram.png?raw=true)
 
 # Installation
 ## Local Installation ##
