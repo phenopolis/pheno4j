@@ -6,9 +6,12 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.graph.db.domain.input.annotation.TranscriptConsequence;
+import com.graph.db.domain.output.annotation.Id;
+import com.graph.db.output.Neo4jMapping;
 
 public class TranscriptOutput {
 	
+	@Id(name = "transcript_id", mapping = Neo4jMapping.Transcript)
 	private final String transcript_id;
 	
 	public TranscriptOutput(Map<String, String> map) {
@@ -43,5 +46,4 @@ public class TranscriptOutput {
 				.append(this.transcript_id, otherObject.transcript_id)
 				.isEquals();
 	}
-
 }

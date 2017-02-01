@@ -1,9 +1,12 @@
 package com.graph.db.domain.output;
 
 import com.graph.db.domain.input.annotation.GeneticVariant;
+import com.graph.db.domain.output.annotation.Id;
+import com.graph.db.output.Neo4jMapping;
 
 public class GeneticVariantOutput {
 	
+	@Id(mapping = Neo4jMapping.GeneticVariant, name = "variantId")
 	private final String variant_id;
 	
 	private final Integer HET_COUNT;

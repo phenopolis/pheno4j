@@ -7,9 +7,12 @@ import java.util.List;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.graph.db.domain.input.annotation.TranscriptConsequence;
+import com.graph.db.domain.output.annotation.Id;
+import com.graph.db.output.Neo4jMapping;
 
 public class TranscriptVariantOutput {
 
+	@Id(name = "hgvsc", mapping = Neo4jMapping.TranscriptVariant)
 	private final String hgvsc;
 	private final String impact;
 	private final String gene_symbol_source;
@@ -68,5 +71,4 @@ public class TranscriptVariantOutput {
 	public String getVariant_allele() {
 		return variant_allele;
 	}
-
 }

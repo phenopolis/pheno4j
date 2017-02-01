@@ -3,8 +3,12 @@ package com.graph.db.domain.output;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.graph.db.domain.output.annotation.Id;
+import com.graph.db.output.Neo4jMapping;
+
 public class ConsequenceTermOutput {
 	
+	@Id(name = "consequenceTerm", mapping = Neo4jMapping.ConsequenceTerm)
 	private final String consequenceTerm;
 
 	public ConsequenceTermOutput(String consequenceTerm) {
@@ -35,5 +39,4 @@ public class ConsequenceTermOutput {
 				.append(this.consequenceTerm, otherObject.consequenceTerm)
 				.isEquals();
 	}
-
 }

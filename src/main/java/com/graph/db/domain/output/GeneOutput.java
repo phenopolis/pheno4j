@@ -6,9 +6,12 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.graph.db.domain.input.annotation.TranscriptConsequence;
+import com.graph.db.domain.output.annotation.Id;
+import com.graph.db.output.Neo4jMapping;
 
 public class GeneOutput {
 	
+	@Id(name = "gene_id", mapping = Neo4jMapping.Gene)
 	private final String gene_id;
 	private final String gene_name;
 	

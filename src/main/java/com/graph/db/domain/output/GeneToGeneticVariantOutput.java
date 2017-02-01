@@ -4,10 +4,16 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.graph.db.domain.input.annotation.TranscriptConsequence;
+import com.graph.db.domain.output.annotation.RelationshipEnd;
+import com.graph.db.domain.output.annotation.RelationshipStart;
+import com.graph.db.output.Neo4jMapping;
 
 public class GeneToGeneticVariantOutput {
 	
+	@RelationshipStart(mapping = Neo4jMapping.Gene)
 	private final String gene_id;
+	
+	@RelationshipEnd(mapping = Neo4jMapping.GeneticVariant)
 	private final String variant_id;
 	
 	public GeneToGeneticVariantOutput(TranscriptConsequence transcriptConsequence) {
@@ -45,5 +51,4 @@ public class GeneToGeneticVariantOutput {
 				.append(this.variant_id, otherObject.variant_id)
 				.isEquals();
 	}
-
 }

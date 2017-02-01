@@ -29,7 +29,7 @@ public abstract class AbstractSubscriber implements AutoCloseable {
 		fileName = createFileName(outputFolder, parserClass, outputFileType);
 		FileWriter writer = createFileWriter();
 		beanWriter = new CsvDozerBeanWriter(writer, CsvPreference.STANDARD_PREFERENCE);
-		beanWriter.configureBeanMapping(outputFileType.getBeanClass(), outputFileType.getHeader());
+		beanWriter.configureBeanMapping(outputFileType.getBeanClass(), outputFileType.getFieldsForCsvMapping());
 	}
 	
 	private FileWriter createFileWriter() {

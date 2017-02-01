@@ -71,5 +71,4 @@ public class HeaderGeneratorTest {
 			assertThat("For: " + outputFileType.toString(), actualHeader, is(expectedHeader));
 		}
 	}
-
 }

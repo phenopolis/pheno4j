@@ -1,5 +1,7 @@
 package com.graph.db.output;
 
+import static com.graph.db.util.Constants.COLON;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +24,9 @@ import com.graph.db.domain.output.TranscriptToGeneOutput;
 import com.graph.db.domain.output.TranscriptToTranscriptVariantOutput;
 import com.graph.db.domain.output.TranscriptVariantOutput;
 import com.graph.db.domain.output.TranscriptVariantToConsequenceTermOutput;
+import com.graph.db.domain.output.annotation.Id;
+import com.graph.db.domain.output.annotation.RelationshipEnd;
+import com.graph.db.domain.output.annotation.RelationshipStart;
 import com.graph.db.file.Parser;
 import com.graph.db.file.annotation.AnnotationParser;
 import com.graph.db.file.gene.GeneParser;
@@ -81,8 +86,8 @@ public enum OutputFileType {
 	public Neo4jMapping getNeo4jMapping() {
 		return neo4jMapping;
 	}
-
-	public String[] getHeader() {
+	
+	public String[] getFieldsForCsvMapping() {
 		List<String> fields = new ArrayList<>();
 		for (Field field : getBeanClass().getDeclaredFields()) {
 			if (!field.isSynthetic()) {
@@ -90,6 +95,51 @@ public enum OutputFileType {
 			}
 		}
 		return fields.toArray(new String[0]);
+	}
+
+	public String[] getHeaderForCsvFile() {
+		List<String> fields = new ArrayList<>();
+		for (Field field : getBeanClass().getDeclaredFields()) {
+			if (!field.isSynthetic()) {
+				final String value;
+				if (field.isAnnotationPresent(Id.class)) {
+					Id annotation = field.getAnnotation(Id.class);
+					value = annotation.name() + COLON + "ID(" + annotation.mapping() + ")";
+				} else if (field.isAnnotationPresent(RelationshipStart.class)) {
+					RelationshipStart annotation = field.getAnnotation(RelationshipStart.class);
+					value = COLON + "START_ID(" + annotation.mapping() + ")";
+				} else if (field.isAnnotationPresent(RelationshipEnd.class)) {
+					RelationshipEnd annotation = field.getAnnotation(RelationshipEnd.class);
+					value = COLON + "END_ID(" + annotation.mapping() + ")";
+				} else {
+					value = addTypeToField(field);
+				}
+				fields.add(value);
+			}
+		}
+		return fields.toArray(new String[0]);
+	}
+
+	private String addTypeToField(Field field) {
+		final String value;
+		String name = field.getName();
+		switch (field.getType().getName()) {
+		case "java.lang.Integer":
+			value = name + COLON + "int";
+			break;
+		case "java.lang.Double":
+			value = name + COLON + "double";
+			break;
+		case "java.lang.Boolean":
+			value = name + COLON + "boolean";
+			break;
+		case "java.lang.String":
+			value = name;
+			break;
+		default:
+			throw new IllegalStateException("Unknown type: " + field.getType().getName());
+		}
+		return value;
 	}
 	
 	public static OutputFileType toOutputFileType(Neo4jMapping neo4jMapping) {
