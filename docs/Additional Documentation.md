@@ -19,13 +19,16 @@ The java command is executed from the lib folder of the extracted zipfile. Subst
 ```
 java -cp.;../conf/*  -jar db-1.0-SNAPSHOT.jar **${PARSER_NAME}**
 ```
-### VcfParser
+### VcfParser ###
 This parses the genotype VCF file containing the variant to individual relationships.
+
 | Nodes | Relationships |
 | --- | --- |
 | Person  | GeneticVariantToPerson |
-### AnnotationParser
+
+### AnnotationParser ###
 This parses the annotation file produced by the Variant Effect Predictor in the JSON format (VCF format to be supported soon).
+
 | Nodes | Relationships |
 | --- | --- |
 | GeneticVariant | GeneToGeneticVariant |
@@ -33,25 +36,32 @@ This parses the annotation file produced by the Variant Effect Predictor in the 
 | ConsequenceTerm | TranscriptToTranscriptVariant |
 | Transcript | TranscriptVariantToConsequenceTerm |
 | Gene | |
-### GeneParser
+
+### GeneParser ###
 This parses the OMIM-HPO file which links genes to the HPO terms to which they are associate.
+
 | Nodes | Relationships |
 | --- | --- |
 | | GeneToTerm |
 
-### PersonParser
+### PersonParser ###
 This parses the phenotype file which links individuals to their HPO terms.
+
 | Nodes | Relationships |
 | --- | --- |
 | Person | PersonToObservedTerm |
 |  | PersonToNonObservedTerm |
-### TermParser
-This loads the HPO ontology which links HPO terms to other HPO terms. The relationships are produced; TermToParentTerm simply links a Term to its Parent Term, and TermToDescendantTerms produces all the descendant Terms for a specific Term, e.g. querying for HP:0000001 will output every single term since it is the root node.   
+
+### TermParser ###
+This loads the HPO ontology which links HPO terms to other HPO terms. The relationships are produced; TermToParentTerm simply links a Term to its Parent Term, and TermToDescendantTerms produces all the descendant Terms for a specific Term, e.g. querying for HP:0000001 will output every single term since it is the root node.
+   
 | Nodes | Relationships |
 | --- | --- |
 | Term | TermToParentTerm |
 |  | TermToDescendantTerms |
-### TranscriptParser
+
+### TranscriptParser ###
+
 | Nodes | Relationships |
 | --- | --- |
 | Transcript | TranscriptToGene |
