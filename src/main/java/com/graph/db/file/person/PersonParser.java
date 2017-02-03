@@ -21,6 +21,9 @@ import com.graph.db.file.LegacyParser;
 import com.graph.db.util.Constants;
 
 /**
+ * Nodes
+ * - Person
+ * 
  * Relationships
  * - PersonToObservedTerm
  * - PersonToNonObservedTerm
