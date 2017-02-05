@@ -168,7 +168,7 @@ RETURN count(distinct gv);
 ```
 ### For an Individual, rank their variants by the number of occurrences in other Individuals
 ```
-MATCH (p:Person {personId:"XXX"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)-[:GeneticVariantToTranscriptVariant]->(tv:TranscriptVariant)
+MATCH (p:Person {personId:"person1"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)-[:GeneticVariantToTranscriptVariant]->(tv:TranscriptVariant)
 WHERE (gv.allele_freq < 0.1 or tv.hasExac = false)
 WITH size(()<-[:GeneticVariantToPerson]-(gv)) as count, gv
 WHERE count > 1 
@@ -176,11 +176,11 @@ RETURN gv.variantId, size(()<-[:GeneticVariantToPerson]-(gv)) as count
 ORDER BY count asc
 LIMIT 10;
 ```
-### For a particular individual, show a list of individuals in decreasing order by the number of variants they share with the given individual, with a frequency less than 0.001 or NA in ExAC, and that appear in less than 5% of individuals
+[query1](### For a particular individual, show a list of 10 top individuals in decreasing order by the number of variants they share with the given individual, with a frequency less than 0.001 or NA in ExAC, and that appear in less than 5% of individuals)
 ```
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
-MATCH (p:Person {personId:"person1"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)
+MATCH (p:Person {personId:"WebsterURMD_Sample_GV4344"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)
 WHERE (gv.allele_freq < 0.001 or gv.hasExac = false)
 WITH size(()<-[:GeneticVariantToPerson]-(gv)) as count , gv, p, numberOfPeople
 WHERE count > 1 
@@ -189,7 +189,7 @@ MATCH (gv)-[:GeneticVariantToPerson]->(q:Person)
 WHERE p <> q
 WITH p,q,count(gv) as c
 ORDER BY c desc LIMIT 10
-RETURN p.personId,q.personId, c
+RETURN p.personId,q.personId, c;
 ```
 ### As above, but show the as a percentage the common variants (i.e. the intersection) over the shared variants (the union)
 ```
