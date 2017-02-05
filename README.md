@@ -176,7 +176,7 @@ RETURN gv.variantId, size(()<-[:GeneticVariantToPerson]-(gv)) as count
 ORDER BY count asc
 LIMIT 10;
 ```
-[query1](### For a particular individual, show a list of 10 top individuals in decreasing order by the number of variants they share with the given individual, with a frequency less than 0.001 or NA in ExAC, and that appear in less than 5% of individuals)
+[### For a particular individual, show a list of 10 top individuals in decreasing order by the number of variants they share with the given individual, with a frequency less than 0.001 or NA in ExAC, and that appear in less than 5% of individuals](query1)
 ```
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
