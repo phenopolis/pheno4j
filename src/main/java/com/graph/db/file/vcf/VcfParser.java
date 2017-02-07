@@ -123,7 +123,6 @@ public class VcfParser extends LegacyParser {
 	}
 	
 	private void writeOutHeaders() {
-		writeOutCsvHeader(outputFolder, "Person", Arrays.asList("personId:ID(Person)"));
 		writeOutCsvHeader(outputFolder, "GeneticVariantToPerson", Arrays.asList(":START_ID(GeneticVariant),:END_ID(Person)"));
 	}
 

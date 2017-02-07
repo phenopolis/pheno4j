@@ -16,6 +16,8 @@ import com.graph.db.domain.output.GeneToGeneticVariantOutput;
 import com.graph.db.domain.output.GeneToTermOutput;
 import com.graph.db.domain.output.GeneticVariantOutput;
 import com.graph.db.domain.output.GeneticVariantToTranscriptVariantOutput;
+import com.graph.db.domain.output.PersonOutput;
+import com.graph.db.domain.output.PersonToTermOutput;
 import com.graph.db.domain.output.TermOutput;
 import com.graph.db.domain.output.TermToDescendantTermsOutput;
 import com.graph.db.domain.output.TermToParentTermOutput;
@@ -52,9 +54,9 @@ public enum OutputFileType {
 	TERM(TermOutput.class, Neo4jMapping.Term, TermParser.class),
 	TERM_TO_PARENT_TERM(TermToParentTermOutput.class, Neo4jMapping.TermToParentTerm, TermParser.class),
 	TERM_TO_DESCENDANT_TERMS(TermToDescendantTermsOutput.class, Neo4jMapping.TermToDescendantTerms, TermParser.class),
-	PERSON_TO_OBSERVED_TERM(NotImplementedException.class, Neo4jMapping.PersonToObservedTerm, PersonParser.class),
-	PERSON_TO_NON_OBSERVED_TERM(NotImplementedException.class, Neo4jMapping.PersonToNonObservedTerm, PersonParser.class),
-	PERSON(NotImplementedException.class, Neo4jMapping.Person, VcfParser.class, PersonParser.class),
+	PERSON_TO_OBSERVED_TERM(PersonToTermOutput.class, Neo4jMapping.PersonToObservedTerm, PersonParser.class),
+	PERSON_TO_NON_OBSERVED_TERM(PersonToTermOutput.class, Neo4jMapping.PersonToNonObservedTerm, PersonParser.class),
+	PERSON(PersonOutput.class, Neo4jMapping.Person, VcfParser.class, PersonParser.class),
 	GENETIC_VARIANT_TO_PERSON(NotImplementedException.class, Neo4jMapping.GeneticVariantToPerson, VcfParser.class),
 	;
 	
