@@ -14,7 +14,7 @@ Take raw input files and convert them into csv files that represent Nodes and Re
 | 3 | HPO-Gene | [http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt](http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt) |
 
 # Domain Model
-Once loaded into neo4j, the following schema is produced:
+The following neo4j schema is produced from the imported data:
 ![](https://github.com/sajid-mughal/pheno4j/blob/master/docs/complete_diagram.png?raw=true)
 
 # Installation
