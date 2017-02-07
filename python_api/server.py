@@ -21,8 +21,7 @@ def patients(args):
 
 def shared_variants(args):
     print(args)
-    """
-    WITH ["{person1}","{person2}"] as persons
+    q=""" WITH ["{person1}","{person2}"] as persons
     MATCH (p:Person)<-[:GeneticVariantToPerson]-(v:GeneticVariant) 
     WHERE p.personId IN persons
     WITH v, count(*) as c, persons
