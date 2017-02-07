@@ -59,8 +59,14 @@ public class HeaderGeneratorTest {
 				expectedHeader = ":START_ID(Term),:END_ID(Term)";
 				break;
 			case PERSON:
+				expectedHeader = "personId:ID(Person)";
+				break;
 			case PERSON_TO_OBSERVED_TERM:
+				expectedHeader = ":START_ID(Person),:END_ID(Term)";
+				break;
 			case PERSON_TO_NON_OBSERVED_TERM:
+				expectedHeader = ":START_ID(Person),:END_ID(Term)";
+				break;
 			case GENETIC_VARIANT_TO_PERSON:
 				continue;
 			default:
