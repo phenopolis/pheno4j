@@ -42,20 +42,47 @@ def patients(args):
       session.close()
       return '\n'.join(s)
 
+"""
+    Variants shared between a group of individuals.
+    @args persons comma separated list of individuals
+"""
 def shared_variants(args):
     print(args)
-    q=""" WITH ["{person1}","{person2}"] as persons
+    q=""" WITH {persons} as persons
     MATCH (p:Person)<-[:GeneticVariantToPerson]-(v:GeneticVariant) 
     WHERE p.personId IN persons
     WITH v, count(*) as c, persons
     WHERE c = size(persons)
     RETURN count(v.variantId);
-    """.format(person1=args['person1'],person2=args['person2'])
+    """.format(persons=args['persons'].split(','))
     print q
     session = driver.session()
     result = session.run(q)
     session.close()
     return json.dumps([r.__dict__ for r in result], indent=4)
+
+"""
+    Variants shared between a group of individuals but no one else.
+    @args persons comma separated list of individuals
+"""
+def exclusive_shared_variants(args):
+    print(args)
+    q=""" WITH {persons} as individuals
+    MATCH (p:Person)<-[:GeneticVariantToPerson]-(v:GeneticVariant) 
+    WHERE p.personId IN individuals
+    WITH v, count(*) as c, individuals
+    WHERE c = size(individuals)
+    with v, individuals
+    MATCH (v:GeneticVariant)
+    where size((v)-[:GeneticVariantToPerson]-()) = size(individuals)
+    RETURN v.variantId;
+    """.format(persons=args['persons'].split(','))
+    print q
+    session = driver.session()
+    result = session.run(q)
+    session.close()
+    return json.dumps([r.__dict__ for r in result], indent=4)
+
 
 def rv_sharing(args):
     individual_id=args.get('individual_id','')
@@ -92,7 +119,7 @@ def rv_sharing(args):
     return json.dumps([r.__dict__ for r in result], indent=4)
 
 
-handlers={'/patients':patients,'/rv_sharing':rv_sharing,'/shared_variants':shared_variants,'/variants_per_patient':variants_per_patient}
+handlers={'/patients':patients,'/rv_sharing':rv_sharing,'/shared_variants':shared_variants,'/variants_per_patient':variants_per_patient, '/exclusive_shared_variants':exclusive_shared_variants }
 
 class CustomHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
       def do_GET(self):
