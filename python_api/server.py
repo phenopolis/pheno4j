@@ -10,6 +10,20 @@ driver = GraphDatabase.driver("bolt://localhost:57687", auth=basic_auth("neo4j",
 
 PORT = 9000
 
+
+def variants_per_patient(args):
+  session = driver.session()
+  q="""
+  MATCH (gv:GeneticVariant)-[:GeneticVariantToPerson]->(p:Person)
+  WHERE p.personId ='{person1}'
+  RETURN gv.variantId;
+  """.format(person1=args['person1'])
+  print q
+  result = session.run(q)
+  session.close()
+  return json.dumps([r.__dict__ for r in result], indent=4)
+
+
 def patients(args):
   session = driver.session()
   if 'variant_id' in args:
@@ -78,7 +92,7 @@ def rv_sharing(args):
     return json.dumps([r.__dict__ for r in result], indent=4)
 
 
-handlers={'/patients':patients,'/rv_sharing':rv_sharing,'/shared_variants':shared_variants}
+handlers={'/patients':patients,'/rv_sharing':rv_sharing,'/shared_variants':shared_variants,'/variants_per_patient':variants_per_patient}
 
 class CustomHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
       def do_GET(self):
