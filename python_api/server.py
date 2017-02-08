@@ -12,12 +12,21 @@ PORT = 9000
 
 def patients(args):
   session = driver.session()
-  result = session.run("MATCH (a:Person) return a.personId as personId ")
-  s=[]
-  for record in result:
-      s+=["%s" % (record["personId"])]
+  if 'variant_id' in args:
+      q=""" MATCH (gv:GeneticVariant)-[:GeneticVariantToPerson]->(p:Person)
+      WHERE gv.variantId = '{variant_id}'
+      RETURN p.personId;
+      """.format(variant_id=args['variant_id'])
+      print q
+      result = session.run(q)
       session.close()
-  return '\n'.join(s)
+      return json.dumps([r.__dict__ for r in result], indent=4)
+  else:
+      result = session.run("MATCH (a:Person) return a.personId as personId ")
+      s=[]
+      for record in result: s+=["%s" % (record["personId"])]
+      session.close()
+      return '\n'.join(s)
 
 def shared_variants(args):
     print(args)
@@ -28,11 +37,11 @@ def shared_variants(args):
     WHERE c = size(persons)
     RETURN count(v.variantId);
     """.format(person1=args['person1'],person2=args['person2'])
+    print q
     session = driver.session()
     result = session.run(q)
     session.close()
     return json.dumps([r.__dict__ for r in result], indent=4)
-
 
 def rv_sharing(args):
     individual_id=args.get('individual_id','')
