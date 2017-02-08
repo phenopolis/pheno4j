@@ -123,7 +123,7 @@ public class VcfParser extends LegacyParser {
 	}
 	
 	private void writeOutHeaders() {
-		writeOutCsvHeader(outputFolder, "GeneticVariantToPerson", Arrays.asList(":START_ID(GeneticVariant),:END_ID(Person)"));
+		writeOutCsvHeader(outputFolder, "GeneticVariantToPerson", Arrays.asList(":START_ID(GeneticVariant),:END_ID(Person),isHom:boolean"));
 	}
 
 	private class RowAction extends RecursiveAction {
@@ -151,10 +151,12 @@ public class VcfParser extends LegacyParser {
 				for (int i = low; i < high; i++) {
 					String cell = array[i];
 					String substringBeforeFirstColon = StringUtils.substringBefore(cell, ":");
+					boolean isHom = "1/1".equals(substringBeforeFirstColon);
+					boolean isHet = "0/1".equals(substringBeforeFirstColon);
 					
-					if ("0/1".equals(substringBeforeFirstColon) || "1/1".equals(substringBeforeFirstColon)) {
+					if (isHet || isHom) {
 						try {
-							geneticVariantToPersonBlockingQueue.put(variantId + COMMA + indexToPerson.get(i));
+							geneticVariantToPersonBlockingQueue.put(variantId + COMMA + indexToPerson.get(i) + COMMA + isHom);
 						} catch (InterruptedException e) {
 							throw new RuntimeException(e);
 						}
@@ -168,5 +170,4 @@ public class VcfParser extends LegacyParser {
 		new VcfParser().execute();
 		LOGGER.info("Finished");
 	}
-
 }
