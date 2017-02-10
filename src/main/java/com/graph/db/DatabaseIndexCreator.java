@@ -37,60 +37,53 @@ public class DatabaseIndexCreator {
         
         GraphDatabaseService graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(storeDir);
         
+        LOGGER.info("Creating constraints...");
 		try (Transaction tx = graphDb.beginTx()) {
 			Schema schema = graphDb.schema();
 			Iterable<ConstraintDefinition> constraints = schema.getConstraints();
 			
-	        for (Neo4jMapping mapping : Neo4jMapping.values()) {
-	        	OutputFileType outputFileType = OutputFileType.toOutputFileType(mapping);
-	        	if (outputFileType != null) {
-	        		Set<Field> fieldsForAnnotation = getFieldForAnnotation(outputFileType, Id.class);
-	        		if (fieldsForAnnotation.size() == 1) {
-	        			Id annotation = fieldsForAnnotation.iterator().next().getAnnotation(Id.class);
-	        			if (annotation != null) {
-	        				if(!doesConstraintExist(constraints, mapping.name())) {
-	        					LOGGER.info("Creating constraint for Type: {}", mapping);
-	        					schema.constraintFor(Label.label(mapping.name()))
-	        					.assertPropertyIsUnique(annotation.name())
-	        					.create();
-	        				} else {
-	        					LOGGER.warn("Constraint already exists for Type: {}", mapping);
-	        				}
-	        			}
-	        		}
-	        	}
+	        for (Neo4jMapping node : Neo4jMapping.getChildren(Neo4jMapping.NODE)) {
+	        	OutputFileType outputFileType = OutputFileType.toOutputFileType(node);
+        		Set<Field> fieldsForAnnotation = getFieldForAnnotation(outputFileType, Id.class);
+        		if (fieldsForAnnotation.size() == 1) {
+        			Id annotation = fieldsForAnnotation.iterator().next().getAnnotation(Id.class);
+    				if(!doesConstraintExist(constraints, node.name())) {
+    					LOGGER.info("Creating constraint for Type: {}", node);
+    					schema.constraintFor(Label.label(node.name()))
+        					.assertPropertyIsUnique(annotation.name())
+        					.create();
+    				} else {
+    					LOGGER.warn("Constraint already exists for Type: {}", node);
+    				}
+        		}
 	        }
 			tx.success();
         }
 		
+		LOGGER.info("Creating indexes...");
 		try (Transaction tx = graphDb.beginTx()) {
 			Schema schema = graphDb.schema();
 			Iterable<IndexDefinition> indexes = schema.getIndexes();
 			
-	        for (Neo4jMapping mapping : Neo4jMapping.values()) {
-	        	OutputFileType outputFileType = OutputFileType.toOutputFileType(mapping);
-	        	if (outputFileType != null) {
-	        		Set<Field> fieldsForAnnotation = getFieldForAnnotation(outputFileType, Index.class);
-	        		for (Field field : fieldsForAnnotation) {
-	        			Index annotation = field.getAnnotation(Index.class);
-	        			if (annotation != null) {
-	        				if(!doesIndexExist(indexes, mapping.name(), field.getName())) {
-	        					LOGGER.info("Creating index for Field: {}", field);
-	        					
-	        					schema.indexFor(Label.label(mapping.name()))
-		        					.on( field.getName() )
-		        					.create();
-	        				} else {
-	        					LOGGER.warn("Index already exists for Field: {}", field);
-	        				}
-	        			}
-	        		}
-	        	}
+	        for (Neo4jMapping node : Neo4jMapping.getChildren(Neo4jMapping.NODE)) {
+	        	OutputFileType outputFileType = OutputFileType.toOutputFileType(node);
+        		Set<Field> fieldsForAnnotation = getFieldForAnnotation(outputFileType, Index.class);
+        		for (Field field : fieldsForAnnotation) {
+    				if(!doesIndexExist(indexes, node.name(), field.getName())) {
+    					LOGGER.info("Creating index for Field: {}", field);
+    					
+    					schema.indexFor(Label.label(node.name()))
+        					.on( field.getName() )
+        					.create();
+    				} else {
+    					LOGGER.warn("Index already exists for Field: {}", field);
+    				}
+        		}
 	        }
 			tx.success();
 		}
 		
-		LOGGER.info("Waiting for creation of indexes");
+		LOGGER.info("Waiting for creation of constraints and indexes");
 		try (Transaction tx = graphDb.beginTx()) {
 			Schema schema = graphDb.schema();
 			schema.awaitIndexesOnline(1, TimeUnit.HOURS);
