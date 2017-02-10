@@ -34,6 +34,9 @@ public class GraphDatabaseBuilder {
 		//Run the Neo4j import tool
 		new ImportToolRunner().execute();
 		
+		//Create the Constraints and Indexes
+		new DatabaseIndexCreator().execute();
+		
 		LOGGER.info("Finished");
 	}
 	
