@@ -70,14 +70,14 @@ This loads the HPO ontology which links HPO terms to other HPO terms. The relati
 # Constraints and Indexes #
 To ensure optimum performance for the queries the following Constraints and Indexes are created by `com.graph.db.DatabaseIndexCreator`
 ## Constraints
-Term - termId
-Person - personId
-GeneticVariant - variantId
-Gene - gene_id
-TranscriptVariant - hgvsc
-Transcript - transcript_id
-ConsequenceTerm - consequenceTerm
+- Term - termId
+- Person - personId
+- GeneticVariant - variantId
+- Gene - gene_id
+- TranscriptVariant - hgvsc
+- Transcript - transcript_id
+- ConsequenceTerm - consequenceTerm
 ## Indexes
-GeneticVariant - allele_freq
-TranscriptVariant - cadd
-GeneticVariant - hasExac
+- GeneticVariant - allele_freq
+- TranscriptVariant - cadd
+- GeneticVariant - hasExac
