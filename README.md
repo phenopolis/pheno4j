@@ -41,7 +41,7 @@ mvn clean package
 ### Update config file to reference your input data ###
 In the conf folder of the extracted zip above, update config.properties to reference your input data.
 ### Run the GraphDatabaseBuilder ###
-This step will take all the input data and build csv files, which are then build into a Neo4j database using their ImportTool.
+This step will take all the input data and build csv files, which are then built into a Neo4j database using their ImportTool. Constraints and Indexes are then created.
 In the lib folder of the extracted zip above, run the following:
 ```
 java -cp *:../conf/ com.graph.db.GraphDatabaseBuilder
@@ -67,21 +67,6 @@ This takes up to 10 minutes for our data.
 MATCH (n)
 OPTIONAL MATCH (n)-[r]->()
 RETURN count(n.prop) + count(r.prop);
-```
-### Create the constraints and indexes ###
-These only need to be run once i.e. they are persisted after a restart.
-```
-CREATE CONSTRAINT ON (p:Term) ASSERT p.termId IS UNIQUE;
-CREATE CONSTRAINT ON (p:Person) ASSERT p.personId IS UNIQUE;
-CREATE CONSTRAINT ON (p:GeneticVariant) ASSERT p.variantId IS UNIQUE;
-CREATE CONSTRAINT ON (p:Gene) ASSERT p.gene_id IS UNIQUE;
-CREATE CONSTRAINT ON (p:TranscriptVariant) ASSERT p.hgvsc IS UNIQUE;
-CREATE CONSTRAINT ON (p:Transcript) ASSERT p.transcript_id IS UNIQUE;
-CREATE CONSTRAINT ON (p:ConsequenceTerm) ASSERT p.consequenceTerm IS UNIQUE;
-
-CREATE INDEX ON :GeneticVariant(allele_freq);
-CREATE INDEX ON :TranscriptVariant(cadd);
-CREATE INDEX ON :GeneticVariant(hasExac);
 ```
 ### Additional Steps ###
 If you would like to connect to your instance from your application tier, you can change the password to the Neo4j instance with the following; the port is the value of "dbms.connector.http.listen_address" in $NEO4J_HOME/conf/neo4j.conf, the password with the following will be set to "1".
