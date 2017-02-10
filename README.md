@@ -112,6 +112,19 @@ WITH v, count(*) as c, persons
 WHERE c = size(persons)
 RETURN count(v.variantId);
 ```
+## Rank Shared Variants by occurences in all Individuals
+```
+WITH ["person1","person2"] as persons
+MATCH (p:Person)<-[:GeneticVariantToPerson]-(v:GeneticVariant) 
+WHERE p.personId IN persons
+and v.allele_freq < 0.01
+WITH v, count(*) as c, persons
+WHERE c = size(persons)
+with v
+return v.variantId, size((v)-[:GeneticVariantToPerson]-())  as count
+ORDER BY count asc
+LIMIT 10;
+```
 ## Find Variants shared by a list of Individuals, that no one else has
 ```
 WITH ["person1","person2"] as individuals
