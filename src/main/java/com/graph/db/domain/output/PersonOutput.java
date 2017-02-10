@@ -7,11 +7,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.graph.db.domain.output.annotation.Id;
 import com.graph.db.file.person.PersonParser;
-import com.graph.db.output.Neo4jMapping;
 
 public class PersonOutput {
 	
-	@Id(name = "personId", mapping = Neo4jMapping.Person)
+	@Id(name = "personId")
 	private final String personId;
 	
 	public PersonOutput(Map<String, Object> map) {

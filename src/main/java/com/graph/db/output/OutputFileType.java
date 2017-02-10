@@ -106,7 +106,7 @@ public enum OutputFileType {
 				final String value;
 				if (field.isAnnotationPresent(Id.class)) {
 					Id annotation = field.getAnnotation(Id.class);
-					value = annotation.name() + COLON + "ID(" + annotation.mapping() + ")";
+					value = annotation.name() + COLON + "ID(" + neo4jMapping + ")";
 				} else if (field.isAnnotationPresent(RelationshipStart.class)) {
 					RelationshipStart annotation = field.getAnnotation(RelationshipStart.class);
 					value = COLON + "START_ID(" + annotation.mapping() + ")";

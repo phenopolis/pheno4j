@@ -2,11 +2,10 @@ package com.graph.db.domain.output;
 
 import com.graph.db.domain.input.term.RawTerm;
 import com.graph.db.domain.output.annotation.Id;
-import com.graph.db.output.Neo4jMapping;
 
 public class TermOutput {
 	
-	@Id(name = "termId", mapping = Neo4jMapping.Term)
+	@Id(name = "termId")
 	private final String termId;
 	private final String name;
 	

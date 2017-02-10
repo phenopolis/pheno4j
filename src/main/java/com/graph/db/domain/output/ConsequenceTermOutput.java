@@ -4,11 +4,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.graph.db.domain.output.annotation.Id;
-import com.graph.db.output.Neo4jMapping;
 
 public class ConsequenceTermOutput {
 	
-	@Id(name = "consequenceTerm", mapping = Neo4jMapping.ConsequenceTerm)
+	@Id(name = "consequenceTerm")
 	private final String consequenceTerm;
 
 	public ConsequenceTermOutput(String consequenceTerm) {

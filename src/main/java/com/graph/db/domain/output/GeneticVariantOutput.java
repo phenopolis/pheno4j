@@ -2,18 +2,20 @@ package com.graph.db.domain.output;
 
 import com.graph.db.domain.input.annotation.GeneticVariant;
 import com.graph.db.domain.output.annotation.Id;
-import com.graph.db.output.Neo4jMapping;
+import com.graph.db.domain.output.annotation.Index;
 
 public class GeneticVariantOutput {
 	
-	@Id(mapping = Neo4jMapping.GeneticVariant, name = "variantId")
+	@Id(name = "variantId")
 	private final String variant_id;
 	
 	private final Integer HET_COUNT;
 	private final Integer WT_COUNT;
 	private final Integer HOM_COUNT;
 	private final Integer MISS_COUNT;
+	@Index
 	private final Double allele_freq;
+	@Index
 	private final Boolean hasExac;
 	
 	private String EXAC_AC;
