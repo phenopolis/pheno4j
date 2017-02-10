@@ -5,8 +5,8 @@
 
 # Execution #
 To generate and run the Graph Database, a number of processes are run. Each process can be run standalone if needed, but the following two maven profiles are provided that call underlying Java wrappers for convenience.
-`build-graph` - Takes the input data and generates csv's that are used to build the graph database using neo4j's `org.neo4j.tooling.ImportTool`
-`run-neo4j` - Starts up the neo4j database, based one the graph built previously
+- `build-graph` - Takes the input data and generates csv's that are used to build the graph database using neo4j's `org.neo4j.tooling.ImportTool`
+- `run-neo4j` - Starts up the neo4j database, based one the graph built previously
 ![](https://github.com/sajid-mughal/pheno4j/blob/master/docs/class%20overview.png?raw=true)
 
 # Project Structure
