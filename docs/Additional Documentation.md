@@ -77,6 +77,7 @@ To ensure optimum performance for the queries the following Constraints and Inde
 - TranscriptVariant - hgvsc
 - Transcript - transcript_id
 - ConsequenceTerm - consequenceTerm
+
 ## Indexes
 - GeneticVariant - allele_freq
 - TranscriptVariant - cadd
