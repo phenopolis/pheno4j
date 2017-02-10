@@ -15,9 +15,9 @@ The project consists of 6 parsers, each one takes two parameters, a specific fil
 Run `mvn clean package`; this will generate graph-bundle.zip in the /target folder
 # Parsers
 Below is the list of the Parsers, and the Nodes and Relationships that each one is responsible for producing. 
-The java command is executed from the lib folder of the extracted zipfile. Substitute `${PARSER_NAME}` with the name of the Parser. 
+The java command is executed from the lib folder of the extracted zipfile. Substitute `${PARSER_NAME}` with the fully qualified name of the Parser e.g. com.graph.db.file.vcf.VcfParser
 ```
-java -cp.;../conf/*  -jar db-1.0-SNAPSHOT.jar **${PARSER_NAME}**
+java -classpath '*:../conf/' **${PARSER_NAME}**
 ```
 ### VcfParser ###
 This parses the genotype VCF file containing the variant to individual relationships.
