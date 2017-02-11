@@ -4,6 +4,7 @@ import static com.graph.db.util.Constants.COMMA;
 import static com.graph.db.util.Constants.DOUBLE_QUOTE;
 import static com.graph.db.util.Constants.HYPHEN;
 import static com.graph.db.util.Constants.TAB;
+import static com.graph.db.util.FileUtil.createFolderIfNotPresent;
 import static com.graph.db.util.FileUtil.getLineNumberReaderForFile;
 import static com.graph.db.util.FileUtil.logLineNumber;
 import static com.graph.db.util.FileUtil.sendPoisonPillToQueue;
@@ -20,11 +21,13 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 
+import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.graph.db.file.LegacyParser;
+import com.graph.db.file.Parser;
+import com.graph.db.util.PropertiesHolder;
 
 /**
  * Writes data to the file as it is available
@@ -38,25 +41,30 @@ import com.graph.db.file.LegacyParser;
  * Relationships
  * - GeneticVariantToPerson
  */
-public class VcfParser extends LegacyParser {
+public class VcfParser implements Parser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(VcfParser.class);
+	
+	private static final Configuration config = PropertiesHolder.getInstance();
 	
 	private final BlockingQueue<String> geneticVariantToPersonBlockingQueue = new ArrayBlockingQueue<>(1024);
 	private final Map<Integer, String> indexToPerson = new HashMap<>();
 
+	private final String outputFolder;
 	private final String fileName;
 	
 	public VcfParser() {
-		this.fileName = config.getString("vcfParser.input.fileName");
-		if (StringUtils.isBlank(fileName)) {
-			throw new RuntimeException("fileName cannot be empty");
-		}
+		this(config.getString("vcfParser.input.fileName"), config.getString("output.folder"));
 	}
 	
 	public VcfParser(String fileName, String outputFolder) {
 		this.fileName = fileName;
 		this.outputFolder = outputFolder;
+		
+		createFolderIfNotPresent(outputFolder);
+		if (StringUtils.isBlank(fileName)) {
+			throw new RuntimeException("fileName cannot be empty");
+		}
 	}
 	
 	@Override
