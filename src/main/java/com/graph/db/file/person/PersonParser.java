@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.graph.db.file.AbstractParser;
 import com.graph.db.file.AbstractSubscriber;
@@ -37,8 +35,6 @@ public class PersonParser extends AbstractParser {
 	private static final String NON_OBSERVED_TERMS_KEY = "non_observed_features";
 	private static final String OBSERVED_TERMS_KEY = "observed_features";
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PersonParser.class);
-	
 	private final String fileName;
 	
 	public PersonParser() {
@@ -104,6 +100,5 @@ public class PersonParser extends AbstractParser {
 
 	public static void main(String[] args) {
 		new PersonParser().execute();
-		LOGGER.info("Finished");
 	}
 }

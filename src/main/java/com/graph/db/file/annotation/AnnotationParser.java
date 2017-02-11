@@ -10,9 +10,6 @@ import java.io.LineNumberReader;
 import java.util.Arrays;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.graph.db.domain.input.annotation.GeneticVariant;
@@ -44,8 +41,6 @@ import com.graph.db.output.OutputFileType;
  * - TranscriptVariantToConsequenceTerm
  */
 public class AnnotationParser extends AbstractParser {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationParser.class);
 	
 	private final String inputFolder;
 
@@ -110,6 +105,5 @@ public class AnnotationParser extends AbstractParser {
 
 	public static void main(String[] args) {
 		new AnnotationParser().execute();
-		LOGGER.info("Finished");
 	}
 }

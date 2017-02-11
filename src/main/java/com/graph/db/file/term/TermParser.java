@@ -12,8 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.graph.db.domain.input.term.RawTerm;
 import com.graph.db.domain.output.TermOutput;
@@ -32,8 +30,6 @@ import com.graph.db.output.OutputFileType;
  * - TermToDescendantTerms
  */
 public class TermParser extends AbstractParser {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(TermParser.class);
 	
 	private final String fileName;
 	
@@ -115,6 +111,5 @@ public class TermParser extends AbstractParser {
 	
 	public static void main(String[] args) {
 		new TermParser().execute();
-		LOGGER.info("Finished");
 	}
 }

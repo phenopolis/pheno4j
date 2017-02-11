@@ -14,7 +14,7 @@ import com.graph.db.util.PropertiesHolder;
 
 public abstract class AbstractParser implements Parser {
 	
-	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	
 	protected final Configuration config;
 	protected final String outputFolder;
@@ -40,6 +40,7 @@ public abstract class AbstractParser implements Parser {
 		
 		closeEventBus();
 		closeSubscribers();
+		LOGGER.info("Finished");
 	}
 	
 	protected String getOutputFolder() {

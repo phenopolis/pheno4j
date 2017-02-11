@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.graph.db.domain.output.GeneToTermOutput;
 import com.graph.db.file.AbstractParser;
@@ -26,8 +24,6 @@ import com.graph.db.util.Constants;
  */
 public class GeneParser extends AbstractParser {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(GeneParser.class);
-
 	private final String fileName;
 	
 	public GeneParser() {
@@ -86,6 +82,5 @@ public class GeneParser extends AbstractParser {
 
 	public static void main(String[] args) {
 		new GeneParser().execute();
-		LOGGER.info("Finished");
 	}
 }
