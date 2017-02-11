@@ -2,12 +2,14 @@ package com.graph.db.file.person;
 
 import static com.graph.db.util.Constants.COMMA;
 import static com.graph.db.util.Constants.SEMI_COLON;
-import static com.graph.db.util.FileUtil.getLineNumberReaderForFile;
 import static com.graph.db.util.FileUtil.logLineNumber;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +48,11 @@ public class PersonParser extends AbstractParser {
 	}
 	
 	@Override
+	public Collection<File> getInputFiles() {
+		return Collections.singleton(new File(fileName));
+	}
+	
+	@Override
 	protected List<AbstractSubscriber> createSubscribers() {
 		GenericSubscriber<Map<String, Object>> personSubscriber = new PersonSubscriber(outputFolder, getParserClass());
 		GenericSubscriber<Map<String, Object>> personToObservedTermSubscriber = new PersonToTermSubscriber(outputFolder, getParserClass(), OutputFileType.PERSON_TO_OBSERVED_TERM, OBSERVED_TERMS_KEY);
@@ -55,27 +62,23 @@ public class PersonParser extends AbstractParser {
 	}
 
 	@Override
-	public void processData() {
-		try (LineNumberReader reader = getLineNumberReaderForFile(fileName);) {
-			String[] header = null;
-			String line;
+	public void processDataForFile(LineNumberReader reader) throws IOException {
+		String[] header = null;
+		String line;
+		
+		while (( line = reader.readLine()) != null) {
+			logLineNumber(reader, 1000);
 			
-			while (( line = reader.readLine()) != null) {
-				logLineNumber(reader, 1000);
-				
-				if (header == null) {
-					header = StringUtils.split(line, COMMA);
-					continue;
-				}
-				
-				String[] columns = StringUtils.split(line, COMMA);
-				if (header.length == columns.length) {
-					Map<String, Object> map = splitColumnsIntoKeyValuePairs(header, columns);
-					eventBus.post(map);
-				}
+			if (header == null) {
+				header = StringUtils.split(line, COMMA);
+				continue;
 			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+			
+			String[] columns = StringUtils.split(line, COMMA);
+			if (header.length == columns.length) {
+				Map<String, Object> map = splitColumnsIntoKeyValuePairs(header, columns);
+				eventBus.post(map);
+			}
 		}
 	}
 	

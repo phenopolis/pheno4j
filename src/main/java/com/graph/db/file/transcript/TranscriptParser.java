@@ -1,11 +1,13 @@
 package com.graph.db.file.transcript;
 
-import static com.graph.db.util.FileUtil.getLineNumberReaderForFile;
 import static com.graph.db.util.FileUtil.logLineNumber;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,14 +33,20 @@ public class TranscriptParser extends AbstractParser {
 	private final String fileName;
 	
 	public TranscriptParser() {
-		this.fileName = config.getString("transcriptParser.input.fileName");
+		this(config.getString("transcriptParser.input.fileName"));
+
+	}
+	
+	public TranscriptParser(String fileName) {
+		this.fileName = fileName;
 		if (StringUtils.isBlank(fileName)) {
 			throw new RuntimeException("fileName cannot be empty");
 		}
 	}
 	
-	public TranscriptParser(String fileName) {
-		this.fileName = fileName;
+	@Override
+	public Collection<File> getInputFiles() {
+		return Collections.singleton(new File(fileName));
 	}
 	
 	@Override
@@ -50,25 +58,21 @@ public class TranscriptParser extends AbstractParser {
 	}
 
 	@Override
-	public void processData() {
-		try (LineNumberReader reader = getLineNumberReaderForFile(fileName);) {
-			String line;
+	public void processDataForFile(LineNumberReader reader) throws IOException {
+		String line;
+		
+		while (( line = reader.readLine()) != null) {
+			logLineNumber(reader, 1000);
 			
-			while (( line = reader.readLine()) != null) {
-				logLineNumber(reader, 1000);
-				
-				if (isNotCommentRow(line)) {
-					String[] columns = StringUtils.split(line, Constants.TAB);
-					if (isTranscriptRow(columns)) {
-						String[] cells = StringUtils.split(columns[8], Constants.SEMI_COLON);
-						
-						Map<String, String> map = splitCellsIntoKeyValuePairs(cells);
-						eventBus.post(map);
-					}
+			if (isNotCommentRow(line)) {
+				String[] columns = StringUtils.split(line, Constants.TAB);
+				if (isTranscriptRow(columns)) {
+					String[] cells = StringUtils.split(columns[8], Constants.SEMI_COLON);
+					
+					Map<String, String> map = splitCellsIntoKeyValuePairs(cells);
+					eventBus.post(map);
 				}
 			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
 		}
 	}
 

@@ -11,9 +11,11 @@ import static com.graph.db.util.FileUtil.sendPoisonPillToQueue;
 import static com.graph.db.util.FileUtil.writeOutCsvFile;
 import static com.graph.db.util.FileUtil.writeOutCsvHeader;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -22,6 +24,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 
 import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,8 +71,13 @@ public class VcfParser implements Parser {
 	}
 	
 	@Override
+	public Collection<File> getInputFiles() {
+		throw new NotImplementedException();
+	}
+	
+	@Override
 	public void execute() {
-		try (LineNumberReader reader = getLineNumberReaderForFile(fileName)) {
+		try (LineNumberReader reader = getLineNumberReaderForFile(new File(fileName))) {
 			boolean found = false;
 			int personStartColumn = Integer.MAX_VALUE;
 			

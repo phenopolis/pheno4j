@@ -1,13 +1,13 @@
 package com.graph.db.file.annotation;
 
 import static com.graph.db.util.FileUtil.getAllJsonFiles;
-import static com.graph.db.util.FileUtil.getLineNumberReaderForFile;
 import static com.graph.db.util.FileUtil.logLineNumber;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -43,19 +43,20 @@ import com.graph.db.output.OutputFileType;
 public class AnnotationParser extends AbstractParser {
 	
 	private final String inputFolder;
+	private final Gson gson;
 
 	public AnnotationParser() {
-		this.inputFolder = config.getString("annotationParser.input.folder");
+		this(config.getString("annotationParser.input.folder"));
 	}
 	
 	public AnnotationParser(String inputFolder) {
 		this.inputFolder = inputFolder;
+		gson = createGson();
 	}
 	
-	private Gson createGson() {
-		GsonBuilder b = new GsonBuilder();
-        b.registerTypeAdapter(GeneticVariant.class, new CustomJsonDeserializer());
-        return b.create();
+	@Override
+	public Collection<File> getInputFiles() {
+		return getAllJsonFiles(inputFolder);
 	}
 
 	@Override
@@ -76,26 +77,21 @@ public class AnnotationParser extends AbstractParser {
 	}
 
 	@Override
-	public void processData() {
-		Gson gson = createGson();
-		File[] jsonFiles = getAllJsonFiles(inputFolder);
-
-		for (File jsonFile : jsonFiles) {
-			LOGGER.info("Processing file: {}", jsonFile);
+	public void processDataForFile(LineNumberReader reader) throws IOException {
+		String line;
+		
+		while (( line = reader.readLine()) != null) {
+			logLineNumber(reader, 1000);
 			
-			try (LineNumberReader reader = getLineNumberReaderForFile(jsonFile);) {
-				String line;
-				
-				while (( line = reader.readLine()) != null) {
-					logLineNumber(reader, 1000);
-					
-					GeneticVariant geneticVariant = gson.fromJson(line, GeneticVariant.class);
-					eventBus.post(geneticVariant);
-				}
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+			GeneticVariant geneticVariant = gson.fromJson(line, GeneticVariant.class);
+			eventBus.post(geneticVariant);
 		}
+	}
+	
+	private Gson createGson() {
+		GsonBuilder b = new GsonBuilder();
+        b.registerTypeAdapter(GeneticVariant.class, new CustomJsonDeserializer());
+        return b.create();
 	}
 
 	@Override

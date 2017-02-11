@@ -1,14 +1,16 @@
 package com.graph.db.file.term;
 
 import static com.graph.db.util.Constants.COLON;
-import static com.graph.db.util.FileUtil.getLineNumberReaderForFile;
 import static com.graph.db.util.FileUtil.logLineNumber;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,14 +36,19 @@ public class TermParser extends AbstractParser {
 	private final String fileName;
 	
 	public TermParser() {
-		this.fileName = config.getString("termParser.input.fileName");
+		this(config.getString("termParser.input.fileName"));
+	}
+	
+	public TermParser(String fileName) {
+		this.fileName = fileName;
 		if (StringUtils.isBlank(fileName)) {
 			throw new RuntimeException("fileName cannot be empty");
 		}
 	}
 	
-	public TermParser(String fileName) {
-		this.fileName = fileName;
+	@Override
+	public Collection<File> getInputFiles() {
+		return Collections.singleton(new File(fileName));
 	}
 	
 	@Override
@@ -53,29 +60,25 @@ public class TermParser extends AbstractParser {
 	}
 	
 	@Override
-	public void processData() {
-		try (LineNumberReader reader = getLineNumberReaderForFile(fileName)) {
-			String line;
+	public void processDataForFile(LineNumberReader reader) throws IOException {
+		String line;
+		
+		while (( line = reader.readLine()) != null) {
+			logLineNumber(reader, 1000);
 			
-			while (( line = reader.readLine()) != null) {
-				logLineNumber(reader, 1000);
-				
-				if ("[Term]".equals(line)) {
-					List<String> linesForTerm = new ArrayList<>();
-					while (( line = reader.readLine()) != null) {
-						if (EMPTY.equals(line)) {
-							break;
-						} else {
-							linesForTerm.add(line);
-						}
+			if ("[Term]".equals(line)) {
+				List<String> linesForTerm = new ArrayList<>();
+				while (( line = reader.readLine()) != null) {
+					if (EMPTY.equals(line)) {
+						break;
+					} else {
+						linesForTerm.add(line);
 					}
-					
-					RawTerm rawTerm = createRawTermFromLines(linesForTerm);
-					eventBus.post(rawTerm);
 				}
+				
+				RawTerm rawTerm = createRawTermFromLines(linesForTerm);
+				eventBus.post(rawTerm);
 			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
 		}
 	}
 	

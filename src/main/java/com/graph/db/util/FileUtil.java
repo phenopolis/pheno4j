@@ -15,6 +15,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -54,14 +55,14 @@ public final class FileUtil {
 		}
 	}
 	
-	public static File[] getAllJsonFiles(String folder) {
+	public static List<File> getAllJsonFiles(String folder) {
 		File dir = new File(folder);
 		FilenameFilter filter = (directory, name) -> name.toLowerCase().contains(".json");
 		File[] files = dir.listFiles(filter);
 		if (ArrayUtils.isEmpty(files)) {
 			throw new RuntimeException("No files in folder: " + folder);
 		}
-		return files;
+		return Arrays.asList(files);
 	}
 	
 	public static void logLineNumber(LineNumberReader reader, int threshold) {
@@ -91,10 +92,6 @@ public final class FileUtil {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-	}
-	
-	public static LineNumberReader getLineNumberReaderForFile(String fileName) {
-		return getLineNumberReaderForFile(new File(fileName));
 	}
 	
 	public static LineNumberReader getLineNumberReaderForFile(File file) {
