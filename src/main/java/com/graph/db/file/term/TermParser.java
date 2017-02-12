@@ -82,7 +82,7 @@ public class TermParser extends AbstractParser {
 		}
 	}
 	
-	protected RawTerm createRawTermFromLines(List<String> linesForTerm) {
+	private RawTerm createRawTermFromLines(List<String> linesForTerm) {
 		String termId = null;
 		String name = null;
 		List<String> is = new ArrayList<>();

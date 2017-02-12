@@ -1,47 +1,67 @@
 package com.graph.db.file.term;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentCaptor;
+import org.powermock.api.mockito.PowerMockito;
 
 import com.graph.db.domain.input.term.RawTerm;
+import com.graph.db.util.ManagedEventBus;
 
 public class TermParserTest {
 	
-	@Rule
-    public TemporaryFolder testFolder = new TemporaryFolder();
-	private TermParser termParser;
+	private TermParser parser;
+	private ManagedEventBus eventBusMock;
+	private LineNumberReader readerMock;
 	
+	@Rule
+    public ExpectedException thrown = ExpectedException.none();
+
 	@Before
-	public void before() throws IOException {
-		File tempFolder = testFolder.newFolder(getClass().getSimpleName());
-		termParser = new TermParser("file") {
-			@Override
-			protected String getOutputFolder() {
-				return tempFolder.toString();
-			}
-		};
-	}
-
-	@Test
-	public void termProducedFromListOfStrings() {
-		List<String> linesForTerm = Arrays.asList("[Term]", "id: HP:0000001", "name: All",
-				"comment: Root of all terms in the Human Phenotype Ontology.");
-		RawTerm rawTerm = termParser.createRawTermFromLines(linesForTerm);
+	public void before() {
+		parser = new TermParser("fileName");
 		
-		assertThat(rawTerm.getIsA(), is(empty()));
-		assertThat(rawTerm.getName(), is("All"));
-		assertThat(rawTerm.getTermId(), is("HP:0000001"));
+		eventBusMock = PowerMockito.mock(ManagedEventBus.class);
+		parser.setEventBus(eventBusMock);
+		
+		readerMock = PowerMockito.mock(LineNumberReader.class);
 	}
-
+	
+	@Test
+	public void whenNoFileIsProvidedThenExceptionIsThrown() {
+		thrown.expect(RuntimeException.class);
+	    thrown.expectMessage("fileName cannot be empty");
+	    
+		parser = new TermParser("");
+	}
+	
+	@Test
+	public void whenTranscriptRowIsReadThenItIsPosted() throws IOException {
+		when(readerMock.readLine())
+			.thenReturn("[Term]")
+			.thenReturn("id: HP:0000005")
+			.thenReturn("name: Mode of inheritance")
+			.thenReturn("alt_id: HP:0001453")
+			.thenReturn("synonym: \"Inheritance\" EXACT []")
+			.thenReturn("is_a: HP:0000001 ! All")
+			.thenReturn(null);
+		
+		parser.processDataForFile(readerMock);
+		
+		ArgumentCaptor<RawTerm> argument = ArgumentCaptor.forClass(RawTerm.class);
+		verify(eventBusMock).post(argument.capture());
+		assertEquals(Arrays.asList("HP:0000001"), argument.getValue().getIsA());
+		assertEquals("Mode of inheritance", argument.getValue().getName());
+		assertEquals("HP:0000005", argument.getValue().getTermId());
+	}
 }
