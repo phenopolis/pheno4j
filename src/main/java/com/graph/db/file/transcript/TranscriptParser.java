@@ -34,7 +34,6 @@ public class TranscriptParser extends AbstractParser {
 	
 	public TranscriptParser() {
 		this(config.getString("transcriptParser.input.fileName"));
-
 	}
 	
 	public TranscriptParser(String fileName) {

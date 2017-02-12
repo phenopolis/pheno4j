@@ -22,7 +22,7 @@ public abstract class AbstractParser implements Parser {
 	
 	protected final static Configuration config = PropertiesHolder.getInstance();
 	protected final String outputFolder;
-	protected final ManagedEventBus eventBus;
+	protected ManagedEventBus eventBus;
 	private final List<? extends AutoCloseable> subscribers;
 	
 	public AbstractParser() {
@@ -80,6 +80,10 @@ public abstract class AbstractParser implements Parser {
 		});
 	}
 	
+	public void setEventBus(ManagedEventBus eventBus) {
+		this.eventBus = eventBus;
+	}
+
 	protected abstract void processDataForFile(LineNumberReader reader) throws IOException;
 
 	protected abstract List<? extends AutoCloseable> createSubscribers();
