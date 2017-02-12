@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.graph.db.domain.input.annotation.GeneticVariant;
@@ -51,6 +53,10 @@ public class AnnotationParser extends AbstractParser {
 	
 	public AnnotationParser(String inputFolder) {
 		this.inputFolder = inputFolder;
+		if (StringUtils.isBlank(inputFolder)) {
+			throw new RuntimeException("inputFolder cannot be empty");
+		}
+		
 		gson = createGson();
 	}
 	

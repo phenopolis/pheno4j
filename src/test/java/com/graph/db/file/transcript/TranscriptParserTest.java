@@ -10,7 +10,9 @@ import java.io.LineNumberReader;
 import java.util.Map;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.powermock.api.mockito.PowerMockito;
 
 import com.google.common.collect.ImmutableMap;
@@ -21,6 +23,9 @@ public class TranscriptParserTest {
 	private TranscriptParser parser;
 	private ManagedEventBus eventBusMock;
 	private LineNumberReader readerMock;
+	
+	@Rule
+    public ExpectedException thrown = ExpectedException.none();
 
 	@Before
 	public void before() {
@@ -30,6 +35,14 @@ public class TranscriptParserTest {
 		parser.setEventBus(eventBusMock);
 		
 		readerMock = PowerMockito.mock(LineNumberReader.class);
+	}
+	
+	@Test
+	public void whenNoFileIsProvidedThenExceptionIsThrown() {
+		thrown.expect(RuntimeException.class);
+	    thrown.expectMessage("fileName cannot be empty");
+	    
+		parser = new TranscriptParser("");
 	}
 
 	@Test

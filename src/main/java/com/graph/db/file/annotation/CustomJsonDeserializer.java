@@ -25,7 +25,6 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 			variant.setTranscript_consequences(Collections.emptySet());
 		}
 		
-		//TODO is this needed?
 		updateVariantIdOnTranscriptConsequences(variant.getTranscript_consequences(), variant.getVariant_id());
 		
 		clearNonDoubleCadds(variant.getTranscript_consequences());
