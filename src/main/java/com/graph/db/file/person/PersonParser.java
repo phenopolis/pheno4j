@@ -40,11 +40,14 @@ public class PersonParser extends AbstractParser {
 	private final String fileName;
 	
 	public PersonParser() {
-		this.fileName = config.getString("personParser.input.fileName");
+		this(config.getString("personParser.input.fileName"));
 	}
 	
 	public PersonParser(String fileName) {
 		this.fileName = fileName;
+		if (StringUtils.isBlank(fileName)) {
+			throw new RuntimeException("fileName cannot be empty");
+		}
 	}
 	
 	@Override
@@ -88,7 +91,7 @@ public class PersonParser extends AbstractParser {
 			String key = header[i];
 			if (OBSERVED_TERMS_KEY.equals(key) || NON_OBSERVED_TERMS_KEY.equals(key)) {
 				String[] value = StringUtils.split(columns[i], SEMI_COLON);
-				result.put(key, value);
+				result.put(key, Arrays.asList(value));
 			} else {
 				result.put(key, columns[i]);
 			}

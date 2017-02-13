@@ -1,6 +1,7 @@
 package com.graph.db.file.person.subscriber;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import com.graph.db.domain.output.PersonToTermOutput;
@@ -21,7 +22,8 @@ public class PersonToTermSubscriber extends GenericSubscriber<Map<String, Object
 	@Override
 	public void processRow(Map<String, Object> map) {
 		String personId = (String) map.get(PersonParser.PERSON_KEY);
-		String[] list = (String[]) map.get(listKey);
+		@SuppressWarnings("unchecked")
+		List<String> list = (List<String>) map.get(listKey);
 		
 		for (String term : list) {
 			try {
