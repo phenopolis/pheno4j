@@ -46,7 +46,7 @@ public class TermParserTest {
 	}
 	
 	@Test
-	public void whenTranscriptRowIsReadThenItIsPosted() throws IOException {
+	public void whenTermBlockIsReadThenItIsPosted() throws IOException {
 		when(readerMock.readLine())
 			.thenReturn("[Term]")
 			.thenReturn("id: HP:0000005")

@@ -29,11 +29,14 @@ public class GeneParser extends AbstractParser {
 	private final String fileName;
 	
 	public GeneParser() {
-		this.fileName = config.getString("geneParser.input.fileName");
+		this(config.getString("geneParser.input.fileName"));
 	}
 	
 	public GeneParser(String fileName) {
 		this.fileName = fileName;
+		if (StringUtils.isBlank(fileName)) {
+			throw new RuntimeException("fileName cannot be empty");
+		}
 	}
 	
 	@Override
