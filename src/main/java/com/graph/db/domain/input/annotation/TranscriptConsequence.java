@@ -25,6 +25,14 @@ public class TranscriptConsequence {
 	private Integer canonical;
 	private Set<String> consequence_terms;
 	
+	public TranscriptConsequence() {
+	}
+	
+	public TranscriptConsequence(String variant_id, String hgvsc) {
+		this.variant_id = variant_id;
+		this.hgvsc = hgvsc;
+	}
+
 	public String getVariant_id() {
 		return variant_id;
 	}
@@ -114,5 +122,4 @@ public class TranscriptConsequence {
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
-
 }

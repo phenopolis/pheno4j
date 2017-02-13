@@ -22,7 +22,7 @@ public abstract class AbstractSubscriber implements AutoCloseable {
 	
 	protected final OutputFileType outputFileType;
 	protected final String fileName;
-	protected final CsvDozerBeanWriter beanWriter;
+	protected CsvDozerBeanWriter beanWriter;
 
 	public AbstractSubscriber(String outputFolder, Class<?> parserClass, OutputFileType outputFileType) {
 		this.outputFileType = outputFileType;
@@ -52,5 +52,9 @@ public abstract class AbstractSubscriber implements AutoCloseable {
 	}
 
 	protected void preClose() {
+	}
+
+	public void setBeanWriter(CsvDozerBeanWriter beanWriter) {
+		this.beanWriter = beanWriter;
 	}
 }
