@@ -2,8 +2,6 @@ package com.graph.db.file.term.subscriber;
 
 import static com.graph.db.util.Constants.HYPHEN;
 
-import java.io.IOException;
-
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.traverse.DepthFirstIterator;
@@ -33,10 +31,6 @@ public class TermToDescendantTermsSubscriber extends SetBasedGenericSubscriber<R
 		depthFirstSearchAndWriteOutResults(graph);
 	}
 
-	private void writeOutBean(RawTerm parentTerm, String child) throws IOException {
-		beanWriter.write(new TermToDescendantTermsOutput(parentTerm.getTermId(), child));
-	}
-	
 	private void addVerticesToGraph(DirectedGraph<String, String> graph) {
 		for (RawTerm rawTerm : set) {
 			graph.addVertex(rawTerm.getTermId());
@@ -52,17 +46,13 @@ public class TermToDescendantTermsSubscriber extends SetBasedGenericSubscriber<R
 	}
 	
 	private void depthFirstSearchAndWriteOutResults(DirectedGraph<String, String> graph) {
-		try {
-			for (RawTerm rawTerm : set) {
-				DepthFirstIterator<String, String> depthFirstIterator = new DepthFirstIterator<>(graph, rawTerm.getTermId());
-				
-				while (depthFirstIterator.hasNext()) {
-					String element = depthFirstIterator.next();
-					writeOutBean(rawTerm, element);
-				}
+		for (RawTerm rawTerm : set) {
+			DepthFirstIterator<String, String> depthFirstIterator = new DepthFirstIterator<>(graph, rawTerm.getTermId());
+			
+			while (depthFirstIterator.hasNext()) {
+				String element = depthFirstIterator.next();
+				write(new TermToDescendantTermsOutput(rawTerm.getTermId(), element));
 			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
 		}
 	}
 }

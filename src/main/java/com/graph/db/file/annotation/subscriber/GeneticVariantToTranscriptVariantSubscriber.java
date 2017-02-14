@@ -1,9 +1,6 @@
 package com.graph.db.file.annotation.subscriber;
 
-import static com.google.common.base.Throwables.throwIfUnchecked;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-
-import java.io.IOException;
 
 import com.graph.db.domain.input.annotation.GeneticVariant;
 import com.graph.db.domain.output.GeneticVariantToTranscriptVariantOutput;
@@ -21,12 +18,6 @@ public class GeneticVariantToTranscriptVariantSubscriber extends GenericSubscrib
 		variant.getTranscript_consequences().stream()
 			.filter(x -> isNotBlank(x.getHgvsc()))
 			.map((x) -> new GeneticVariantToTranscriptVariantOutput(x))
-			.forEach(x -> {
-				try {
-					beanWriter.write(x);
-				} catch (IOException e) {
-					throwIfUnchecked(e);
-				}
-			});
+			.forEach(x -> write(x));
 	}
 }

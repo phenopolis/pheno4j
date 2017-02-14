@@ -1,6 +1,5 @@
 package com.graph.db.file.transcript.subscriber;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,12 +37,8 @@ public class GeneSubscriber extends AbstractSubscriber {
 	
 	@Override
 	public void preClose() {
-		try {
-			for (GeneOutput s : set) {
-				beanWriter.write(s);
-			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		for (GeneOutput s : set) {
+			write(s);
 		}
 	}
 }

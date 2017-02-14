@@ -26,7 +26,6 @@ import com.graph.db.domain.input.annotation.TranscriptConsequence;
 import com.graph.db.domain.output.GeneticVariantToTranscriptVariantOutput;
 
 @RunWith(PowerMockRunner.class)
-//@PrepareForTest({GeneticVariantToTranscriptVariantSubscriber.class})
 public class GeneticVariantToTranscriptVariantSubscriberTest {
 	
 	private GeneticVariantToTranscriptVariantSubscriber subscriber;

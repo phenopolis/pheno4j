@@ -1,7 +1,5 @@
 package com.graph.db.file.annotation.subscriber;
 
-import java.io.IOException;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,17 +17,13 @@ public class TranscriptVariantToConsequenceTermSubscriber extends GenericSubscri
 
 	@Override
 	public void processRow(GeneticVariant variant) {
-        try {
-			for (TranscriptConsequence transcriptConsequence : variant.getTranscript_consequences()) {
-				if (StringUtils.isNoneBlank(transcriptConsequence.getHgvsc()) && CollectionUtils.isNotEmpty(transcriptConsequence.getConsequence_terms())) {
-					for (String consequenceTerm : transcriptConsequence.getConsequence_terms()) {
-						TranscriptVariantToConsequenceTermOutput output = new TranscriptVariantToConsequenceTermOutput(transcriptConsequence.getHgvsc(), consequenceTerm);
-						beanWriter.write(output);
-					}
+		for (TranscriptConsequence transcriptConsequence : variant.getTranscript_consequences()) {
+			if (StringUtils.isNoneBlank(transcriptConsequence.getHgvsc()) && CollectionUtils.isNotEmpty(transcriptConsequence.getConsequence_terms())) {
+				for (String consequenceTerm : transcriptConsequence.getConsequence_terms()) {
+					TranscriptVariantToConsequenceTermOutput output = new TranscriptVariantToConsequenceTermOutput(transcriptConsequence.getHgvsc(), consequenceTerm);
+					write(output);
 				}
 			}
-    	} catch (IOException e) {
-    		throw new RuntimeException(e);
-    	}
+		}
 	}
 }

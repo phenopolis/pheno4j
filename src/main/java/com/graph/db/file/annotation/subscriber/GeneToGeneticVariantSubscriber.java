@@ -1,11 +1,6 @@
 package com.graph.db.file.annotation.subscriber;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.graph.db.domain.input.annotation.GeneticVariant;
-import com.graph.db.domain.input.annotation.TranscriptConsequence;
 import com.graph.db.domain.output.GeneToGeneticVariantOutput;
 import com.graph.db.file.GenericSubscriber;
 import com.graph.db.output.OutputFileType;
@@ -18,18 +13,8 @@ public class GeneToGeneticVariantSubscriber extends GenericSubscriber<GeneticVar
 
 	@Override
 	public void processRow(GeneticVariant variant) {
-		Set<GeneToGeneticVariantOutput> set = new HashSet<>();
-		for (TranscriptConsequence transcriptConsequence : variant.getTranscript_consequences()) {
-			GeneToGeneticVariantOutput output = new GeneToGeneticVariantOutput(transcriptConsequence);
-			set.add(output);
-		}
-		
-    	try {
-			for (GeneToGeneticVariantOutput output : set) {
-				beanWriter.write(output);
-			}
-    	} catch (IOException e) {
-    		throw new RuntimeException(e);
-    	}
+		variant.getTranscript_consequences().stream()
+			.map(tc -> new GeneToGeneticVariantOutput(tc))
+			.forEach(output -> write(output));
 	}
 }

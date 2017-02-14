@@ -1,6 +1,5 @@
 package com.graph.db.file.person.subscriber;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,12 +25,8 @@ public class PersonToTermSubscriber extends GenericSubscriber<Map<String, Object
 		List<String> list = (List<String>) map.get(listKey);
 		
 		for (String term : list) {
-			try {
-				PersonToTermOutput output = new PersonToTermOutput(personId, term);
-				beanWriter.write(output);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+			PersonToTermOutput output = new PersonToTermOutput(personId, term);
+			write(output);
 		}
 	}
 }

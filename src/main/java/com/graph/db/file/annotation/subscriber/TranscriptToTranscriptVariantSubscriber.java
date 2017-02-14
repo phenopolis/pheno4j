@@ -1,7 +1,5 @@
 package com.graph.db.file.annotation.subscriber;
 
-import java.io.IOException;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.graph.db.domain.input.annotation.GeneticVariant;
@@ -18,15 +16,11 @@ public class TranscriptToTranscriptVariantSubscriber extends GenericSubscriber<G
 
 	@Override
 	public void processRow(GeneticVariant variant) {
-    	try {
-			for (TranscriptConsequence transcriptConsequence : variant.getTranscript_consequences()) {
-				if (StringUtils.isNoneBlank(transcriptConsequence.getHgvsc())) {
-					TranscriptToTranscriptVariantOutput output = new TranscriptToTranscriptVariantOutput(transcriptConsequence);
-					beanWriter.write(output);
-				}
+		for (TranscriptConsequence transcriptConsequence : variant.getTranscript_consequences()) {
+			if (StringUtils.isNoneBlank(transcriptConsequence.getHgvsc())) {
+				TranscriptToTranscriptVariantOutput output = new TranscriptToTranscriptVariantOutput(transcriptConsequence);
+				write(output);
 			}
-    	} catch (IOException e) {
-    		throw new RuntimeException(e);
-    	}
+		}
 	}
 }

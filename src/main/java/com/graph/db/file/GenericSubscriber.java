@@ -22,11 +22,7 @@ public class GenericSubscriber<InputType> extends AbstractSubscriber {
     	}
     	
     	final Object objectToWrite = getObjectToWrite(object);
-		try {
-			beanWriter.write(objectToWrite);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		write(objectToWrite);
     }
 
 	private Object getObjectToWrite(InputType object) {

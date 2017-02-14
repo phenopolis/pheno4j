@@ -40,6 +40,9 @@ public abstract class AbstractSubscriber implements AutoCloseable {
 		}
 	}
 	
+	protected void preClose() {
+	}
+	
 	@Override
 	public final void close() {
 		try {
@@ -51,7 +54,12 @@ public abstract class AbstractSubscriber implements AutoCloseable {
 		LOGGER.info("Wrote out: {}", fileName);
 	}
 
-	protected void preClose() {
+	public void write(final Object object) {
+		try {
+			beanWriter.write(object);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void setBeanWriter(CsvDozerBeanWriter beanWriter) {

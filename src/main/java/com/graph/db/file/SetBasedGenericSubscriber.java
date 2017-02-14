@@ -1,6 +1,5 @@
 package com.graph.db.file;
 
-import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,12 +15,8 @@ public class SetBasedGenericSubscriber<InputType, SetType> extends GenericSubscr
 	
 	@Override
 	public void preClose() {
-		try {
-			for (SetType s : set) {
-				beanWriter.write(s);
-			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		for (SetType s : set) {
+			write(s);
 		}
 	}
 }
