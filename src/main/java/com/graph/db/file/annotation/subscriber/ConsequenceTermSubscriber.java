@@ -1,9 +1,11 @@
 package com.graph.db.file.annotation.subscriber;
 
-import org.apache.commons.collections.CollectionUtils;
+import static java.util.stream.Collectors.toSet;
+
+import java.util.Objects;
+import java.util.Set;
 
 import com.graph.db.domain.input.annotation.GeneticVariant;
-import com.graph.db.domain.input.annotation.TranscriptConsequence;
 import com.graph.db.domain.output.ConsequenceTermOutput;
 import com.graph.db.file.SetBasedGenericSubscriber;
 import com.graph.db.output.OutputFileType;
@@ -16,12 +18,13 @@ public class ConsequenceTermSubscriber extends SetBasedGenericSubscriber<Genetic
 	
 	@Override
 	public void processRow(GeneticVariant variant) {
-    	for (TranscriptConsequence transcriptConsequence : variant.getTranscript_consequences()) {
-    		if (CollectionUtils.isNotEmpty(transcriptConsequence.getConsequence_terms())) {
-    			for (String consequenceTerm : transcriptConsequence.getConsequence_terms()) {
-    				set.add(new ConsequenceTermOutput(consequenceTerm));
-    			}
-    		}
-		}
+		Set<String> allConsequenceTerms = variant.getTranscript_consequences().stream()
+			.map(x -> x.getConsequence_terms())
+			.filter(Objects::nonNull)
+			.flatMap(l -> l.stream())
+			.collect(toSet());
+		
+		allConsequenceTerms.stream()
+			.forEach(x -> set.add(new ConsequenceTermOutput(x)));
 	}
 }

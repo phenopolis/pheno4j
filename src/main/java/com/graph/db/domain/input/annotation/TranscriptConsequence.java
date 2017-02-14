@@ -1,5 +1,8 @@
 package com.graph.db.domain.input.annotation;
 
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -26,10 +29,13 @@ public class TranscriptConsequence {
 	public TranscriptConsequence() {
 	}
 	
-	private TranscriptConsequence(String variant_id, String gene_id, String hgvsc) {
+	private TranscriptConsequence(String variant_id, String gene_id, String hgvsc, Set<String> consequenceTerms) {
 		this.variant_id = variant_id;
 		this.gene_id = gene_id;
 		this.hgvsc = hgvsc;
+		if (isNotEmpty(consequenceTerms)) {
+			this.consequence_terms = new HashSet<>(consequenceTerms);
+		}
 	}
 
 	public String getVariant_id() {
@@ -121,6 +127,7 @@ public class TranscriptConsequence {
 		private String gene_id;
 		private String variant_id;
 		private String hgvsc;
+		private final Set<String> consequenceTerms = new HashSet<>();
 		
 		public TranscriptConsequenceBuilder geneId(String gene_id) {
 			this.gene_id = gene_id;
@@ -137,8 +144,13 @@ public class TranscriptConsequence {
 			return this;
 		}
 		
+		public TranscriptConsequenceBuilder addConsequenceTerm(String consequenceTerm) {
+			consequenceTerms.add(consequenceTerm);
+			return this;
+		}
+		
 		public TranscriptConsequence build() {
-			return new TranscriptConsequence(variant_id, gene_id, hgvsc);
+			return new TranscriptConsequence(variant_id, gene_id, hgvsc, consequenceTerms);
 		}
 	}
 }

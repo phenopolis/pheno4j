@@ -47,7 +47,7 @@ public class GeneticVariantToTranscriptVariantSubscriberTest {
 		
 		subscriber.processRow(variant);
 		
-		//no data is sent to the eventBus
+		//no data is written out
 		verify(beanWriterMock, times(0)).write(any());
 	}
 	

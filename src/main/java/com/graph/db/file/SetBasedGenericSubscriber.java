@@ -1,5 +1,6 @@
 package com.graph.db.file;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -18,5 +19,9 @@ public class SetBasedGenericSubscriber<InputType, SetType> extends GenericSubscr
 		for (SetType s : set) {
 			write(s);
 		}
+	}
+
+	public Set<SetType> getSet() {
+		return Collections.unmodifiableSet(set);
 	}
 }
