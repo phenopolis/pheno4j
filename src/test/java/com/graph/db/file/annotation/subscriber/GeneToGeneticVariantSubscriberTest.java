@@ -39,10 +39,7 @@ public class GeneToGeneticVariantSubscriberTest {
 	@Test
 	public void whenCorrectDataIsSuppliedThenItIsWrittenOut() throws IOException {
 		GeneticVariant variant = new GeneticVariant();
-		TranscriptConsequence transcriptConsequence = new TranscriptConsequence.TranscriptConsequenceBuilder()
-			.geneId("gene_id")
-			.variantId("variant_id")
-			.build();
+		TranscriptConsequence transcriptConsequence = new TranscriptConsequence("variant_id", "gene_id", "hgvsc", null);
 		Set<TranscriptConsequence> transcript_consequences = Sets.newHashSet(transcriptConsequence);
 		variant.setTranscript_consequences(transcript_consequences);
 		

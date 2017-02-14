@@ -39,10 +39,7 @@ public class ConsequenceTermSubscriberTest {
 	@Test
 	public void whenConsequenceTermsIsNullThenNoExceptionIsThrown() throws IOException {
 		GeneticVariant variant = new GeneticVariant();
-		TranscriptConsequence transcriptConsequence = new TranscriptConsequence.TranscriptConsequenceBuilder()
-				.variantId("variant_id")
-				.hgvsc("hgvsc")
-				.build();
+		TranscriptConsequence transcriptConsequence = new TranscriptConsequence("variant_id", "gene_id", "hgvsc", null);
 		Set<TranscriptConsequence> transcript_consequences = Sets.newHashSet(transcriptConsequence);
 		variant.setTranscript_consequences(transcript_consequences);
 		
@@ -56,12 +53,8 @@ public class ConsequenceTermSubscriberTest {
 	@Test
 	public void whenCorrectDataIsSuppliedThenItIsWrittenOut() throws Exception {
 		GeneticVariant variant = new GeneticVariant();
-		TranscriptConsequence transcriptConsequence = new TranscriptConsequence.TranscriptConsequenceBuilder()
-				.variantId("variant_id")
-				.hgvsc("hgvsc")
-				.addConsequenceTerm("consequenceTerm1")
-				.addConsequenceTerm("consequenceTerm2")
-				.build();
+		TranscriptConsequence transcriptConsequence = new TranscriptConsequence("variant_id", "gene_id", "hgvsc",
+				Sets.newHashSet("consequenceTerm1", "consequenceTerm2"));
 		Set<TranscriptConsequence> transcript_consequences = Sets.newHashSet(transcriptConsequence);
 		variant.setTranscript_consequences(transcript_consequences);
 		

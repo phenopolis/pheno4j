@@ -29,7 +29,7 @@ public class TranscriptConsequence {
 	public TranscriptConsequence() {
 	}
 	
-	private TranscriptConsequence(String variant_id, String gene_id, String hgvsc, Set<String> consequenceTerms) {
+	public TranscriptConsequence(String variant_id, String gene_id, String hgvsc, Set<String> consequenceTerms) {
 		this.variant_id = variant_id;
 		this.gene_id = gene_id;
 		this.hgvsc = hgvsc;
@@ -121,36 +121,5 @@ public class TranscriptConsequence {
 		return new EqualsBuilder()
 				.append(this.hgvsc, otherObject.hgvsc)
 				.isEquals();
-	}
-	
-	public static class TranscriptConsequenceBuilder {
-		private String gene_id;
-		private String variant_id;
-		private String hgvsc;
-		private final Set<String> consequenceTerms = new HashSet<>();
-		
-		public TranscriptConsequenceBuilder geneId(String gene_id) {
-			this.gene_id = gene_id;
-			return this;
-		}
-		
-		public TranscriptConsequenceBuilder variantId(String variant_id) {
-			this.variant_id = variant_id;
-			return this;
-		}
-		
-		public TranscriptConsequenceBuilder hgvsc(String hgvsc) {
-			this.hgvsc = hgvsc;
-			return this;
-		}
-		
-		public TranscriptConsequenceBuilder addConsequenceTerm(String consequenceTerm) {
-			consequenceTerms.add(consequenceTerm);
-			return this;
-		}
-		
-		public TranscriptConsequence build() {
-			return new TranscriptConsequence(variant_id, gene_id, hgvsc, consequenceTerms);
-		}
 	}
 }
