@@ -24,9 +24,8 @@ public class PersonToTermSubscriber extends GenericSubscriber<Map<String, Object
 		@SuppressWarnings("unchecked")
 		List<String> list = (List<String>) map.get(listKey);
 		
-		for (String term : list) {
-			PersonToTermOutput output = new PersonToTermOutput(personId, term);
-			write(output);
-		}
+		list.stream()
+			.map(term -> new PersonToTermOutput(personId, term))
+			.forEach(output -> write(output));
 	}
 }

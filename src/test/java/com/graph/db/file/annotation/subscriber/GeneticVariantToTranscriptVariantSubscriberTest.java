@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -31,9 +29,6 @@ public class GeneticVariantToTranscriptVariantSubscriberTest {
 	private GeneticVariantToTranscriptVariantSubscriber subscriber;
 	private CsvDozerBeanWriter beanWriterMock;
 	
-	@Rule
-    public ExpectedException thrown = ExpectedException.none();
-
 	@Before
 	public void before() {
 		suppress(constructorsDeclaredIn(GeneticVariantToTranscriptVariantSubscriber.class));
