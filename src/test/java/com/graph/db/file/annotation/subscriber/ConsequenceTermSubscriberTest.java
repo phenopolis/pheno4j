@@ -71,6 +71,5 @@ public class ConsequenceTermSubscriberTest {
 		assertThat(set, hasSize(2));
 		assertThat(set, hasItems(hasProperty("consequenceTerm", is("consequenceTerm1"))));
 		assertThat(set, hasItems(hasProperty("consequenceTerm", is("consequenceTerm2"))));
-		
 	}
 }
