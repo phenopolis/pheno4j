@@ -4,8 +4,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class TranscriptConsequence {
 
@@ -28,8 +26,9 @@ public class TranscriptConsequence {
 	public TranscriptConsequence() {
 	}
 	
-	public TranscriptConsequence(String variant_id, String hgvsc) {
+	private TranscriptConsequence(String variant_id, String gene_id, String hgvsc) {
 		this.variant_id = variant_id;
+		this.gene_id = gene_id;
 		this.hgvsc = hgvsc;
 	}
 
@@ -117,9 +116,29 @@ public class TranscriptConsequence {
 				.append(this.hgvsc, otherObject.hgvsc)
 				.isEquals();
 	}
-
-	@Override
-	public String toString() {
-		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	
+	public static class TranscriptConsequenceBuilder {
+		private String gene_id;
+		private String variant_id;
+		private String hgvsc;
+		
+		public TranscriptConsequenceBuilder geneId(String gene_id) {
+			this.gene_id = gene_id;
+			return this;
+		}
+		
+		public TranscriptConsequenceBuilder variantId(String variant_id) {
+			this.variant_id = variant_id;
+			return this;
+		}
+		
+		public TranscriptConsequenceBuilder hgvsc(String hgvsc) {
+			this.hgvsc = hgvsc;
+			return this;
+		}
+		
+		public TranscriptConsequence build() {
+			return new TranscriptConsequence(variant_id, gene_id, hgvsc);
+		}
 	}
 }
