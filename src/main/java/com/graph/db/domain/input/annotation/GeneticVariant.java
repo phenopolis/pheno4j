@@ -54,7 +54,7 @@ public class GeneticVariant {
 		return allele_freq;
 	}
 	
-	public boolean isHasExac() {
+	public Boolean isHasExac() {
 		return hasExac;
 	}
 
@@ -66,5 +66,4 @@ public class GeneticVariant {
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
-
 }

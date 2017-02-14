@@ -75,8 +75,6 @@ public class ImportCommandGenerator {
 			}
 		}
 		
-//		map.put("> " + inputFolderPath + File.separator + "neo4j-log.txt &");
-		
 		logImportCommandToConsole(map);
 		return convertMapToStringArray(map);
 	}
