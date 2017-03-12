@@ -166,7 +166,7 @@ WITH distinct gv, gs
 MATCH (r:Person)<-[:GeneticVariantToPerson]-(gv)
 WITH distinct gv, gs, r
 MATCH (p:Term)-[:TermToDescendantTerms]->(q:Term)<-[:PersonToObservedTerm]-(r)
-WHERE p.termId ='HP:0000505'
+WHERE p.termId ='HP:0000556'
 RETURN distinct r.personId, gv.variantId, gs.gene_name
 ORDER BY r.personId asc;
 ```
