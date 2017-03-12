@@ -162,7 +162,13 @@ WHERE gv.allele_freq < 0.001
 WITH distinct gv, gs
 MATCH (gv)-[:GeneticVariantToTranscriptVariant]->(ts:TranscriptVariant)
 WHERE ts.cadd > 20 
-RETURN distinct gv.variantId, gs.gene_name;
+WITH distinct gv, gs
+MATCH (r:Person)<-[:GeneticVariantToPerson]-(gv)
+WITH distinct gv, gs, r
+MATCH (p:Term)-[:TermToDescendantTerms]->(q:Term)<-[:PersonToObservedTerm]-(r)
+WHERE p.termId ='HP:0000505'
+RETURN distinct r.personId, gv.variantId, gs.gene_name
+ORDER BY r.personId asc;
 ```
 ### For an Individual, rank their variants by the number of occurrences in other Individuals
 ```
