@@ -210,5 +210,16 @@ WITH p, q, v, intersection
 RETURN p.personId, q.personId, intersection, size(collect(distinct v)) as unionSum, (round((intersection/toFloat(size(collect(distinct v))))*100.0*10)/10) as PercentShared
 ORDER BY PercentShared DESC;
 ```
+### Get rare damaging variants in Gene TTLL5
+```
+MATCH (gs:Gene {gene_name:"TTLL5"})-[:GeneToGeneticVariant]->(gv:GeneticVariant)
+WHERE gv.allele_freq < 0.001 
+WITH distinct gv
+MATCH (gv)-[:GeneticVariantToTranscriptVariant]->(ts:TranscriptVariant)
+WHERE ts.cadd > 20 
+WITH distinct gv
+MATCH (gv)-[:GeneticVariantToPerson]->(p:Person)-[:PersonToObservedTerm]-(t:Term)
+return gv.variantId, p.personId, t.termId, t.name
+```
 # Further reading
 [Additional Documentation](docs/Additional Documentation.md)
