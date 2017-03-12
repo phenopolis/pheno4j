@@ -137,8 +137,7 @@ RETURN count(s.gene_id);
 ## Find Variants which have a frequency less than 0.001 and a CADD score greater than 20
 ```
 MATCH (n:GeneticVariant)-[:GeneticVariantToTranscriptVariant]->(tv:TranscriptVariant)
-WHERE n.allele_freq < 0.001 and tv.cadd > 20 
-RETURN count(*);
+WHERE n.allele_freq < 0.001 and tv.cadd > 20  RETURN count(distinct n);
 ```
 ## For a Term, find all the Descendant Terms
 ```
