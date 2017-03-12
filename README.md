@@ -159,10 +159,10 @@ WHERE p.termId ='HP:0000556'
 WITH distinct gs
 MATCH (gs)-[:GeneToGeneticVariant]->(gv:GeneticVariant)
 WHERE gv.allele_freq < 0.001 
-WITH distinct gv
+WITH distinct gv, gs
 MATCH (gv)-[:GeneticVariantToTranscriptVariant]->(ts:TranscriptVariant)
 WHERE ts.cadd > 20 
-RETURN count(distinct gv);
+RETURN distinct gv.variantId, gs.gene_name;
 ```
 ### For an Individual, rank their variants by the number of occurrences in other Individuals
 ```
