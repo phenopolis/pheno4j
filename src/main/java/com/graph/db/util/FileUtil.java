@@ -55,14 +55,25 @@ public final class FileUtil {
 		}
 	}
 	
+	/**
+	 * First try to load all *.json.gz files, if none present then try to load
+	 * *.json files
+	 */
 	public static List<File> getAllJsonFiles(String folder) {
 		File dir = new File(folder);
-		FilenameFilter filter = (directory, name) -> name.toLowerCase().contains(".json");
-		File[] files = dir.listFiles(filter);
-		if (ArrayUtils.isEmpty(files)) {
+		File[] filesForType = getAllFilesForType(dir, (directory, name) -> name.toLowerCase().endsWith(".json.gz"));
+		if (ArrayUtils.isEmpty(filesForType)) {
+			filesForType = getAllFilesForType(dir, (directory, name) -> name.toLowerCase().endsWith(".json"));
+		}
+		
+		if (ArrayUtils.isEmpty(filesForType)) {
 			throw new RuntimeException("No files in folder: " + folder);
 		}
-		return Arrays.asList(files);
+		return Arrays.asList(filesForType);
+	}
+	
+	private static File[] getAllFilesForType(File dir, FilenameFilter filter) {
+		return dir.listFiles(filter);
 	}
 	
 	public static void logLineNumber(LineNumberReader reader, int threshold) {
