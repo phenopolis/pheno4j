@@ -1,5 +1,7 @@
 package com.graph.db.domain.output;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import com.graph.db.domain.input.annotation.GeneticVariant;
 import com.graph.db.domain.output.annotation.Id;
 import com.graph.db.domain.output.annotation.Index;
@@ -34,7 +36,7 @@ public class GeneticVariantOutput {
 	private String EXAC_AC_OTH;
 	private String EXAC_AC_POPMAX;
 	private String EXAC_AC_SAS;
-	private String EXAC_AF;
+	private Double EXAC_AF;
 	private String EXAC_ALT;
 	private String EXAC_AN;
 	private String EXAC_AN_Adj;
@@ -133,7 +135,11 @@ public class GeneticVariantOutput {
 			this.EXAC_AC_OTH = geneticVariant.getEXAC().getAC_OTH();
 			this.EXAC_AC_POPMAX = geneticVariant.getEXAC().getAC_POPMAX();
 			this.EXAC_AC_SAS = geneticVariant.getEXAC().getAC_SAS();
-			this.EXAC_AF = geneticVariant.getEXAC().getAF();
+			if (NumberUtils.isNumber(geneticVariant.getEXAC().getAF())) {
+				this.EXAC_AF = Double.valueOf(geneticVariant.getEXAC().getAF());
+			} else {
+				this.EXAC_AF = 1d;
+			}
 			this.EXAC_ALT = geneticVariant.getEXAC().getALT();
 			this.EXAC_AN = geneticVariant.getEXAC().getAN();
 			this.EXAC_AN_Adj = geneticVariant.getEXAC().getAN_Adj();
@@ -299,7 +305,7 @@ public class GeneticVariantOutput {
 		return EXAC_AC_SAS;
 	}
 
-	public String getEXAC_AF() {
+	public Double getEXAC_AF() {
 		return EXAC_AF;
 	}
 

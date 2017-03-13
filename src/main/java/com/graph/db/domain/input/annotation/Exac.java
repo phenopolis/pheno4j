@@ -160,6 +160,10 @@ public class Exac {
 	public String getAF() {
 		return AF;
 	}
+	
+	public void setAF(String AF) {
+		this.AF = AF;
+	}
 
 	public String getALT() {
 		return ALT;
@@ -445,5 +449,4 @@ public class Exac {
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
-
 }

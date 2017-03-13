@@ -12,6 +12,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.graph.db.domain.input.annotation.Exac;
 import com.graph.db.domain.input.annotation.GeneticVariant;
 import com.graph.db.domain.input.annotation.TranscriptConsequence;
 
@@ -29,6 +30,7 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 		
 		clearNonDoubleCadds(variant.getTranscript_consequences());
 		setHasExac(variant);
+		defaultNonDoubleExacAf(variant);
 		
 		return variant;
 	}
@@ -48,7 +50,16 @@ public class CustomJsonDeserializer implements JsonDeserializer<GeneticVariant> 
 		}
 	}
 	
-	private void setHasExac(GeneticVariant annotatedVariant) {
-		annotatedVariant.setHasExac(annotatedVariant.getEXAC() != null);
+	private void setHasExac(GeneticVariant variant) {
+		variant.setHasExac(variant.getEXAC() != null);
+	}
+	
+	private void defaultNonDoubleExacAf(GeneticVariant variant) {
+		Exac exac = variant.getEXAC();
+		if (exac != null) {
+			if (!NumberUtils.isNumber(exac.getAF())) {
+				exac.setAF("1");
+			}
+		}
 	}
 }
