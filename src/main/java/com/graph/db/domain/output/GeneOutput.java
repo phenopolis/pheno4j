@@ -7,11 +7,13 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.graph.db.domain.input.annotation.TranscriptConsequence;
 import com.graph.db.domain.output.annotation.Id;
+import com.graph.db.domain.output.annotation.Index;
 
 public class GeneOutput {
 	
 	@Id(name = "gene_id")
 	private final String gene_id;
+	@Index
 	private final String gene_name;
 	
 	public GeneOutput(Map<String, String> map) {
