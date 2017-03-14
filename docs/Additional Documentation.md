@@ -24,7 +24,8 @@ This parses the genotype VCF file containing the variant to individual relations
 
 | Nodes | Relationships |
 | --- | --- |
-| Person  | GeneticVariantToPerson |
+| Person  | HetVariantToPerson |
+| | HomVariantToPerson |
 
 ### AnnotationParser ###
 This parses the annotation file produced by the Variant Effect Predictor in the JSON format (VCF format to be supported soon).
@@ -82,3 +83,4 @@ To ensure optimum performance for the queries the following Constraints and Inde
 - GeneticVariant - allele_freq
 - TranscriptVariant - cadd
 - GeneticVariant - hasExac
+- Gene - gene_name
