@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.graph.db.file.Parser;
+import com.graph.db.output.OutputFileType;
 import com.graph.db.util.PropertiesHolder;
 
 /**
@@ -42,7 +43,8 @@ import com.graph.db.util.PropertiesHolder;
  * - Person
  * 
  * Relationships
- * - GeneticVariantToPerson
+ * - HetVariantToPerson
+ * - HomVariantToPerson
  */
 public class VcfParser implements Parser {
 	
@@ -50,7 +52,8 @@ public class VcfParser implements Parser {
 	
 	private static final Configuration config = PropertiesHolder.getInstance();
 	
-	private final BlockingQueue<String> geneticVariantToPersonBlockingQueue = new ArrayBlockingQueue<>(1024);
+	private final BlockingQueue<String> hetVariantToPersonBlockingQueue = new ArrayBlockingQueue<>(1024);
+	private final BlockingQueue<String> homVariantToPersonBlockingQueue = new ArrayBlockingQueue<>(1024);
 	private final Map<Integer, String> indexToPerson = new HashMap<>();
 
 	private final String outputFolder;
@@ -81,8 +84,10 @@ public class VcfParser implements Parser {
 			boolean found = false;
 			int personStartColumn = Integer.MAX_VALUE;
 			
-	        Runnable geneticVariantToPersonBlockingQueueConsumer = new QueueToFileConsumer(geneticVariantToPersonBlockingQueue, outputFolder, getClass());
-	        new Thread(geneticVariantToPersonBlockingQueueConsumer).start();
+			Runnable hetVariantToPersonBlockingQueueConsumer = new QueueToFileConsumer(OutputFileType.HET_VARIANT_TO_PERSON, hetVariantToPersonBlockingQueue, outputFolder, getClass());
+			Runnable homVariantToPersonBlockingQueueConsumer = new QueueToFileConsumer(OutputFileType.HOM_VARIANT_TO_PERSON, homVariantToPersonBlockingQueue, outputFolder, getClass());
+			new Thread(hetVariantToPersonBlockingQueueConsumer).start();
+			new Thread(homVariantToPersonBlockingQueueConsumer).start();
 	        
 	        ForkJoinPool forkJoinPool = new ForkJoinPool();
 	        
@@ -126,7 +131,8 @@ public class VcfParser implements Parser {
 					}
 				}
 			}
-			sendPoisonPillToQueue(geneticVariantToPersonBlockingQueue);
+			sendPoisonPillToQueue(hetVariantToPersonBlockingQueue);
+			sendPoisonPillToQueue(homVariantToPersonBlockingQueue);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -139,7 +145,8 @@ public class VcfParser implements Parser {
 	}
 	
 	private void writeOutHeaders() {
-		writeOutCsvHeader(outputFolder, "GeneticVariantToPerson", Arrays.asList(":START_ID(GeneticVariant),:END_ID(Person),isHom:boolean"));
+		writeOutCsvHeader(outputFolder, "HetVariantToPerson", Arrays.asList(":START_ID(GeneticVariant),:END_ID(Person)"));
+		writeOutCsvHeader(outputFolder, "HomVariantToPerson", Arrays.asList(":START_ID(GeneticVariant),:END_ID(Person)"));
 	}
 
 	private class RowAction extends RecursiveAction {
@@ -170,9 +177,15 @@ public class VcfParser implements Parser {
 					boolean isHom = "1/1".equals(substringBeforeFirstColon);
 					boolean isHet = "0/1".equals(substringBeforeFirstColon);
 					
-					if (isHet || isHom) {
+					if (isHet) {
 						try {
-							geneticVariantToPersonBlockingQueue.put(variantId + COMMA + indexToPerson.get(i) + COMMA + isHom);
+							hetVariantToPersonBlockingQueue.put(variantId + COMMA + indexToPerson.get(i));
+						} catch (InterruptedException e) {
+							throw new RuntimeException(e);
+						}
+					} else if (isHom) {
+						try {
+							homVariantToPersonBlockingQueue.put(variantId + COMMA + indexToPerson.get(i));
 						} catch (InterruptedException e) {
 							throw new RuntimeException(e);
 						}

@@ -18,7 +18,7 @@ public class HeaderGenerator {
 	
 	private final String outputFolder;
 	
-	private static final EnumSet<OutputFileType> EXCLUSION_SET = EnumSet.of(OutputFileType.GENETIC_VARIANT_TO_PERSON);
+	private static final EnumSet<OutputFileType> EXCLUSION_SET = EnumSet.of(OutputFileType.HET_VARIANT_TO_PERSON, OutputFileType.HOM_VARIANT_TO_PERSON);
 
 	public HeaderGenerator() {
 		PropertiesConfiguration config = PropertiesHolder.getInstance();

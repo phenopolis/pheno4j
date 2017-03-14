@@ -57,7 +57,8 @@ public enum OutputFileType {
 	PERSON_TO_OBSERVED_TERM(PersonToTermOutput.class, Neo4jMapping.PersonToObservedTerm, PersonParser.class),
 	PERSON_TO_NON_OBSERVED_TERM(PersonToTermOutput.class, Neo4jMapping.PersonToNonObservedTerm, PersonParser.class),
 	PERSON(PersonOutput.class, Neo4jMapping.Person, VcfParser.class, PersonParser.class),
-	GENETIC_VARIANT_TO_PERSON(NotImplementedException.class, Neo4jMapping.GeneticVariantToPerson, VcfParser.class),
+	HET_VARIANT_TO_PERSON(NotImplementedException.class, Neo4jMapping.HetVariantToPerson, VcfParser.class),
+	HOM_VARIANT_TO_PERSON(NotImplementedException.class, Neo4jMapping.HomVariantToPerson, VcfParser.class),
 	;
 	
 	private final Class<?> beanClass;

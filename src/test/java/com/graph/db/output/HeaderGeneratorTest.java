@@ -67,7 +67,8 @@ public class HeaderGeneratorTest {
 			case PERSON_TO_NON_OBSERVED_TERM:
 				expectedHeader = ":START_ID(Person),:END_ID(Term)";
 				break;
-			case GENETIC_VARIANT_TO_PERSON:
+			case HET_VARIANT_TO_PERSON:
+			case HOM_VARIANT_TO_PERSON:
 				continue;
 			default:
 				throw new IllegalStateException("outputFileType: " + outputFileType);

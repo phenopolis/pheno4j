@@ -18,11 +18,13 @@ public class QueueToFileConsumer implements Runnable {
 	
     private static final Logger LOGGER = LoggerFactory.getLogger(QueueToFileConsumer.class);
 	
+    private final OutputFileType outputFileType;
     private final BlockingQueue<String> queue;
 	private final PrintWriter writer;
 
-    public QueueToFileConsumer(BlockingQueue<String> queue, String outputFolder, Class<? extends VcfParser> clazz) {
-        this.queue = queue;
+    public QueueToFileConsumer(OutputFileType outputFileType, BlockingQueue<String> queue, String outputFolder, Class<? extends VcfParser> clazz) {
+        this.outputFileType = outputFileType;
+		this.queue = queue;
         
         FileWriter fileWriter = getFileWriter(outputFolder, clazz);
 	    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
@@ -32,7 +34,7 @@ public class QueueToFileConsumer implements Runnable {
 	private FileWriter getFileWriter(String outputFolder, Class<? extends VcfParser> clazz) {
 		FileWriter fileWriter;
 		try {
-			String filePathAndName = FileUtil.createFileName(outputFolder, clazz, OutputFileType.GENETIC_VARIANT_TO_PERSON);
+			String filePathAndName = FileUtil.createFileName(outputFolder, clazz, outputFileType);
 			fileWriter = new FileWriter(filePathAndName, true);
 			LOGGER.info("Created fileWriter for: {}", filePathAndName);
 		} catch (IOException e) {

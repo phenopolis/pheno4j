@@ -20,13 +20,14 @@ public enum Neo4jMapping {
     	TermToDescendantTerms(RELATIONSHIP),
     	PersonToObservedTerm(RELATIONSHIP),
     	PersonToNonObservedTerm(RELATIONSHIP),
-    	GeneticVariantToPerson(RELATIONSHIP),
     	GeneToGeneticVariant(RELATIONSHIP),
     	GeneticVariantToTranscriptVariant(RELATIONSHIP),
     	TranscriptToTranscriptVariant(RELATIONSHIP),
     	TranscriptVariantToConsequenceTerm(RELATIONSHIP),
     	GeneToTerm(RELATIONSHIP),
     	TranscriptToGene(RELATIONSHIP),
+    	HetVariantToPerson(RELATIONSHIP),
+    	HomVariantToPerson(RELATIONSHIP),
     ;
 	
 	private final Neo4jMapping parent;
