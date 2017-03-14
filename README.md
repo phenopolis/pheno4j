@@ -230,4 +230,4 @@ MATCH (gv)-[]->(p:Person)-[:PersonToObservedTerm]-(t:Term)
 return gv.variantId, p.personId, t.termId, t.name
 ```
 # Further reading
-[Additional Documentation](docs/Additional Documentation.md)
+[Additional Documentation](docs/Additional-Documentation.md)
