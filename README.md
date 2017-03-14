@@ -78,20 +78,20 @@ curl -H "Content-Type: application/json" -X POST -d '{"password":"1"}' -u neo4j:
 These can be run in the browser interface or via the neo4j-shell ([See here for more information](http://neo4j.com/docs/operations-manual/current/tools/cypher-shell/))
 ## All Variants for an individual
 ```
-MATCH (gv:GeneticVariant)-[:GeneticVariantToPerson]->(p:Person)
+MATCH (gv:GeneticVariant)-[]->(p:Person)
 WHERE p.personId ='person1'
 RETURN count(gv);
 ```
 ## Individuals who have a particular variant
 ```
-MATCH (gv:GeneticVariant)-[:GeneticVariantToPerson]->(p:Person)
+MATCH (gv:GeneticVariant)-[]->(p:Person)
 WHERE gv.variantId ='22-51171497-G-A'
 RETURN p.personId;
 ```
 ## Find Variants shared by a list of Individuals
 ```
 WITH ["person1","person2"] as persons
-MATCH (p:Person)<-[:GeneticVariantToPerson]-(v:GeneticVariant) 
+MATCH (p:Person)<-[]-(v:GeneticVariant) 
 WHERE p.personId IN persons
 WITH v, count(*) as c, persons
 WHERE c = size(persons)
@@ -100,26 +100,26 @@ RETURN count(v.variantId);
 ## Rank Shared Variants by occurences in all Individuals
 ```
 WITH ["person1","person2"] as persons
-MATCH (p:Person)<-[:GeneticVariantToPerson]-(v:GeneticVariant) 
+MATCH (p:Person)<-[]-(v:GeneticVariant) 
 WHERE p.personId IN persons
 and v.allele_freq < 0.01
 WITH v, count(*) as c, persons
 WHERE c = size(persons)
 with v
-return v.variantId, size((v)-[:GeneticVariantToPerson]-())  as count
+return v.variantId, size((v)-[]-())  as count
 ORDER BY count asc
 LIMIT 10;
 ```
 ## Find Variants shared by a list of Individuals, that no one else has
 ```
 WITH ["person1","person2"] as individuals
-MATCH (p:Person)<-[:GeneticVariantToPerson]-(v:GeneticVariant) 
+MATCH (p:Person)<-[]-(v:GeneticVariant) 
 WHERE p.personId IN individuals
 WITH v, count(*) as c, individuals
 WHERE c = size(individuals)
 with v, individuals
 MATCH (v:GeneticVariant)
-where size((v)-[:GeneticVariantToPerson]-()) = size(individuals)
+where size((v)-[]-()) = size(individuals)
 RETURN v.variantId;
 ```
 ## Individuals who have a Term
@@ -165,7 +165,7 @@ WITH distinct gv, gs
 MATCH (gv)-[:GeneticVariantToTranscriptVariant]->(ts:TranscriptVariant)
 WHERE ts.cadd > 20 
 WITH distinct gv, gs
-MATCH (r:Person)<-[:GeneticVariantToPerson]-(gv)
+MATCH (r:Person)<-[]-(gv)
 WITH distinct gv, gs, r
 MATCH (p:Term)-[:TermToDescendantTerms]->(q:Term)<-[:PersonToObservedTerm]-(r)
 WHERE p.termId ='HP:0000556'
@@ -174,11 +174,11 @@ ORDER BY r.personId asc;
 ```
 ### For an Individual, rank their variants by the number of occurrences in other Individuals
 ```
-MATCH (p:Person {personId:"person1"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)-[:GeneticVariantToTranscriptVariant]->(tv:TranscriptVariant)
+MATCH (p:Person {personId:"person1"})<-[]-(gv:GeneticVariant)-[:GeneticVariantToTranscriptVariant]->(tv:TranscriptVariant)
 WHERE (gv.allele_freq < 0.1 or tv.hasExac = false)
-WITH size(()<-[:GeneticVariantToPerson]-(gv)) as count, gv
+WITH size(()<-[]-(gv)) as count, gv
 WHERE count > 1 
-RETURN gv.variantId, size(()<-[:GeneticVariantToPerson]-(gv)) as count
+RETURN gv.variantId, size(()<-[]-(gv)) as count
 ORDER BY count asc
 LIMIT 10;
 ```
@@ -186,12 +186,12 @@ LIMIT 10;
 ```
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
-MATCH (p:Person {personId:"WebsterURMD_Sample_GV4344"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)
+MATCH (p:Person {personId:"WebsterURMD_Sample_GV4344"})<-[]-(gv:GeneticVariant)
 WHERE (gv.allele_freq < 0.001 or gv.hasExac = false)
-WITH size(()<-[:GeneticVariantToPerson]-(gv)) as count , gv, p, numberOfPeople
+WITH size(()<-[]-(gv)) as count , gv, p, numberOfPeople
 WHERE count > 1 
 AND ((count / toFloat(numberOfPeople))  <= 0.05)
-MATCH (gv)-[:GeneticVariantToPerson]->(q:Person)
+MATCH (gv)-[]->(q:Person)
 WHERE p <> q
 WITH p,q,count(gv) as c
 ORDER BY c desc LIMIT 10
@@ -201,19 +201,19 @@ RETURN p.personId,q.personId, c;
 ```
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
-MATCH (p:Person {personId:"person1"})<-[:GeneticVariantToPerson]-(gv:GeneticVariant)
+MATCH (p:Person {personId:"person1"})<-[]-(gv:GeneticVariant)
 WHERE (gv.allele_freq < 0.001 or gv.hasExac = false)
-WITH size(()<-[:GeneticVariantToPerson]-(gv)) as count , gv, p, numberOfPeople
+WITH size(()<-[]-(gv)) as count , gv, p, numberOfPeople
 WHERE count > 1 
 AND ((count / toFloat(numberOfPeople))  <= 0.05)
-MATCH (gv)-[:GeneticVariantToPerson]->(q:Person)
+MATCH (gv)-[]->(q:Person)
 WHERE p <> q
 WITH p,q,count(gv) as intersection, numberOfPeople
 ORDER BY intersection DESC limit 1
-MATCH (x:Person)<-[:GeneticVariantToPerson]-(v:GeneticVariant)
+MATCH (x:Person)<-[]-(v:GeneticVariant)
 WHERE (x.personId = p.personId or x.personId = q.personId)
 AND (v.allele_freq < 0.001 or v.hasExac = false)
-AND ((size(()<-[:GeneticVariantToPerson]-(v)) / toFloat(numberOfPeople))  <= 0.05)
+AND ((size(()<-[]-(v)) / toFloat(numberOfPeople))  <= 0.05)
 WITH p, q, v, intersection
 RETURN p.personId, q.personId, intersection, size(collect(distinct v)) as unionSum, (round((intersection/toFloat(size(collect(distinct v))))*100.0*10)/10) as PercentShared
 ORDER BY PercentShared DESC;
@@ -226,7 +226,7 @@ WITH distinct gv
 MATCH (gv)-[:GeneticVariantToTranscriptVariant]->(ts:TranscriptVariant)
 WHERE ts.cadd > 20 
 WITH distinct gv
-MATCH (gv)-[:GeneticVariantToPerson]->(p:Person)-[:PersonToObservedTerm]-(t:Term)
+MATCH (gv)-[]->(p:Person)-[:PersonToObservedTerm]-(t:Term)
 return gv.variantId, p.personId, t.termId, t.name
 ```
 # Further reading
