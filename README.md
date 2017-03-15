@@ -136,10 +136,9 @@ RETURN count(s.gene_id);
 ```
 ## Find Variants which have a frequency less than 0.001 and a CADD score greater than 20
 ```
-MATCH (gv:GeneticVariant)-[:GeneticVariantToTranscriptVariant]->(ts:TranscriptVariant)
-WHERE ts.cadd > 20
-WITH distinct gv
-WHERE gv.allele_freq < 0.001
+MATCH (gv:GeneticVariant)
+WHERE gv.cadd > 20
+AND gv.allele_freq < 0.001
 RETURN count(gv);
 ```
 ## For a Term, find all the Descendant Terms
@@ -161,9 +160,7 @@ WHERE p.termId ='HP:0000556'
 WITH distinct gs
 MATCH (gs)-[:GeneToGeneticVariant]->(gv:GeneticVariant)
 WHERE gv.allele_freq < 0.001 
-WITH distinct gv, gs
-MATCH (gv)-[:GeneticVariantToTranscriptVariant]->(ts:TranscriptVariant)
-WHERE ts.cadd > 20 
+and gv.cadd > 20 
 WITH distinct gv, gs
 MATCH (r:Person)<-[]-(gv)
 WITH distinct gv, gs, r
@@ -222,12 +219,10 @@ ORDER BY PercentShared DESC;
 ```
 MATCH (gs:Gene {gene_name:"TTLL5"})-[:GeneToGeneticVariant]->(gv:GeneticVariant)
 WHERE gv.allele_freq < 0.001 
-WITH distinct gv
-MATCH (gv)-[:GeneticVariantToTranscriptVariant]->(ts:TranscriptVariant)
-WHERE ts.cadd > 20 
+AND gv.cadd > 20 
 WITH distinct gv
 MATCH (gv)-[]->(p:Person)-[:PersonToObservedTerm]-(t:Term)
-return gv.variantId, p.personId, t.termId, t.name
+return gv.variantId, p.personId, t.termId, t.name;
 ```
 # Further reading
 [Additional Documentation](docs/Additional-Documentation.md)
