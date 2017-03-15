@@ -81,6 +81,6 @@ To ensure optimum performance for the queries the following Constraints and Inde
 
 ## Indexes
 - GeneticVariant - allele_freq
-- TranscriptVariant - cadd
+- GeneticVariant - cadd
 - GeneticVariant - hasExac
 - Gene - gene_name
