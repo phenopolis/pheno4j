@@ -125,7 +125,7 @@ RETURN v.variantId;
 ## Individuals who have a Term
 ```
 MATCH (t:Term)<-[tp:PersonToObservedTerm]-(p:Person)
-WHERE t.termId = 	'HP:0000505'
+WHERE t.termId = 'HP:0000505'
 RETURN p.personId;
 ```
 ## Find Genes that have no Term
