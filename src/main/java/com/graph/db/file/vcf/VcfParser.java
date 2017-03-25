@@ -120,14 +120,11 @@ public class VcfParser implements Parser {
 					String ref = split[3];
 					String altField = split[4];
 					
-					String[] alts = altField.split(COMMA);
-					for (String alt : alts) {
-						if (isNotStar(alt)) {
-							String variantId = DOUBLE_QUOTE + chrom + HYPHEN + pos + HYPHEN + ref + HYPHEN + alt + DOUBLE_QUOTE;
-							
-							RecursiveAction task = new RowAction(variantId, split, personStartColumn, split.length);
-							forkJoinPool.invoke(task);
-						}
+					if (doesNotContainComma(altField) && isNotStar(altField)) {
+						String variantId = DOUBLE_QUOTE + chrom + HYPHEN + pos + HYPHEN + ref + HYPHEN + altField + DOUBLE_QUOTE;
+						
+						RecursiveAction task = new RowAction(variantId, split, personStartColumn, split.length);
+						forkJoinPool.invoke(task);
 					}
 				}
 			}
@@ -138,6 +135,10 @@ public class VcfParser implements Parser {
 		}
 		
 		writeOutHeaders();
+	}
+
+	private boolean doesNotContainComma(String alt) {
+		return !StringUtils.contains(alt, COMMA);
 	}
 
 	private boolean isNotStar(String alt) {
