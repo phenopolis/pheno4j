@@ -2,10 +2,10 @@ package com.graph.db.file.annotation.subscriber;
 
 import com.graph.db.domain.input.annotation.GeneticVariant;
 import com.graph.db.domain.output.GeneToGeneticVariantOutput;
-import com.graph.db.file.GenericSubscriber;
+import com.graph.db.file.SetBasedGenericSubscriber;
 import com.graph.db.output.OutputFileType;
 
-public class GeneToGeneticVariantSubscriber extends GenericSubscriber<GeneticVariant> {
+public class GeneToGeneticVariantSubscriber extends SetBasedGenericSubscriber<GeneticVariant, GeneToGeneticVariantOutput> {
 	
 	public GeneToGeneticVariantSubscriber(String outputFolder, Class<?> parserClass) {
 		super(outputFolder, parserClass, OutputFileType.GENE_TO_GENETIC_VARIANT);
@@ -15,6 +15,6 @@ public class GeneToGeneticVariantSubscriber extends GenericSubscriber<GeneticVar
 	public void processRow(GeneticVariant variant) {
 		variant.getTranscript_consequences().stream()
 			.map(tc -> new GeneToGeneticVariantOutput(tc))
-			.forEach(output -> write(output));
+			.forEach(output -> set.add(output));
 	}
 }
