@@ -72,32 +72,6 @@ public class AnnotationParserTest {
 	}
 	
 	@Test
-	public void whenNonDoubleCaddIsPresentThenItIsNulled() throws IOException {
-		when(readerMock.readLine())
-			.thenReturn("{\"transcript_consequences\":[{\"cadd\":blah}]}")
-			.thenReturn(null);
-	
-		parser.processDataForFile(readerMock);
-		
-		ArgumentCaptor<GeneticVariant> argument = ArgumentCaptor.forClass(GeneticVariant.class);
-		verify(eventBusMock).post(argument.capture());
-		assertEquals(null, argument.getValue().getTranscript_consequences().iterator().next().getCadd());
-	}
-	
-	@Test
-	public void whenDoubleCaddIsPresentThenItIsNotNulled() throws IOException {
-		when(readerMock.readLine())
-			.thenReturn("{\"transcript_consequences\":[{\"cadd\":123}]}")
-			.thenReturn(null);
-	
-		parser.processDataForFile(readerMock);
-		
-		ArgumentCaptor<GeneticVariant> argument = ArgumentCaptor.forClass(GeneticVariant.class);
-		verify(eventBusMock).post(argument.capture());
-		assertEquals("123", argument.getValue().getTranscript_consequences().iterator().next().getCadd());
-	}
-	
-	@Test
 	public void whenNoExacIsPresentThenHasExacIsFalse() throws IOException {
 		when(readerMock.readLine())
 			.thenReturn("{}")

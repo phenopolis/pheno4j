@@ -19,6 +19,8 @@ public class GeneticVariantOutput {
 	private final Double allele_freq;
 	@Index
 	private final Boolean hasExac;
+	@Index
+	private final Double cadd;
 	
 	private String EXAC_AC;
 	private String EXAC_AC_Adj;
@@ -117,6 +119,7 @@ public class GeneticVariantOutput {
 		this.MISS_COUNT = geneticVariant.getMISS_COUNT();
 		this.allele_freq = geneticVariant.getAllele_freq();
 		this.hasExac = geneticVariant.isHasExac();
+		this.cadd = geneticVariant.getCadd();
 
 		if (geneticVariant.getEXAC() != null) {
 			this.EXAC_AC = geneticVariant.getEXAC().getAC();
@@ -239,6 +242,10 @@ public class GeneticVariantOutput {
 
 	public Boolean getHasExac() {
 		return hasExac;
+	}
+
+	public Double getCadd() {
+		return cadd;
 	}
 
 	public String getEXAC_AC() {

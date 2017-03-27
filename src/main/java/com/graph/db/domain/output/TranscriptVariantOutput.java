@@ -4,11 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
 import com.graph.db.domain.input.annotation.TranscriptConsequence;
 import com.graph.db.domain.output.annotation.Id;
-import com.graph.db.domain.output.annotation.Index;
 
 public class TranscriptVariantOutput {
 
@@ -18,8 +15,6 @@ public class TranscriptVariantOutput {
 	private final String gene_symbol_source;
 	private final Integer cdna_end;
 	private final Integer cdna_start;
-	@Index
-	private final Double cadd;
 	private final String variant_allele;
 
 	public TranscriptVariantOutput(TranscriptConsequence transcriptConsequence) {
@@ -29,12 +24,6 @@ public class TranscriptVariantOutput {
 		this.cdna_end = transcriptConsequence.getCdna_end();
 		this.cdna_start = transcriptConsequence.getCdna_start();
 		this.variant_allele = transcriptConsequence.getVariant_allele();
-
-		if (NumberUtils.isNumber(transcriptConsequence.getCadd())) {
-			this.cadd = Double.valueOf(transcriptConsequence.getCadd());
-		} else {
-			this.cadd = null;
-		}
 	}
 	
 	public static String[] getFields() {
@@ -63,10 +52,6 @@ public class TranscriptVariantOutput {
 
 	public Integer getCdna_start() {
 		return cdna_start;
-	}
-
-	public Double getCadd() {
-		return cadd;
 	}
 
 	public String getVariant_allele() {
