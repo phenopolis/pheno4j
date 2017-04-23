@@ -172,7 +172,7 @@ ORDER BY r.personId asc;
 ### For an Individual, rank their variants by the number of occurrences in other Individuals
 ```
 MATCH (p:Person {personId:"person1"})<-[]-(gv:GeneticVariant)-[:GeneticVariantToTranscriptVariant]->(tv:TranscriptVariant)
-WHERE (gv.allele_freq < 0.1 or tv.hasExac = false)
+WHERE (gv.allele_freq < 0.1 or NOT EXISTS(gv.exac_af))
 WITH size(()<-[]-(gv)) as count, gv
 WHERE count > 1 
 RETURN gv.variantId, size(()<-[]-(gv)) as count
@@ -184,7 +184,7 @@ LIMIT 10;
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
 MATCH (p:Person {personId:"WebsterURMD_Sample_GV4344"})<-[]-(gv:GeneticVariant)
-WHERE (gv.allele_freq < 0.001 or gv.hasExac = false)
+WHERE (gv.allele_freq < 0.001 or NOT EXISTS(gv.exac_af))
 WITH size(()<-[]-(gv)) as count , gv, p, numberOfPeople
 WHERE count > 1 
 AND ((count / toFloat(numberOfPeople))  <= 0.05)
@@ -199,7 +199,7 @@ RETURN p.personId,q.personId, c;
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
 MATCH (p:Person {personId:"person1"})<-[]-(gv:GeneticVariant)
-WHERE (gv.allele_freq < 0.001 or gv.hasExac = false)
+WHERE (gv.allele_freq < 0.001 or NOT EXISTS(gv.exac_af))
 WITH size(()<-[]-(gv)) as count , gv, p, numberOfPeople
 WHERE count > 1 
 AND ((count / toFloat(numberOfPeople))  <= 0.05)
@@ -209,7 +209,7 @@ WITH p,q,count(gv) as intersection, numberOfPeople
 ORDER BY intersection DESC limit 1
 MATCH (x:Person)<-[]-(v:GeneticVariant)
 WHERE (x.personId = p.personId or x.personId = q.personId)
-AND (v.allele_freq < 0.001 or v.hasExac = false)
+AND (v.allele_freq < 0.001 or NOT EXISTS(v.exac_af))
 AND ((size(()<-[]-(v)) / toFloat(numberOfPeople))  <= 0.05)
 WITH p, q, v, intersection
 RETURN p.personId, q.personId, intersection, size(collect(distinct v)) as unionSum, (round((intersection/toFloat(size(collect(distinct v))))*100.0*10)/10) as PercentShared
