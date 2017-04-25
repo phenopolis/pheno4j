@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/sajid-mughal/pheno4j.svg?branch=master)](https://travis-ci.org/sajid-mughal/pheno4j)
+[![Build Status](https://travis-ci.org/phenopolis/pheno4j.svg?branch=master)](https://travis-ci.org/sajid-mughal/pheno4j)
 [![Coverage Status](https://coveralls.io/repos/github/sajid-mughal/pheno4j/badge.svg?branch=master)](https://coveralls.io/github/sajid-mughal/pheno4j?branch=master)
 # Pheno4j: a graph based HPO to NGS database
 
