@@ -18,7 +18,7 @@ cache:
     - '$HOME/.sonar/cache'
  
 script:
-  - mvn clean jacoco:report org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
   
 after_success:
-  - mvn coveralls:report
+  - mvn clean test jacoco:report coveralls:report
