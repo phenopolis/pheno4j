@@ -1,17 +1,24 @@
 language: java
 
+sudo: false
+install: true
+
+addons:
+  sonarqube:
+    organization: "sajid-mughal-github"
+    token:
+      secure: "045b2f5de43d34c745e536392764392aea7498c7"
+
 jdk:
   - oraclejdk8
   
 cache:
   directories:
     - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
  
-install:
-  - mvn test-compile -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-  
 script:
-  - mvn test jacoco:report
+  - mvn clean jacoco:report org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
   
 after_success:
   - mvn coveralls:report
