@@ -89,7 +89,8 @@ public final class FileUtil {
 		try {
 			queue.put(POISON_PILL);
 		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
+			LOGGER.error("Interrupted: ", e);
+			Thread.currentThread().interrupt();
 		}
 	}
 	

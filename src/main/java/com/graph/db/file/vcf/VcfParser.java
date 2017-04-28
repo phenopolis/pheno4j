@@ -99,7 +99,7 @@ public class VcfParser implements Parser {
 					for (int i = 0; i < split.length; i++) {
 						String string = split[i];
 						
-						if (string.equals("FORMAT")) {
+						if ("FORMAT".equals(string)) {
 							personStartColumn = i + 1;
 						}
 						if (i >= personStartColumn) {

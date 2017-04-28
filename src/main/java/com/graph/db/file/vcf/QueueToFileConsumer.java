@@ -60,7 +60,8 @@ public class QueueToFileConsumer implements Runnable {
         	    writer.flush();
         	}
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+			LOGGER.error("Interrupted: ", e);
+			Thread.currentThread().interrupt();
         } finally {
         	writer.close();
         }
