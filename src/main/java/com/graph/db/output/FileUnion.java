@@ -26,7 +26,7 @@ public class FileUnion {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileUnion.class);
 	
-	public static final Set<OutputFileType> SOURCE_OUTPUTFILETYPES = EnumSet.of(
+	protected static final Set<OutputFileType> SOURCE_OUTPUTFILETYPES = EnumSet.of(
 			OutputFileType.GENE,
 			OutputFileType.TRANSCRIPT,
 			OutputFileType.PERSON);

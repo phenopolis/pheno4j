@@ -179,19 +179,20 @@ public class VcfParser implements Parser {
 					boolean isHet = "0/1".equals(substringBeforeFirstColon);
 					
 					if (isHet) {
-						try {
-							hetVariantToPersonBlockingQueue.put(variantId + COMMA + indexToPerson.get(i));
-						} catch (InterruptedException e) {
-							throw new RuntimeException(e);
-						}
+						sendDataToQueue(hetVariantToPersonBlockingQueue, i);
 					} else if (isHom) {
-						try {
-							homVariantToPersonBlockingQueue.put(variantId + COMMA + indexToPerson.get(i));
-						} catch (InterruptedException e) {
-							throw new RuntimeException(e);
-						}
+						sendDataToQueue(homVariantToPersonBlockingQueue, i);
 					}
 				}
+			}
+		}
+
+		private void sendDataToQueue(BlockingQueue<String> queue, int i) {
+			try {
+				queue.put(variantId + COMMA + indexToPerson.get(i));
+			} catch (InterruptedException e) {
+				LOGGER.error("Interrupted: ", e);
+				Thread.currentThread().interrupt();
 			}
 		}
 	}
