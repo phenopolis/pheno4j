@@ -46,13 +46,11 @@ public class QueueToFileConsumer implements Runnable {
 
     @Override
 	public void run() {
-    	boolean swallowed = false;
         try {
-			while (!swallowed) {
+			while (true) {
 	            Object queueElement = queue.take();
 
 				if (queueElement == POISON_PILL) {
-					swallowed = true;
 					return;
 				}
 	            
