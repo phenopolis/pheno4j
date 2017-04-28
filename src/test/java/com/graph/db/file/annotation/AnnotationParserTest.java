@@ -38,9 +38,9 @@ public class AnnotationParserTest {
 	}
 
 	@Test
-	public void whenNoFolderIsProvidedThenExceptionIsThrown() {
+	public void whenNoFileNameIsProvidedThenExceptionIsThrown() {
 		thrown.expect(RuntimeException.class);
-	    thrown.expectMessage("inputFolder cannot be empty");
+	    thrown.expectMessage("fileName cannot be empty");
 	    
 		parser = new AnnotationParser("");
 	}
@@ -69,31 +69,5 @@ public class AnnotationParserTest {
 		ArgumentCaptor<GeneticVariant> argument = ArgumentCaptor.forClass(GeneticVariant.class);
 		verify(eventBusMock).post(argument.capture());
 		assertEquals("22-16157603-G-C", argument.getValue().getTranscript_consequences().iterator().next().getVariant_id());
-	}
-	
-	@Test
-	public void whenNoExacIsPresentThenHasExacIsFalse() throws IOException {
-		when(readerMock.readLine())
-			.thenReturn("{}")
-			.thenReturn(null);
-	
-		parser.processDataForFile(readerMock);
-		
-		ArgumentCaptor<GeneticVariant> argument = ArgumentCaptor.forClass(GeneticVariant.class);
-		verify(eventBusMock).post(argument.capture());
-		assertEquals(false, argument.getValue().isHasExac());
-	}
-	
-	@Test
-	public void whenExacIsPresentThenHasExacIsTrue() throws IOException {
-		when(readerMock.readLine())
-			.thenReturn("{\"EXAC\":{\"AN_FEMALE\":2142.0}}")
-			.thenReturn(null);
-	
-		parser.processDataForFile(readerMock);
-		
-		ArgumentCaptor<GeneticVariant> argument = ArgumentCaptor.forClass(GeneticVariant.class);
-		verify(eventBusMock).post(argument.capture());
-		assertEquals(true, argument.getValue().isHasExac());
 	}
 }

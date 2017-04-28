@@ -1,6 +1,5 @@
 package com.graph.db.file.annotation;
 
-import static com.graph.db.util.FileUtil.getAllJsonFiles;
 import static com.graph.db.util.FileUtil.logLineNumber;
 
 import java.io.File;
@@ -8,6 +7,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -44,17 +44,17 @@ import com.graph.db.output.OutputFileType;
  */
 public class AnnotationParser extends AbstractParser {
 	
-	private final String inputFolder;
+	private final String fileName;
 	private final Gson gson;
 
 	public AnnotationParser() {
-		this(config.getString("annotationParser.input.folder"));
+		this(config.getString("annotationParser.input.fileName"));
 	}
 	
-	public AnnotationParser(String inputFolder) {
-		this.inputFolder = inputFolder;
-		if (StringUtils.isBlank(inputFolder)) {
-			throw new RuntimeException("inputFolder cannot be empty");
+	public AnnotationParser(String fileName) {
+		this.fileName = fileName;
+		if (StringUtils.isBlank(fileName)) {
+			throw new RuntimeException("fileName cannot be empty");
 		}
 		
 		gson = createGson();
@@ -62,7 +62,7 @@ public class AnnotationParser extends AbstractParser {
 	
 	@Override
 	public Collection<File> getInputFiles() {
-		return getAllJsonFiles(inputFolder);
+		return Collections.singleton(new File(fileName));
 	}
 
 	@Override
@@ -97,6 +97,7 @@ public class AnnotationParser extends AbstractParser {
 	private Gson createGson() {
 		GsonBuilder b = new GsonBuilder();
         b.registerTypeAdapter(GeneticVariant.class, new CustomJsonDeserializer());
+        b.setLenient();
         return b.create();
 	}
 

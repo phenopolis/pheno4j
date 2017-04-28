@@ -107,6 +107,7 @@ public enum OutputFileType {
 				final String value;
 				if (field.isAnnotationPresent(Id.class)) {
 					Id annotation = field.getAnnotation(Id.class);
+					//TODO why do we need to use name? using field name is better
 					value = annotation.name() + COLON + "ID(" + neo4jMapping + ")";
 				} else if (field.isAnnotationPresent(RelationshipStart.class)) {
 					RelationshipStart annotation = field.getAnnotation(RelationshipStart.class);

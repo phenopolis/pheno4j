@@ -11,6 +11,7 @@ import java.util.concurrent.BlockingQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.graph.db.file.Parser;
 import com.graph.db.output.OutputFileType;
 import com.graph.db.util.FileUtil;
 
@@ -22,7 +23,7 @@ public class QueueToFileConsumer implements Runnable {
     private final BlockingQueue<String> queue;
 	private final PrintWriter writer;
 
-    public QueueToFileConsumer(OutputFileType outputFileType, BlockingQueue<String> queue, String outputFolder, Class<? extends VcfParser> clazz) {
+    public QueueToFileConsumer(OutputFileType outputFileType, BlockingQueue<String> queue, String outputFolder, Class<? extends Parser> clazz) {
         this.outputFileType = outputFileType;
 		this.queue = queue;
         
@@ -31,7 +32,7 @@ public class QueueToFileConsumer implements Runnable {
 	    writer = new PrintWriter(bufferedWriter);
     }
 
-	private FileWriter getFileWriter(String outputFolder, Class<? extends VcfParser> clazz) {
+	private FileWriter getFileWriter(String outputFolder, Class<? extends Parser> clazz) {
 		FileWriter fileWriter;
 		try {
 			String filePathAndName = FileUtil.createFileName(outputFolder, clazz, outputFileType);

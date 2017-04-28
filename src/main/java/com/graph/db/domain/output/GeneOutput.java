@@ -15,15 +15,18 @@ public class GeneOutput {
 	private final String gene_id;
 	@Index
 	private final String gene_name;
+	private final Integer hgnc_id;
 	
 	public GeneOutput(Map<String, String> map) {
 		this.gene_id = map.get("gene_id");
 		this.gene_name = map.get("gene_name");
+		this.hgnc_id = null;//TODO
 	}
 
 	public GeneOutput(TranscriptConsequence transcriptConsequence) {
 		this.gene_id = transcriptConsequence.getGene_id();
 		this.gene_name = transcriptConsequence.getGene_symbol();
+		this.hgnc_id = transcriptConsequence.getHgnc_id();
 	}
 
 	public String getGene_id() {
@@ -32,6 +35,10 @@ public class GeneOutput {
 
 	public String getGene_name() {
 		return gene_name;
+	}
+
+	public Integer getHgnc_id() {
+		return hgnc_id;
 	}
 
 	@Override

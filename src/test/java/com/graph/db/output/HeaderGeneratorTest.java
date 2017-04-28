@@ -20,7 +20,7 @@ public class HeaderGeneratorTest {
 				expectedHeader = "consequenceTerm:ID(ConsequenceTerm)";
 				break;
 			case GENE:
-				expectedHeader = "gene_id:ID(Gene),gene_name";
+				expectedHeader = "gene_id:ID(Gene),gene_name,hgnc_id:int";
 				break;
 			case GENE_TO_GENETIC_VARIANT:
 				expectedHeader = ":START_ID(Gene),:END_ID(GeneticVariant)";
@@ -29,13 +29,13 @@ public class HeaderGeneratorTest {
 				expectedHeader = ":START_ID(Gene),:END_ID(Term)";
 				break;
 			case GENETIC_VARIANT:
-				expectedHeader = "variantId:ID(GeneticVariant),HET_COUNT:int,WT_COUNT:int,HOM_COUNT:int,MISS_COUNT:int,allele_freq:double,hasExac:boolean,cadd:double,EXAC_AC,EXAC_AC_Adj,EXAC_AC_AFR,EXAC_AC_AMR,EXAC_AC_CONSANGUINEOUS,EXAC_AC_EAS,EXAC_AC_FEMALE,EXAC_AC_FIN,EXAC_AC_Hemi,EXAC_AC_Het,EXAC_AC_Hom,EXAC_AC_MALE,EXAC_AC_NFE,EXAC_AC_OTH,EXAC_AC_POPMAX,EXAC_AC_SAS,EXAC_AF:double,EXAC_ALT,EXAC_AN,EXAC_AN_Adj,EXAC_AN_AFR,EXAC_AN_AMR,EXAC_AN_CONSANGUINEOUS,EXAC_AN_EAS,EXAC_AN_FEMALE,EXAC_AN_FIN,EXAC_AN_MALE,EXAC_AN_NFE,EXAC_AN_OTH,EXAC_AN_POPMAX,EXAC_AN_SAS,EXAC_BaseQRankSum,EXAC_clinvar_conflicted,EXAC_clinvar_measureset_id,EXAC_clinvar_mut,EXAC_clinvar_pathogenic,EXAC_ClippingRankSum,EXAC_culprit,EXAC_DOUBLETON_DIST,EXAC_DP,EXAC_ESP_AC,EXAC_ESP_AF_GLOBAL,EXAC_ESP_AF_POPMAX,EXAC_FS,EXAC_GQ_MEAN,EXAC_GQ_STDDEV,EXAC_Hemi_AFR,EXAC_Hemi_AMR,EXAC_Hemi_EAS,EXAC_Hemi_FIN,EXAC_Hemi_NFE,EXAC_Hemi_OTH,EXAC_Hemi_SAS,EXAC_Het_AFR,EXAC_Het_AMR,EXAC_Het_EAS,EXAC_Het_FIN,EXAC_Het_NFE,EXAC_Het_OTH,EXAC_Het_SAS,EXAC_hgvs,EXAC_Hom_AFR,EXAC_Hom_AMR,EXAC_Hom_CONSANGUINEOUS,EXAC_Hom_EAS,EXAC_Hom_FIN,EXAC_Hom_NFE,EXAC_Hom_OTH,EXAC_Hom_SAS,EXAC_InbreedingCoeff,EXAC_index,EXAC_K1_RUN,EXAC_K2_RUN,EXAC_K3_RUN,EXAC_KG_AC,EXAC_KG_AF_GLOBAL,EXAC_KG_AF_POPMAX,EXAC_MQ,EXAC_MQ0,EXAC_MQRankSum,EXAC_NCC,EXAC_POPMAX,EXAC_POS,EXAC_QD,EXAC_ReadPosRankSum,EXAC_REF,EXAC_VQSLOD";
+				expectedHeader = "variantId:ID(GeneticVariant),allele_string,start:int,end:int,seq_region_name,most_severe_consequence,strand:int,AC:int,allele_freq:double,AN:int,ExcessHet:double,FS:double,InbreedingCoeff:double,MLEAC:int,MLEAF:double,MQ:double,MQRankSum:double,ReadPosRankSum:double,VQSLOD:double,Culprit,gnomad_exomes_AC_AFR:int,gnomad_exomes_AC_AMR:int,gnomad_exomes_AC_ASJ:int,gnomad_exomes_AC_raw:int,gnomad_exomes_AF_NFE:double,gnomad_exomes_AF_OTH:double,gnomad_exomes_AF_raw:double,gnomad_exomes_AN_AFR:int,gnomad_genomes_AC_AFR:int,gnomad_genomes_AC_AMR:int,gnomad_genomes_AC_ASJ:int,gnomad_genomes_AC_raw:int,gnomad_genomes_AF_NFE:double,gnomad_genomes_AF_OTH:double,gnomad_genomes_AF_raw:double,gnomad_genomes_AN_AFR:int,kaviar_AN:int,kaviar_AC:int,kaviar_AF:double,exac_AF:double,exac_AF_ADJ:double,exac_AF_AFR:int,exac_AF_AMR:double,exac_AF_CONSANGUINEOUS:int,exac_AF_EAS:int,exac_AF_FEMALE:int,exac_AF_FIN:int,exac_AF_MALE:double,exac_AF_NFE:int,exac_AF_OTH:int,exac_AF_POPMAX:double,exac_AF_SAS:double,cadd_phred:int,cadd_raw:double";
 				break;
 			case GENETIC_VARIANT_TO_TRANSCRIPT_VARIANT:
 				expectedHeader = ":START_ID(GeneticVariant),:END_ID(TranscriptVariant)";
 				break;
 			case TRANSCRIPT:
-				expectedHeader = "transcript_id:ID(Transcript)";
+				expectedHeader = "transcript_id:ID(Transcript),canonical:int,strand:int,ensembl_protein_id,swissprot_protein_id";
 				break;
 			case TRANSCRIPT_TO_GENE:
 				expectedHeader = ":START_ID(Transcript),:END_ID(Gene)";
@@ -44,7 +44,7 @@ public class HeaderGeneratorTest {
 				expectedHeader = ":START_ID(Transcript),:END_ID(TranscriptVariant)";
 				break;
 			case TRANSCRIPT_VARIANT:
-				expectedHeader = "hgvsc:ID(TranscriptVariant),impact,gene_symbol_source,cdna_end:int,cdna_start:int,variant_allele";
+				expectedHeader = "hgvsc:ID(TranscriptVariant),hgvsp,impact,intron,exon";
 				break;
 			case TRANSCRIPT_VARIANT_TO_CONSEQUENCE_TERM:
 				expectedHeader = ":START_ID(TranscriptVariant),:END_ID(ConsequenceTerm)";

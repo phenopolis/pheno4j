@@ -7,68 +7,69 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class GeneticVariant {
 	
-	private String variant_id;
-	private Exac EXAC;
-	private Set<TranscriptConsequence> transcript_consequences;
-	
-	private Integer HET_COUNT;
-	private Integer WT_COUNT;
-	private Integer HOM_COUNT;
-	private Integer MISS_COUNT;
-	private Double allele_freq;
-	private Boolean hasExac;
-	private Double cadd;
-	
-	public String getVariant_id() {
-		return variant_id;
+    private Custom_annotations custom_annotations;
+    private Integer end;
+    private Set<TranscriptConsequence> transcript_consequences;
+    private String input;
+    private String seq_region_name;
+    private String allele_string;
+    private Integer start;
+    private String most_severe_consequence;
+    private Integer strand;
+    private String variant_class;
+    private String assembly_name;
+    private String variant_id;
+    
+    public Custom_annotations getCustom_annotations() {
+		return custom_annotations;
 	}
-	
-	public Exac getEXAC() {
-		return EXAC;
+
+	public Integer getEnd() {
+		return end;
 	}
 
 	public Set<TranscriptConsequence> getTranscript_consequences() {
 		return transcript_consequences;
 	}
 
+	public String getInput() {
+		return input;
+	}
+
+	public String getSeq_region_name() {
+		return seq_region_name;
+	}
+
+	public String getAllele_string() {
+		return allele_string;
+	}
+
+	public Integer getStart() {
+		return start;
+	}
+
+	public String getMost_severe_consequence() {
+		return most_severe_consequence;
+	}
+
+	public Integer getStrand() {
+		return strand;
+	}
+
+	public String getVariant_class() {
+		return variant_class;
+	}
+
+	public String getAssembly_name() {
+		return assembly_name;
+	}
+
+	public String getVariant_id() {
+		return variant_id;
+	}
+
 	public void setTranscript_consequences(Set<TranscriptConsequence> transcript_consequences) {
 		this.transcript_consequences = transcript_consequences;
-	}
-
-	public Integer getHET_COUNT() {
-		return HET_COUNT;
-	}
-
-	public Integer getWT_COUNT() {
-		return WT_COUNT;
-	}
-
-	public Integer getHOM_COUNT() {
-		return HOM_COUNT;
-	}
-
-	public Integer getMISS_COUNT() {
-		return MISS_COUNT;
-	}
-
-	public Double getAllele_freq() {
-		return allele_freq;
-	}
-	
-	public Boolean isHasExac() {
-		return hasExac;
-	}
-
-	public void setHasExac(Boolean hasExac) {
-		this.hasExac = hasExac;
-	}
-	
-	public Double getCadd() {
-		return cadd;
-	}
-
-	public void setCadd(Double cadd) {
-		this.cadd = cadd;
 	}
 
 	@Override

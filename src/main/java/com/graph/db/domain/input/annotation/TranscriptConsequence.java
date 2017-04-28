@@ -12,19 +12,59 @@ public class TranscriptConsequence {
 
 	private String variant_id;
 	
-	private String impact;
-	private String gene_symbol_source;
-	private String gene_symbol;
-	private Integer cdna_end;
-	private String gene_id;
+	private Double exac_af;
+	private Double exac_af_adj;
+	private Integer exac_af_afr;
+	private Double exac_af_amr;
+	private Integer exac_af_consanguineous;
+	private Integer exac_af_eas;
+	private Integer exac_af_female;
+	private Integer exac_af_fin;
+	private Double exac_af_male;
+	private Integer exac_af_nfe;
+	private Integer exac_af_oth;
+	private Double exac_af_popmax;
+	private Double exac_af_sas;
+	private Integer cadd_phred;
+	private Double cadd_raw;
 	private String hgvsc;
-	private Integer cdna_start;
-	private String transcript_id;
-	private String cadd;
-	private String variant_allele;
-	private Integer strand;
-	private Integer canonical;
+	private String hgvsp;
+	private String impact;
 	private Set<String> consequence_terms;
+	private String transcript_id;
+	private String intron;
+	private String exon;
+	private String gene_id;
+	private String gene_symbol;
+	private Integer hgnc_id;
+	private Integer canonical;
+	private Integer strand;
+	private String protein_id;
+	private String[] swissprot;
+
+//    private String ccds;
+//    private Integer cds_start;
+//    private Domain domains[];
+//    private String amino_acids;
+//    private String carol;
+//    private String sift_prediction;
+//    private String biotype;
+//    private Integer gene_pheno;
+//    private Integer cdna_end;
+//    private String[] trembl;
+//    private Integer sift_score;
+//    private String codons;
+//    private String polyphen_prediction;
+//    private Double polyphen_score;
+//    private Integer protein_end;
+//    private Integer cdna_start;
+//    private Integer cds_end;
+//    private String condel;
+//    private Integer protein_start;
+//    private String[] uniparc;
+//    private Integer exacpli;
+//    private String variant_allele;
+//    private String gene_symbol_source;
 	
 	public TranscriptConsequence() {
 	}
@@ -42,60 +82,120 @@ public class TranscriptConsequence {
 		return variant_id;
 	}
 
-	public String getImpact() {
-		return impact;
+	public Double getExac_af() {
+		return exac_af;
 	}
 
-	public String getGene_symbol_source() {
-		return gene_symbol_source;
+	public Double getExac_af_adj() {
+		return exac_af_adj;
 	}
 
-	public String getGene_symbol() {
-		return gene_symbol;
+	public Integer getExac_af_afr() {
+		return exac_af_afr;
 	}
 
-	public Integer getCdna_end() {
-		return cdna_end;
+	public Double getExac_af_amr() {
+		return exac_af_amr;
 	}
 
-	public String getGene_id() {
-		return gene_id;
+	public Integer getExac_af_consanguineous() {
+		return exac_af_consanguineous;
+	}
+
+	public Integer getExac_af_eas() {
+		return exac_af_eas;
+	}
+
+	public Integer getExac_af_female() {
+		return exac_af_female;
+	}
+
+	public Integer getExac_af_fin() {
+		return exac_af_fin;
+	}
+
+	public Double getExac_af_male() {
+		return exac_af_male;
+	}
+
+	public Integer getExac_af_nfe() {
+		return exac_af_nfe;
+	}
+
+	public Integer getExac_af_oth() {
+		return exac_af_oth;
+	}
+
+	public Double getExac_af_popmax() {
+		return exac_af_popmax;
+	}
+
+	public Double getExac_af_sas() {
+		return exac_af_sas;
+	}
+
+	public Integer getCadd_phred() {
+		return cadd_phred;
+	}
+
+	public Double getCadd_raw() {
+		return cadd_raw;
 	}
 
 	public String getHgvsc() {
 		return hgvsc;
 	}
 
-	public Integer getCdna_start() {
-		return cdna_start;
+	public String getHgvsp() {
+		return hgvsp;
+	}
+
+	public String getImpact() {
+		return impact;
+	}
+
+	public Set<String> getConsequence_terms() {
+		return consequence_terms;
 	}
 
 	public String getTranscript_id() {
 		return transcript_id;
 	}
 
-	public String getCadd() {
-		return cadd;
+	public String getIntron() {
+		return intron;
 	}
 
-	public void setCadd(String cadd) {
-		this.cadd = cadd;
+	public String getExon() {
+		return exon;
 	}
 
-	public String getVariant_allele() {
-		return variant_allele;
+	public String getGene_id() {
+		return gene_id;
 	}
 
-	public Integer getStrand() {
-		return strand;
+	public String getGene_symbol() {
+		return gene_symbol;
+	}
+
+	public Integer getHgnc_id() {
+		return hgnc_id;
 	}
 
 	public Integer getCanonical() {
 		return canonical;
 	}
 
-	public Set<String> getConsequence_terms() {
-		return consequence_terms;
+	public Integer getStrand() {
+		return strand;
+	}
+
+	public String getProtein_id() {
+		return protein_id;
+	}
+
+	public String[] getSwissprot() {
+		return swissprot;
 	}
 
 	public void setVariant_id(String variant_id) {
