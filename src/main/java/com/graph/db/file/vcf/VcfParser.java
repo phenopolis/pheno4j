@@ -1,5 +1,6 @@
 package com.graph.db.file.vcf;
 
+import static com.graph.db.util.Constants.COLON;
 import static com.graph.db.util.Constants.COMMA;
 import static com.graph.db.util.Constants.DOUBLE_QUOTE;
 import static com.graph.db.util.Constants.HYPHEN;
@@ -173,15 +174,14 @@ public class VcfParser implements Parser {
 				invokeAll(Arrays.asList(new RowAction(variantId, array, low, mid), new RowAction(variantId, array, mid, high)));
 			} else {
 				for (int i = low; i < high; i++) {
-					String cell = array[i];
-					String substringBeforeFirstColon = StringUtils.substringBefore(cell, ":");
-					boolean isHom = "1/1".equals(substringBeforeFirstColon);
-					boolean isHet = "0/1".equals(substringBeforeFirstColon);
-					
-					if (isHet) {
-						sendDataToQueue(hetVariantToPersonBlockingQueue, i);
-					} else if (isHom) {
+					String substringBeforeFirstColon = StringUtils.substringBefore(array[i], COLON);
+					switch (substringBeforeFirstColon) {
+					case "1/1":
 						sendDataToQueue(homVariantToPersonBlockingQueue, i);
+						break;
+					case "0/1":
+						sendDataToQueue(hetVariantToPersonBlockingQueue, i);
+						break;
 					}
 				}
 			}
