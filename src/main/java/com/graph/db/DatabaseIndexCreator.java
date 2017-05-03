@@ -88,6 +88,8 @@ public class DatabaseIndexCreator {
 			Schema schema = graphDb.schema();
 			schema.awaitIndexesOnline(1, TimeUnit.HOURS);
 		}
+		
+		graphDb.shutdown();
 	}
 	
 	private <T extends Annotation> Set<Field> getFieldForAnnotation(OutputFileType type, Class<T> class1) {
