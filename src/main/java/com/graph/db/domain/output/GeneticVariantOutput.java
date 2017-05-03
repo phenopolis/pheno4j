@@ -57,6 +57,39 @@ public class GeneticVariantOutput {
 	private Double gnomad_exomes_AF_OTH;
 	private Double gnomad_exomes_AF_raw;
 	private Integer gnomad_exomes_AN_AFR;
+	private Integer gnomad_exomes_AC_EAS;
+	private Integer gnomad_exomes_AC_Female;
+	private Integer gnomad_exomes_AC_OTH;
+	private Integer gnomad_exomes_AC_NFE;
+	private Integer gnomad_exomes_AC_Male;
+	private Integer gnomad_exomes_AC_FIN;
+	private Double gnomad_exomes_AF_AFR;
+	private Double gnomad_exomes_AF_AMR;
+	private Double gnomad_exomes_AF_ASJ;
+	private Double gnomad_exomes_AF_EAS;
+	private Double gnomad_exomes_AF_FIN;
+	private Double gnomad_exomes_AF_Female;
+	private Double gnomad_exomes_AF_Male;
+	private Integer gnomad_exomes_AN_AMR;
+	private Integer gnomad_exomes_AN_ASJ;
+	private Integer gnomad_exomes_AN_EAS;
+	private Integer gnomad_exomes_AN_FIN;
+	private Integer gnomad_exomes_AN_Female;
+	private Integer gnomad_exomes_AN_Male;
+	private Integer gnomad_exomes_AN_NFE;
+	private Integer gnomad_exomes_AN_OTH;
+	private Integer gnomad_exomes_AN_raw;
+	private Integer gnomad_exomes_Hom_AFR;
+	private Integer gnomad_exomes_Hom_AMR;
+	private Integer gnomad_exomes_Hom_ASJ;
+	private Integer gnomad_exomes_Hom_EAS;
+	private Integer gnomad_exomes_Hom_FIN;
+	private Integer gnomad_exomes_Hom_Female;
+	private Integer gnomad_exomes_Hom_Male;
+	private Integer gnomad_exomes_Hom_NFE;
+	private Integer gnomad_exomes_Hom_OTH;
+	private Integer gnomad_exomes_Hom_raw;
+	private Integer gnomad_exomes_Hom;
 	
 	//gnomad_genomes[0].fields.
 	private Integer gnomad_genomes_AC_AFR;
@@ -67,6 +100,39 @@ public class GeneticVariantOutput {
 	private Double gnomad_genomes_AF_OTH;
 	private Double gnomad_genomes_AF_raw;
 	private Integer gnomad_genomes_AN_AFR;
+	private Integer gnomad_genomes_AC_EAS;
+	private Integer gnomad_genomes_AC_Female;
+	private Integer gnomad_genomes_AC_OTH;
+	private Integer gnomad_genomes_AC_NFE;
+	private Integer gnomad_genomes_AC_Male;
+	private Integer gnomad_genomes_AC_FIN;
+	private Double gnomad_genomes_AF_AFR;
+	private Double gnomad_genomes_AF_AMR;
+	private Double gnomad_genomes_AF_ASJ;
+	private Double gnomad_genomes_AF_EAS;
+	private Double gnomad_genomes_AF_FIN;
+	private Double gnomad_genomes_AF_Female;
+	private Double gnomad_genomes_AF_Male;
+	private Integer gnomad_genomes_AN_AMR;
+	private Integer gnomad_genomes_AN_ASJ;
+	private Integer gnomad_genomes_AN_EAS;
+	private Integer gnomad_genomes_AN_FIN;
+	private Integer gnomad_genomes_AN_Female;
+	private Integer gnomad_genomes_AN_Male;
+	private Integer gnomad_genomes_AN_NFE;
+	private Integer gnomad_genomes_AN_OTH;
+	private Integer gnomad_genomes_AN_raw;
+	private Integer gnomad_genomes_Hom_AFR;
+	private Integer gnomad_genomes_Hom_AMR;
+	private Integer gnomad_genomes_Hom_ASJ;
+	private Integer gnomad_genomes_Hom_EAS;
+	private Integer gnomad_genomes_Hom_FIN;
+	private Integer gnomad_genomes_Hom_Female;
+	private Integer gnomad_genomes_Hom_Male;
+	private Integer gnomad_genomes_Hom_NFE;
+	private Integer gnomad_genomes_Hom_OTH;
+	private Integer gnomad_genomes_Hom_raw;
+	private Integer gnomad_genomes_Hom;
 	
 	//kaviar[0].fields.
 	private Integer kaviar_AN;
@@ -130,6 +196,39 @@ public class GeneticVariantOutput {
 			this.gnomad_exomes_AF_OTH = convertToDouble(fields.getAF_OTH());
 			this.gnomad_exomes_AF_raw = convertToDouble(fields.getAF_raw());
 			this.gnomad_exomes_AN_AFR = convertToInteger(fields.getAN_AFR());
+			this.gnomad_exomes_AC_EAS = convertToInteger(fields.getAC_EAS());
+			this.gnomad_exomes_AC_Female = convertToInteger(fields.getAC_Female());
+			this.gnomad_exomes_AC_OTH = convertToInteger(fields.getAC_OTH());
+			this.gnomad_exomes_AC_NFE = convertToInteger(fields.getAC_NFE());
+			this.gnomad_exomes_AC_Male = convertToInteger(fields.getAC_Male());
+			this.gnomad_exomes_AC_FIN = convertToInteger(fields.getAC_FIN());
+			this.gnomad_exomes_AF_AFR = convertToDouble(fields.getAF_AFR());
+			this.gnomad_exomes_AF_AMR = convertToDouble(fields.getAF_AMR());
+			this.gnomad_exomes_AF_ASJ = convertToDouble(fields.getAF_ASJ());
+			this.gnomad_exomes_AF_EAS = convertToDouble(fields.getAF_EAS());
+			this.gnomad_exomes_AF_FIN = convertToDouble(fields.getAF_FIN());
+			this.gnomad_exomes_AF_Female = convertToDouble(fields.getAF_Female());
+			this.gnomad_exomes_AF_Male = convertToDouble(fields.getAF_Male());
+			this.gnomad_exomes_AN_AMR = convertToInteger(fields.getAN_AMR());
+			this.gnomad_exomes_AN_ASJ = convertToInteger(fields.getAN_ASJ());
+			this.gnomad_exomes_AN_EAS = convertToInteger(fields.getAN_EAS());
+			this.gnomad_exomes_AN_FIN = convertToInteger(fields.getAN_FIN());
+			this.gnomad_exomes_AN_Female = convertToInteger(fields.getAN_Female());
+			this.gnomad_exomes_AN_Male = convertToInteger(fields.getAN_Male());
+			this.gnomad_exomes_AN_NFE = convertToInteger(fields.getAN_NFE());
+			this.gnomad_exomes_AN_OTH = convertToInteger(fields.getAN_OTH());
+			this.gnomad_exomes_AN_raw = convertToInteger(fields.getAN_raw());
+			this.gnomad_exomes_Hom_AFR = convertToInteger(fields.getHom_AFR());
+			this.gnomad_exomes_Hom_AMR = convertToInteger(fields.getHom_AMR());
+			this.gnomad_exomes_Hom_ASJ = convertToInteger(fields.getHom_ASJ());
+			this.gnomad_exomes_Hom_EAS = convertToInteger(fields.getHom_EAS());
+			this.gnomad_exomes_Hom_FIN = convertToInteger(fields.getHom_FIN());
+			this.gnomad_exomes_Hom_Female = convertToInteger(fields.getHom_Female());
+			this.gnomad_exomes_Hom_Male = convertToInteger(fields.getHom_Male());
+			this.gnomad_exomes_Hom_NFE = convertToInteger(fields.getHom_NFE());
+			this.gnomad_exomes_Hom_OTH = convertToInteger(fields.getHom_OTH());
+			this.gnomad_exomes_Hom_raw = convertToInteger(fields.getHom_raw());
+			this.gnomad_exomes_Hom = convertToInteger(fields.getHom());
 		}
 		
 		if ((geneticVariant.getCustom_annotations() != null) && (geneticVariant.getCustom_annotations().getGnomad_genomes() != null) ) {
@@ -144,6 +243,39 @@ public class GeneticVariantOutput {
 			this.gnomad_genomes_AF_OTH = convertToDouble(fields.getAF_OTH());
 			this.gnomad_genomes_AF_raw = convertToDouble(fields.getAF_raw());
 			this.gnomad_genomes_AN_AFR = convertToInteger(fields.getAN_AFR());
+			this.gnomad_genomes_AC_EAS = convertToInteger(fields.getAC_EAS());
+			this.gnomad_genomes_AC_Female = convertToInteger(fields.getAC_Female());
+			this.gnomad_genomes_AC_OTH = convertToInteger(fields.getAC_OTH());
+			this.gnomad_genomes_AC_NFE = convertToInteger(fields.getAC_NFE());
+			this.gnomad_genomes_AC_Male = convertToInteger(fields.getAC_Male());
+			this.gnomad_genomes_AC_FIN = convertToInteger(fields.getAC_FIN());
+			this.gnomad_genomes_AF_AFR = convertToDouble(fields.getAF_AFR());
+			this.gnomad_genomes_AF_AMR = convertToDouble(fields.getAF_AMR());
+			this.gnomad_genomes_AF_ASJ = convertToDouble(fields.getAF_ASJ());
+			this.gnomad_genomes_AF_EAS = convertToDouble(fields.getAF_EAS());
+			this.gnomad_genomes_AF_FIN = convertToDouble(fields.getAF_FIN());
+			this.gnomad_genomes_AF_Female = convertToDouble(fields.getAF_Female());
+			this.gnomad_genomes_AF_Male = convertToDouble(fields.getAF_Male());
+			this.gnomad_genomes_AN_AMR = convertToInteger(fields.getAN_AMR());
+			this.gnomad_genomes_AN_ASJ = convertToInteger(fields.getAN_ASJ());
+			this.gnomad_genomes_AN_EAS = convertToInteger(fields.getAN_EAS());
+			this.gnomad_genomes_AN_FIN = convertToInteger(fields.getAN_FIN());
+			this.gnomad_genomes_AN_Female = convertToInteger(fields.getAN_Female());
+			this.gnomad_genomes_AN_Male = convertToInteger(fields.getAN_Male());
+			this.gnomad_genomes_AN_NFE = convertToInteger(fields.getAN_NFE());
+			this.gnomad_genomes_AN_OTH = convertToInteger(fields.getAN_OTH());
+			this.gnomad_genomes_AN_raw = convertToInteger(fields.getAN_raw());
+			this.gnomad_genomes_Hom_AFR = convertToInteger(fields.getHom_AFR());
+			this.gnomad_genomes_Hom_AMR = convertToInteger(fields.getHom_AMR());
+			this.gnomad_genomes_Hom_ASJ = convertToInteger(fields.getHom_ASJ());
+			this.gnomad_genomes_Hom_EAS = convertToInteger(fields.getHom_EAS());
+			this.gnomad_genomes_Hom_FIN = convertToInteger(fields.getHom_FIN());
+			this.gnomad_genomes_Hom_Female = convertToInteger(fields.getHom_Female());
+			this.gnomad_genomes_Hom_Male = convertToInteger(fields.getHom_Male());
+			this.gnomad_genomes_Hom_NFE = convertToInteger(fields.getHom_NFE());
+			this.gnomad_genomes_Hom_OTH = convertToInteger(fields.getHom_OTH());
+			this.gnomad_genomes_Hom_raw = convertToInteger(fields.getHom_raw());
+			this.gnomad_genomes_Hom = convertToInteger(fields.getHom());
 		}
 		
 		if ((geneticVariant.getCustom_annotations() != null) && (geneticVariant.getCustom_annotations().getKaviar() != null) ) {
@@ -324,6 +456,138 @@ public class GeneticVariantOutput {
 		return gnomad_exomes_AN_AFR;
 	}
 
+	public Integer getGnomad_exomes_AC_EAS() {
+		return gnomad_exomes_AC_EAS;
+	}
+
+	public Integer getGnomad_exomes_AC_Female() {
+		return gnomad_exomes_AC_Female;
+	}
+
+	public Integer getGnomad_exomes_AC_OTH() {
+		return gnomad_exomes_AC_OTH;
+	}
+
+	public Integer getGnomad_exomes_AC_NFE() {
+		return gnomad_exomes_AC_NFE;
+	}
+
+	public Integer getGnomad_exomes_AC_Male() {
+		return gnomad_exomes_AC_Male;
+	}
+
+	public Integer getGnomad_exomes_AC_FIN() {
+		return gnomad_exomes_AC_FIN;
+	}
+
+	public Double getGnomad_exomes_AF_AFR() {
+		return gnomad_exomes_AF_AFR;
+	}
+
+	public Double getGnomad_exomes_AF_AMR() {
+		return gnomad_exomes_AF_AMR;
+	}
+
+	public Double getGnomad_exomes_AF_ASJ() {
+		return gnomad_exomes_AF_ASJ;
+	}
+
+	public Double getGnomad_exomes_AF_EAS() {
+		return gnomad_exomes_AF_EAS;
+	}
+
+	public Double getGnomad_exomes_AF_FIN() {
+		return gnomad_exomes_AF_FIN;
+	}
+
+	public Double getGnomad_exomes_AF_Female() {
+		return gnomad_exomes_AF_Female;
+	}
+
+	public Double getGnomad_exomes_AF_Male() {
+		return gnomad_exomes_AF_Male;
+	}
+
+	public Integer getGnomad_exomes_AN_AMR() {
+		return gnomad_exomes_AN_AMR;
+	}
+
+	public Integer getGnomad_exomes_AN_ASJ() {
+		return gnomad_exomes_AN_ASJ;
+	}
+
+	public Integer getGnomad_exomes_AN_EAS() {
+		return gnomad_exomes_AN_EAS;
+	}
+
+	public Integer getGnomad_exomes_AN_FIN() {
+		return gnomad_exomes_AN_FIN;
+	}
+
+	public Integer getGnomad_exomes_AN_Female() {
+		return gnomad_exomes_AN_Female;
+	}
+
+	public Integer getGnomad_exomes_AN_Male() {
+		return gnomad_exomes_AN_Male;
+	}
+
+	public Integer getGnomad_exomes_AN_NFE() {
+		return gnomad_exomes_AN_NFE;
+	}
+
+	public Integer getGnomad_exomes_AN_OTH() {
+		return gnomad_exomes_AN_OTH;
+	}
+
+	public Integer getGnomad_exomes_AN_raw() {
+		return gnomad_exomes_AN_raw;
+	}
+
+	public Integer getGnomad_exomes_Hom_AFR() {
+		return gnomad_exomes_Hom_AFR;
+	}
+
+	public Integer getGnomad_exomes_Hom_AMR() {
+		return gnomad_exomes_Hom_AMR;
+	}
+
+	public Integer getGnomad_exomes_Hom_ASJ() {
+		return gnomad_exomes_Hom_ASJ;
+	}
+
+	public Integer getGnomad_exomes_Hom_EAS() {
+		return gnomad_exomes_Hom_EAS;
+	}
+
+	public Integer getGnomad_exomes_Hom_FIN() {
+		return gnomad_exomes_Hom_FIN;
+	}
+
+	public Integer getGnomad_exomes_Hom_Female() {
+		return gnomad_exomes_Hom_Female;
+	}
+
+	public Integer getGnomad_exomes_Hom_Male() {
+		return gnomad_exomes_Hom_Male;
+	}
+
+	public Integer getGnomad_exomes_Hom_NFE() {
+		return gnomad_exomes_Hom_NFE;
+	}
+
+	public Integer getGnomad_exomes_Hom_OTH() {
+		return gnomad_exomes_Hom_OTH;
+	}
+
+	public Integer getGnomad_exomes_Hom_raw() {
+		return gnomad_exomes_Hom_raw;
+	}
+
+	public Integer getGnomad_exomes_Hom() {
+		return gnomad_exomes_Hom;
+	}
+
 	public Integer getGnomad_genomes_AC_AFR() {
 		return gnomad_genomes_AC_AFR;
 	}
@@ -354,6 +618,138 @@ public class GeneticVariantOutput {
 
 	public Integer getGnomad_genomes_AN_AFR() {
 		return gnomad_genomes_AN_AFR;
+	}
+
+	public Integer getGnomad_genomes_AC_EAS() {
+		return gnomad_genomes_AC_EAS;
+	}
+
+	public Integer getGnomad_genomes_AC_Female() {
+		return gnomad_genomes_AC_Female;
+	}
+
+	public Integer getGnomad_genomes_AC_OTH() {
+		return gnomad_genomes_AC_OTH;
+	}
+
+	public Integer getGnomad_genomes_AC_NFE() {
+		return gnomad_genomes_AC_NFE;
+	}
+
+	public Integer getGnomad_genomes_AC_Male() {
+		return gnomad_genomes_AC_Male;
+	}
+
+	public Integer getGnomad_genomes_AC_FIN() {
+		return gnomad_genomes_AC_FIN;
+	}
+
+	public Double getGnomad_genomes_AF_AFR() {
+		return gnomad_genomes_AF_AFR;
+	}
+
+	public Double getGnomad_genomes_AF_AMR() {
+		return gnomad_genomes_AF_AMR;
+	}
+
+	public Double getGnomad_genomes_AF_ASJ() {
+		return gnomad_genomes_AF_ASJ;
+	}
+
+	public Double getGnomad_genomes_AF_EAS() {
+		return gnomad_genomes_AF_EAS;
+	}
+
+	public Double getGnomad_genomes_AF_FIN() {
+		return gnomad_genomes_AF_FIN;
+	}
+
+	public Double getGnomad_genomes_AF_Female() {
+		return gnomad_genomes_AF_Female;
+	}
+
+	public Double getGnomad_genomes_AF_Male() {
+		return gnomad_genomes_AF_Male;
+	}
+
+	public Integer getGnomad_genomes_AN_AMR() {
+		return gnomad_genomes_AN_AMR;
+	}
+
+	public Integer getGnomad_genomes_AN_ASJ() {
+		return gnomad_genomes_AN_ASJ;
+	}
+
+	public Integer getGnomad_genomes_AN_EAS() {
+		return gnomad_genomes_AN_EAS;
+	}
+
+	public Integer getGnomad_genomes_AN_FIN() {
+		return gnomad_genomes_AN_FIN;
+	}
+
+	public Integer getGnomad_genomes_AN_Female() {
+		return gnomad_genomes_AN_Female;
+	}
+
+	public Integer getGnomad_genomes_AN_Male() {
+		return gnomad_genomes_AN_Male;
+	}
+
+	public Integer getGnomad_genomes_AN_NFE() {
+		return gnomad_genomes_AN_NFE;
+	}
+
+	public Integer getGnomad_genomes_AN_OTH() {
+		return gnomad_genomes_AN_OTH;
+	}
+
+	public Integer getGnomad_genomes_AN_raw() {
+		return gnomad_genomes_AN_raw;
+	}
+
+	public Integer getGnomad_genomes_Hom_AFR() {
+		return gnomad_genomes_Hom_AFR;
+	}
+
+	public Integer getGnomad_genomes_Hom_AMR() {
+		return gnomad_genomes_Hom_AMR;
+	}
+
+	public Integer getGnomad_genomes_Hom_ASJ() {
+		return gnomad_genomes_Hom_ASJ;
+	}
+
+	public Integer getGnomad_genomes_Hom_EAS() {
+		return gnomad_genomes_Hom_EAS;
+	}
+
+	public Integer getGnomad_genomes_Hom_FIN() {
+		return gnomad_genomes_Hom_FIN;
+	}
+
+	public Integer getGnomad_genomes_Hom_Female() {
+		return gnomad_genomes_Hom_Female;
+	}
+
+	public Integer getGnomad_genomes_Hom_Male() {
+		return gnomad_genomes_Hom_Male;
+	}
+
+	public Integer getGnomad_genomes_Hom_NFE() {
+		return gnomad_genomes_Hom_NFE;
+	}
+
+	public Integer getGnomad_genomes_Hom_OTH() {
+		return gnomad_genomes_Hom_OTH;
+	}
+
+	public Integer getGnomad_genomes_Hom_raw() {
+		return gnomad_genomes_Hom_raw;
+	}
+
+	public Integer getGnomad_genomes_Hom() {
+		return gnomad_genomes_Hom;
 	}
 
 	public Integer getKaviar_AN() {
