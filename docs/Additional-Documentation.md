@@ -88,6 +88,11 @@ To ensure optimum performance for the queries the following Constraints and Inde
 - GeneticVariant - exac_AF
 - Gene - gene_name
 
+# Loading Manually Created Files #
+In `config.properties` you can specify any additional files you would like loaded into neo4j as part of the bulk upload. 
+
+For the relevant Node or Relationship (e.g. GeneticVariant, GeneToTerm), specify the full path to the file. If there are multiple files, separate them by commas. The files should not have a header, and the order of the columns must match the headers produced by `HeaderGenerator`.
+
 # Sizing Test #
 
 | Number of Individuals | Number of Variants | Total Number of Nodes | Total Number of Relationships | Total Number of Properties | Database Size (MB) |
