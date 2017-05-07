@@ -89,6 +89,7 @@ To ensure optimum performance for the queries the following Constraints and Inde
 - Gene - gene_name
 
 # Sizing Test #
+
 | Number of Individuals | Number of Variants | Total Number of Nodes | Total Number of Relationships | Total Number of Properties | Database Size (MB) |
 | 1,000 | 1,876,797 | 4,223,968 | 103,155,817 | 153,133,671 | 5,901 |
 | 2,000 | 2,673,978 | 5,911,219 | 199,069,603 | 205,735,931 | 9,897 |
