@@ -87,3 +87,11 @@ To ensure optimum performance for the queries the following Constraints and Inde
 - GeneticVariant - cadd
 - GeneticVariant - exac_AF
 - Gene - gene_name
+
+# Sizing Test #
+| Number of Individuals | Number of Variants | Total Number of Nodes | Total Number of Relationships | Total Number of Properties | Database Size (MB) |
+| 1,000 | 1,876,797 | 4,223,968 | 103,155,817 | 153,133,671 | 5,901 |
+| 2,000 | 2,673,978 | 5,911,219 | 199,069,603 | 205,735,931 | 9,897 |
+| 3,000 | 3,218,287 | 7,062,972 | 293,919,001 | 243,309,397 | 13,613 |
+| 4,000 | 3,653,139 | 7,982,961 | 389,593,314 | 271,785,796 | 17,205 |
+| 5,000 | 4,008,807 | 8,736,155 | 484,182,286 | 294,170,309 | 20,653 |
