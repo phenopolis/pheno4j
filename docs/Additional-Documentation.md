@@ -3,6 +3,9 @@
 - Use Guava's EventBus to decouple the reading of input data and the writing of output data
 - Input beans are mapped to Output beans using reflection, and are written out using super-csv
 
+# Data Model #
+![](https://github.com/phenopolis/pheno4j/blob/master/docs/schema%20diagram.png)
+
 # Execution #
 To generate and run the Graph Database, a number of processes are run. Each process can be run standalone if needed, but the following two maven profiles are provided that call underlying Java wrappers for convenience.
 - `build-graph` - Takes the input data and generates csv's that are used to build the graph database using neo4j's `org.neo4j.tooling.ImportTool`
