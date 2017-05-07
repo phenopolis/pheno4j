@@ -5,16 +5,16 @@ import static com.graph.db.util.Constants.DOUBLE_QUOTE;
 import static com.graph.db.util.Constants.EQUALS;
 import static com.graph.db.util.FileUtil.createFileName;
 import static com.graph.db.util.FileUtil.createHeaderFileName;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.graph.db.file.Parser;
@@ -40,12 +41,32 @@ public class ImportCommandGenerator {
 	
 	private final String inputFolderPath;
 	private final String outputFolderPath;
+
+	private final Multimap<String, String> neoTypeToManualFiles;
 	
 	public ImportCommandGenerator() {
 		PropertiesConfiguration config = PropertiesHolder.getInstance();
 		
 		this.inputFolderPath = config.getString("output.folder");
 		this.outputFolderPath = config.getString("output.folder") + File.separator + "graph-db" + File.separator + "data" + File.separator +"databases" + File.separator + "graph.db";
+		
+		this.neoTypeToManualFiles = getNeoTypeToManualFiles(config);
+	}
+
+	private Multimap<String, String> getNeoTypeToManualFiles(PropertiesConfiguration config) {
+		Multimap<String,String> neoTypeToManualFiles = HashMultimap.create();
+		Iterator<String> keys = config.getKeys("manualUpload");
+		while (keys.hasNext()) {
+			String key = keys.next();
+			String propertyValue = config.getString(key);
+			if (StringUtils.isNotEmpty(propertyValue)) {
+				String[] split = propertyValue.split(COMMA);
+				for (String s : split) {
+					neoTypeToManualFiles.put(StringUtils.remove(key, "manualUpload."), s);
+				}
+			}
+		}
+		return neoTypeToManualFiles;
 	}
 	
 	public String[] execute() {
@@ -70,6 +91,7 @@ public class ImportCommandGenerator {
 				StringBuilder value = new StringBuilder();
 				appendHeaderFileName(value, outputFileType);
 				appendContentFiles(value, outputFileTypeToFileNames, outputFileType);
+				appendManualFiles(value, neo4jMapping);
 				
 				map.put(key.toString(), value.toString());
 			}
@@ -81,19 +103,15 @@ public class ImportCommandGenerator {
 	
 	private void logImportCommandToConsole(Map<String, String> map) {
 		LOGGER.info("Following command will be passed into neo4j-import");
-		for (Entry<String, String> entry : map.entrySet()) {
-			String lineForConsole = StringUtils.join(entry.getKey(), EQUALS, DOUBLE_QUOTE, entry.getValue(), DOUBLE_QUOTE);
-			System.out.println(lineForConsole);
-		}
+		map.entrySet().stream()
+			.map(entry -> StringUtils.join(entry.getKey(), EQUALS, DOUBLE_QUOTE, entry.getValue(), DOUBLE_QUOTE))
+			.forEach(System.out::println);
 	}
 
 	private String[] convertMapToStringArray(Map<String, String> map) {
-		List<String> result = new ArrayList<>();
-		for (Entry<String, String> entry : map.entrySet()) {
-			String lineForJava = StringUtils.join(entry.getKey(), EQUALS, entry.getValue());
-			result.add(lineForJava);
-		}
-		return result.toArray(new String[0]);
+		return map.entrySet().stream()
+			.map(entry -> StringUtils.join(entry.getKey(), EQUALS, entry.getValue()))
+			.toArray(size -> new String[ size ]);
 	}
 
 	private Set<Class<? extends Parser>> getSubclassesOfParser() {
@@ -143,6 +161,15 @@ public class ImportCommandGenerator {
 				throw new IllegalStateException("No file names for: " + outputFileType);
 			}
 			builder.append(StringUtils.join(collection, COMMA));
+		}
+	}
+	
+	private void appendManualFiles(StringBuilder value, Neo4jMapping neo4jMapping) {
+		if (neoTypeToManualFiles.containsKey(neo4jMapping.toString())) {
+			Collection<String> collection = neoTypeToManualFiles.get(neo4jMapping.toString());
+			StringJoiner stringJoiner = new StringJoiner(COMMA, COMMA, EMPTY);
+			collection.stream().forEach(file -> stringJoiner.add(file));
+			value.append(stringJoiner.toString());
 		}
 	}
 	
