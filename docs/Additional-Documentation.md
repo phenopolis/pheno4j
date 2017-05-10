@@ -13,7 +13,39 @@ To generate and run the Graph Database, a number of processes are run. Each proc
 ![](https://github.com/sajid-mughal/pheno4j/blob/master/docs/class%20overview.png?raw=true)
 
 # Project Structure
-The project consists of 6 parsers, each one takes two parameters, a specific file or a folder (depending on the parser) and an output directory. These are specified in `config.properties`
+The project consists of 6 parsers, each one takes two parameters, a specific file or a folder (depending on the parser) and an output directory. These are specified in `src/main/resources/config.properties`:
+```
+output.folder=target/pheno4joutput
+geneParser.input.fileName=src/test/resources/GeneParser-gene_id_ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt.gz
+annotationParser.input.fileName=src/test/resources/AnnotationParser.json.gz
+termParser.input.fileName=src/test/resources/hp.obo
+transcriptParser.input.fileName=src/test/resources/TranscriptParser.gtf.gz
+personParser.input.fileName=src/test/resources/PersonParser.csv
+vcfParser.input.fileName=src/test/resources/VcfParser.vcf
+annotationFileFilter.input.vcfOutputHetFile=target/pheno4joutput/HetVariantToPerson-VcfParser.csv
+annotationFileFilter.input.vcfOutputHomFile=target/pheno4joutput/HomVariantToPerson-VcfParser.csv
+##add comma separated list of paths to any manually created files  
+manualUpload.GeneticVariant=
+manualUpload.Gene=
+manualUpload.Person=
+manualUpload.Term=
+manualUpload.TranscriptVariant=
+manualUpload.Transcript=
+manualUpload.ConsequenceTerm=
+manualUpload.TermToParentTerm=
+manualUpload.TermToDescendantTerms=
+manualUpload.PersonToObservedTerm=
+manualUpload.PersonToNonObservedTerm=
+manualUpload.GeneToGeneticVariant=
+manualUpload.GeneticVariantToTranscriptVariant=
+manualUpload.TranscriptToTranscriptVariant=
+manualUpload.TranscriptVariantToConsequenceTerm=
+manualUpload.GeneToTerm=
+manualUpload.TranscriptToGene=
+manualUpload.HetVariantToPerson=
+manualUpload.HomVariantToPerson=
+```
+
 # Packaging
 Run `mvn clean package`; this will generate graph-bundle.zip in the /target folder
 # Parsers
