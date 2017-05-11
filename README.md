@@ -31,15 +31,18 @@ Run the following in the checkout directory, and then browse to http://localhost
 ```
 mvn clean compile -P build-graph,run-neo4j
 ```
-### Run Example Queries
-```
-curl -H "Content-Type: application/json" -X POST -d '{"password":"1"}' -u neo4j:neo4j http://localhost:7474/user/neo4j/password
-```
-```
-curl -H "Content-Type: application/json" -d '{ "statements": [ { "statement": "WITH [$p1,$p2] as persons MATCH (p:Person)<-[]-(v:GeneticVariant) WHERE p.personId IN persons WITH v, count(*) as c, persons WHERE c = size(persons) RETURN count(v.variantId);", "parameters": {"p1":"person1","p2":"person2"}, "resultDataContents": [ "row", "graph" ], "includeStats": true } ] }' http://localhost:7474/db/data/transaction/commit
+This should load the test data and start the server on port 7474.
+Once the server is running, it can be queried either by going to the web interface on http://localhost:7474/ or using `curl`
+to http requests from the command line.
 
-
+### Run Example Queries with curl
 ```
+curl -H "Content-Type: application/json" -d '{ "query": "WITH [$p1,$p2] as persons MATCH (p:Person)<-[]-(v:GeneticVariant) WHERE p.personId IN persons WITH v, count(*) as c, persons WHERE c = size(persons) RETURN count(v.variantId);", "params": {"p1":"person1","p2":"person2"} }' http://localhost:7474/db/data/cypher
+```
+```
+curl -H "Content-Type: application/json" -d '{ "query": "MATCH (gv:GeneticVariant)-[]->(p:Person) WHERE gv.variantId =$var RETURN p.personId;", "params":{"var":"22-51171497-G-A"}}' http://localhost:7474/db/data/cypher
+```
+
 ## Server Installation ##
 ### Prerequisites ###
 - Java 1.8
