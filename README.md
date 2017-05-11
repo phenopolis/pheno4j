@@ -51,7 +51,8 @@ Once the server is running, it can be queried either by going to the web interfa
 to do http requests from the command line (see next section).
 
 ### Run Example Queries with curl
-The curl http queries return data in JSON format and so the response can be parsed using [jq](https://stedolan.github.io/jq/)
+The curl http queries return data in JSON format and so the response can be parsed using [jq](https://stedolan.github.io/jq/).
+
 Get count of variants shared between person1 and person2:
 ```
 curl -H "Content-Type: application/json" -d '{
@@ -59,6 +60,7 @@ curl -H "Content-Type: application/json" -d '{
 "params":{"p1":"person1","p2":"person2"}
 }' http://localhost:7474/db/data/cypher
 ```
+
 Get ids of persons with variant 22-51171497-G-A:
 ```
 curl -H "Content-Type: application/json" -d '{
