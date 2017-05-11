@@ -1,3 +1,4 @@
+# Examples of Cypher Queries
 
 These can be run in 3 ways:
 * using the browser interface
