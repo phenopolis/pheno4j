@@ -33,6 +33,10 @@ Example datasets.
 
 # Installation
 ## Local Installation ##
+
+The local version will not be able to handle efficiently a very large dataset since it does not have access to the configuration for the page cache and jvm size.
+Hence it should be used for testing.
+
 ### Prerequisites ###
 - Java 1.8
 - Maven 3
@@ -49,8 +53,8 @@ Then run the following in the checkout directory:
 mvn clean compile -P build-graph,run-neo4j
 ```
 This should load the test data and start the server on port 7474.
-Once the server is running, it can be queried either by going to the web interface on http://localhost:7474/ or using `curl`
-to do http requests from the command line (see below).
+Once the server is running, it can be queried either by going to the web interface on http://localhost:7474/ or using [curl](https://curl.haxx.se/)
+to do http requests from the command line (see next section).
 
 ### Run Example Queries with curl
 The curl http queries return data in JSON format and so the response can be parsed using [jq](https://stedolan.github.io/jq/)
@@ -68,6 +72,7 @@ curl -H "Content-Type: application/json" -d '{
 "params":{"var":"22-51171497-G-A"}
 }' http://localhost:7474/db/data/cypher
 ```
+More cypher queries are available [here](https://github.com/phenopolis/pheno4j/blob/master/docs/Cypher-Queries.md).
 
 ### Running Pheno4J on your own data
 
@@ -75,17 +80,20 @@ curl -H "Content-Type: application/json" -d '{
 
 ## Server Installation ##
 
+The server installation can scale to very large datasets as it allows configuration of the JVM size and page cache.
+
 ### Prerequisites ###
 - Java 1.8
 - Neo4j installation - download from https://neo4j.com/download/community-edition/, extract the archive. The location of the extract will be referred to as **$NEO4J_HOME**
 
 ### Deploy code ###
-Run the following in the checkout directory, which will generate a zip file, "graph-bundle.zip", in the target folder. Deploy this to your target server and extract it.
+Run the following in the checkout directory, which will generate a zip file, "graph-bundle.zip", in the target folder:
 ```
 mvn clean package
 ```
+Copy `graph-bundle.zip` to your target server and extract it.
 ### Update config file to reference your input data ###
-In the conf folder of the extracted zip above, update config.properties to reference your input data.
+In the conf folder of the extracted zip above, update `config.properties` to reference your input data.
 ### Run the GraphDatabaseBuilder ###
 This step will take all the input data and build csv files, which are then built into a Neo4j database using their ImportTool. Constraints and Indexes are then created.
 In the lib folder of the extracted zip above, run the following:
