@@ -110,7 +110,12 @@ curl -H "Content-Type: application/json" -X POST -d '{"password":"1"}' -u neo4j:
 ```
 
 # Example Cypher Queries
-These can be run in the browser interface or via the neo4j-shell ([See here for more information](http://neo4j.com/docs/operations-manual/current/tools/cypher-shell/))
+
+These can be run in 3 ways:
+* using the browser interface
+* using curl
+* via the neo4j-shell ([See here for more information](http://neo4j.com/docs/operations-manual/current/tools/cypher-shell/))
+
 ## All Variants for an individual
 ```
 MATCH (gv:GeneticVariant)-[]->(p:Person)
