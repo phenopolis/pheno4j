@@ -27,11 +27,11 @@ The following neo4j schema is produced from the imported data:
 - Maven 3
 
 ### Build Graph and Start up Neo4j on test data ###
-This will build the database and load the test data referenced in (config.properties)[https://github.com/phenopolis/pheno4j/blob/master/src/main/resources/config.properties].
+This will build the database and load the test data referenced in [config.properties](https://github.com/phenopolis/pheno4j/blob/master/src/main/resources/config.properties).
 
 First clone the repository:
 ```
-git clone
+git clone https://github.com/phenopolis/pheno4j.git
 ```
 Then run the following in the checkout directory:
 ```
@@ -42,7 +42,7 @@ Once the server is running, it can be queried either by going to the web interfa
 to do http requests from the command line (see below).
 
 ### Run Example Queries with curl
-The curl http queries return data in json format and so the response can be parsed using (jq)[https://stedolan.github.io/jq/]
+The curl http queries return data in json format and so the response can be parsed using [jq](https://stedolan.github.io/jq/)
 Get count of variants shared between person1 and person2:
 ```
 curl -H "Content-Type: application/json" -d '{
@@ -58,7 +58,12 @@ curl -H "Content-Type: application/json" -d '{
 }' http://localhost:7474/db/data/cypher
 ```
 
+### Running Pheno4J on your own data
+
+[Documentation here](https://github.com/phenopolis/pheno4j/blob/master/docs/Additional-Documentation.md#loading-manually-created-files).
+
 ## Server Installation ##
+
 ### Prerequisites ###
 - Java 1.8
 - Neo4j installation - download from https://neo4j.com/download/community-edition/, extract the archive. The location of the extract will be referred to as **$NEO4J_HOME**
