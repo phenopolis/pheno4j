@@ -10,14 +10,24 @@ Take raw input files and convert them into csv files that represent Nodes and Re
 
 # Public datasets
 
-| | Description | URL |
-| --- | --- | --- |
-| 1 | Gencode gene-transcript | [ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_25/GRCh37_mapping/gencode.v25lift37.annotation.gtf.gz](ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_25/GRCh37_mapping/gencode.v25lift37.annotation.gtf.gz)| 
-| 2 | HPO ontology | [http://purl.obolibrary.org/obo/hp.obo](http://purl.obolibrary.org/obo/hp.obo)|
-| 3 | HPO-Gene | [http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt](http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt) |
+| Description | URL |
+| --- | --- |
+| Gencode gene-transcript | [ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_25/GRCh37_mapping/gencode.v25lift37.annotation.gtf.gz](ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_25/GRCh37_mapping/gencode.v25lift37.annotation.gtf.gz)| 
+| HPO ontology | [http://purl.obolibrary.org/obo/hp.obo](http://purl.obolibrary.org/obo/hp.obo)|
+| HPO-Gene | [http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt](http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt) |
 
-# Domain Model
-The following neo4j schema is produced from the imported data:
+# User specified datasets
+
+Example datasets.
+
+| Description | URL |
+| --- | --- |
+| VCF file which contains genotypes | https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/genotypes.vcf |
+| VEP JSON file | https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/VEP.json |
+| Individuals with HPO terms as CSV file | https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/person_phenotypes.csv |
+
+# Pheno4J schema overview
+
 ![](https://github.com/sajid-mughal/pheno4j/blob/master/docs/complete_diagram.png?raw=true)
 
 # Installation
