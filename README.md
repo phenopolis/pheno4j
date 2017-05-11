@@ -1,7 +1,8 @@
 [![Build Status](https://travis-ci.org/phenopolis/pheno4j.svg?branch=master)](https://travis-ci.org/phenopolis/pheno4j)
 [![Coverage Status](https://coveralls.io/repos/github/phenopolis/pheno4j/badge.svg?branch=master)](https://coveralls.io/github/phenopolis/pheno4j?branch=master)
-
+<!-- Sajid fix this :-)
 [![Quality Gate](https://sonarqube.com/api/badges/gate?key=com.graph%3Adb)](https://sonarqube.com/dashboard/index/com.graph%3Adb)
+-->
 
 # Pheno4j: a graph based HPO to NGS database
 
