@@ -32,7 +32,14 @@ Run the following in the checkout directory, and then browse to http://localhost
 mvn clean compile -P build-graph,run-neo4j
 ```
 ### Run Example Queries
+```
+curl -H "Content-Type: application/json" -X POST -d '{"password":"1"}' -u neo4j:neo4j http://localhost:7474/user/neo4j/password
+```
+```
+curl -H "Content-Type: application/json" -d '{ "statements": [ { "statement": "WITH [$p1,$p2] as persons MATCH (p:Person)<-[]-(v:GeneticVariant) WHERE p.personId IN persons WITH v, count(*) as c, persons WHERE c = size(persons) RETURN count(v.variantId);", "parameters": {"p1":"person1","p2":"person2"}, "resultDataContents": [ "row", "graph" ], "includeStats": true } ] }' http://localhost:7474/db/data/transaction/commit
 
+
+```
 ## Server Installation ##
 ### Prerequisites ###
 - Java 1.8
