@@ -17,9 +17,9 @@ Take raw input files in JSON, VCF and CSV format and convert them into CSV files
 # User specified datasets
 
 Example datasets specified in [config.properties](https://github.com/phenopolis/pheno4j/blob/master/src/main/resources/config.properties):
-* VCF file which contains genotypes [example](https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/genotypes.vcf)
-* VEP JSON file [example](https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/VEP.json)
-* Individuals with HPO terms as CSV file [example](https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/person_phenotypes.csv)
+* VCF file which contains genotypes ([example](https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/genotypes.vcf))
+* VEP JSON file ([example](https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/VEP.json))
+* Individuals with HPO terms as CSV file ([example](https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/person_phenotypes.csv))
 
 # Pheno4J schema overview
 
