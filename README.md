@@ -37,10 +37,17 @@ to http requests from the command line.
 
 ### Run Example Queries with curl
 ```
-curl -H "Content-Type: application/json" -d '{ "query": "WITH [$p1,$p2] as persons MATCH (p:Person)<-[]-(v:GeneticVariant) WHERE p.personId IN persons WITH v, count(*) as c, persons WHERE c = size(persons) RETURN count(v.variantId);", "params": {"p1":"person1","p2":"person2"} }' http://localhost:7474/db/data/cypher
+curl -H "Content-Type: application/json" -d '{
+"query": "WITH [$p1,$p2] AS persons MATCH (p:Person)<-[]-(v:GeneticVariant)
+WHERE p.personId IN persons WITH v, count(*) as c, persons WHERE c = size(persons) RETURN count(v.variantId);",
+"params": {"p1":"person1","p2":"person2"}
+}' http://localhost:7474/db/data/cypher
 ```
 ```
-curl -H "Content-Type: application/json" -d '{ "query": "MATCH (gv:GeneticVariant)-[]->(p:Person) WHERE gv.variantId =$var RETURN p.personId;", "params":{"var":"22-51171497-G-A"}}' http://localhost:7474/db/data/cypher
+curl -H "Content-Type: application/json" -d '{
+"query": "MATCH (gv:GeneticVariant)-[]->(p:Person) WHERE gv.variantId =$var RETURN p.personId;",
+"params":{"var":"22-51171497-G-A"}
+}' http://localhost:7474/db/data/cypher
 ```
 
 ## Server Installation ##
