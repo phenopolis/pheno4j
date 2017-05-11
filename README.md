@@ -11,7 +11,7 @@ Take raw input files in JSON, VCF and CSV format and convert them into CSV files
 
 # Public datasets
 * [Gencode gene-transcript](ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_25/GRCh37_mapping/gencode.v25lift37.annotation.gtf.gz)
-* [HPO ontology](http://purl.obolibrary.org/obo/hp.obo](http://purl.obolibrary.org/obo/hp.obo)
+* [HPO ontology](http://purl.obolibrary.org/obo/hp.obo)
 * [HPO-Gene](http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt)
 
 # User specified datasets
