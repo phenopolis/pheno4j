@@ -31,6 +31,8 @@ Run the following in the checkout directory, and then browse to http://localhost
 ```
 mvn clean compile -P build-graph,run-neo4j
 ```
+### Run Example Queries
+
 ## Server Installation ##
 ### Prerequisites ###
 - Java 1.8
