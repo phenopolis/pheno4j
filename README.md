@@ -33,16 +33,17 @@ mvn clean compile -P build-graph,run-neo4j
 ```
 This should load the test data and start the server on port 7474.
 Once the server is running, it can be queried either by going to the web interface on http://localhost:7474/ or using `curl`
-to http requests from the command line.
+to http requests from the command line (see below).
 
 ### Run Example Queries with curl
+Get count of variants shared between person1 and person2:
 ```
 curl -H "Content-Type: application/json" -d '{
-"query": "WITH [$p1,$p2] AS persons MATCH (p:Person)<-[]-(v:GeneticVariant)
-WHERE p.personId IN persons WITH v, count(*) as c, persons WHERE c = size(persons) RETURN count(v.variantId);",
-"params": {"p1":"person1","p2":"person2"}
+"query": "WITH [$p1,$p2] AS persons MATCH (p:Person)<-[]-(v:GeneticVariant) WHERE p.personId IN persons WITH v, count(*) as c, persons WHERE c = size(persons) RETURN count(v.variantId);",
+"params":{"p1":"person1","p2":"person2"}
 }' http://localhost:7474/db/data/cypher
 ```
+Get ids of persons with variant 22-51171497-G-A:
 ```
 curl -H "Content-Type: application/json" -d '{
 "query": "MATCH (gv:GeneticVariant)-[]->(p:Person) WHERE gv.variantId =$var RETURN p.personId;",
