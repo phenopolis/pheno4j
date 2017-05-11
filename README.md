@@ -10,22 +10,16 @@
 Take raw input files in JSON, VCF and CSV format and convert them into CSV files that represent Nodes and Relationships, which can then be used to populate Pheno4J using the neo4j bulk CSV import tool.
 
 # Public datasets
-
-| Description | URL |
-| --- | --- |
-| Gencode gene-transcript | [ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_25/GRCh37_mapping/gencode.v25lift37.annotation.gtf.gz](ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_25/GRCh37_mapping/gencode.v25lift37.annotation.gtf.gz)| 
-| HPO ontology | [http://purl.obolibrary.org/obo/hp.obo](http://purl.obolibrary.org/obo/hp.obo)|
-| HPO-Gene | [http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt](http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt) |
+* [Gencode gene-transcript](ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_25/GRCh37_mapping/gencode.v25lift37.annotation.gtf.gz)
+* [HPO ontology](http://purl.obolibrary.org/obo/hp.obo](http://purl.obolibrary.org/obo/hp.obo)
+* [HPO-Gene](http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt)
 
 # User specified datasets
 
-Example datasets.
-
-| Description | URL |
-| --- | --- |
-| VCF file which contains genotypes | https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/genotypes.vcf |
-| VEP JSON file | https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/VEP.json |
-| Individuals with HPO terms as CSV file | https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/person_phenotypes.csv |
+Example datasets specified in [config.properties](https://github.com/phenopolis/pheno4j/blob/master/src/main/resources/config.properties):
+* VCF file which contains genotypes [example](https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/genotypes.vcf)
+* VEP JSON file [example](https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/VEP.json)
+* Individuals with HPO terms as CSV file [example](https://github.com/phenopolis/pheno4j/blob/master/src/test/resources/person_phenotypes.csv)
 
 # Pheno4J schema overview
 
