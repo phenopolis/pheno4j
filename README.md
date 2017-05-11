@@ -7,10 +7,10 @@
 # Pheno4j: a graph based HPO to NGS database
 
 # Purpose
-Take raw input files in JSON, VCF and CSV format and convert them into CSV files that represent Nodes and Relationships, which can then be used to populate Pheno4J using the neo4j bulk CSV import tool.
+Genetic and phenotype data in JSON, VCF and CSV format and convert them into CSV files that represent Nodes and Relationships that can then be used to populate Pheno4J using [the neo4j bulk CSV import tool](https://neo4j.com/docs/operations-manual/current/tutorial/import-tool/).
 
 # Public datasets
-* Gencode gene-transcript mapping [ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_25/GRCh37_mapping/gencode.v25lift37.annotation.gtf.gz](ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_25/GRCh37_mapping/gencode.v25lift37.annotation.gtf.gz) (may be removed as information can be obtained for user specified JSON file).
+* Gencode gene-transcript mapping ([gencode.v25lift37.annotation.gtf.gz](ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_25/GRCh37_mapping/gencode.v25lift37.annotation.gtf.gz)) (may be removed as information can be obtained for user specified JSON file).
 * [HPO ontology](http://purl.obolibrary.org/obo/hp.obo)
 * [OMIM HPO-Gene mapping](http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt)
 
@@ -117,13 +117,12 @@ OPTIONAL MATCH (n)-[r]->()
 RETURN count(n.prop) + count(r.prop);
 ```
 ### Additional Steps ###
-If you would like to connect to your instance from your application tier, you can change the password to the Neo4j instance with the following; the port is the value of "dbms.connector.http.listen_address" in $NEO4J_HOME/conf/neo4j.conf, the password with the following will be set to "1".
+If you would like to connect to your instance from your application tier to handle incoming database requests, you can change the password to the Neo4j instance with the following; the port is the value of `dbms.connector.http.listen_address` in `$NEO4J_HOME/conf/neo4j.conf`, the password with the following will be set to `1`.
 ```
 curl -H "Content-Type: application/json" -X POST -d '{"password":"1"}' -u neo4j:neo4j http://**{HOST}**:**{PORT}**/user/neo4j/password
 ```
 
 # Example Cypher Queries
-
 Examples can be found [here](https://github.com/phenopolis/pheno4j/blob/master/docs/Cypher-Queries.md).
 
 # Further reading
