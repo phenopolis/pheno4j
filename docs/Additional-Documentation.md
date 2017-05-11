@@ -1,7 +1,3 @@
-# Application Design #
-- Files are read line-by-line using BufferedReader, as opposed to loading all the data into memory
-- Use Guava's EventBus to decouple the reading of input data and the writing of output data
-- Input beans are mapped to Output beans using reflection, and are written out using super-csv
 
 <!--
 # Data Model #
@@ -99,7 +95,7 @@ In `config.properties` you can specify any additional files you would like loade
 
 For the relevant Node or Relationship (e.g. GeneticVariant, GeneToTerm), specify the full path to the file. If there are multiple files, separate them by commas. The files should not have a header, and the order of the columns must match the headers produced by `HeaderGenerator`.
 
-# Sizing Test #
+# Sizing Test
 
 | Number of Individuals | Number of Variants | Total Number of Nodes | Total Number of Relationships | Total Number of Properties | Database Size (MB) |
 | --- | --- | --- | --- | --- | --- |
@@ -109,3 +105,10 @@ For the relevant Node or Relationship (e.g. GeneticVariant, GeneToTerm), specify
 | 4,000 | 3,653,139 | 7,982,961 | 389,593,314 | 271,785,796 | 17,205 |
 | 5,000 | 4,008,807 | 8,736,155 | 484,182,286 | 294,170,309 | 20,653 |
 | 5,025 | 4,086,921 | 8,832,245 | 486,827,321 | 296,355,931 | 20,781 |
+
+
+## Application Details
+* Files are read line-by-line using BufferedReader, as opposed to loading all the data into memory
+* Use Guava's EventBus to decouple the reading of input data and the writing of output data
+* Input beans are mapped to Output beans using reflection, and are written out using super-csv
+
