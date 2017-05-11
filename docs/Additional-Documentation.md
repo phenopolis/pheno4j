@@ -15,13 +15,14 @@ The project consists of 6 parsers, each one takes two parameters, a specific fil
 
 # Packaging
 Run `mvn clean package`; this will generate graph-bundle.zip in the /target folder
+
 # Parsers
 Below is the list of the Parsers, and the Nodes and Relationships that each one is responsible for producing. 
 The java command is executed from the lib folder of the extracted zipfile. Substitute `${PARSER_NAME}` with the fully qualified name of the Parser e.g. com.graph.db.file.vcf.VcfParser
 ```
 java -classpath '*:../conf/' **${PARSER_NAME}**
 ```
-### VcfParser ###
+### VcfParser 
 This parses the genotype VCF file containing the variant to individual relationships.
 
 | Nodes | Relationships |
@@ -29,7 +30,7 @@ This parses the genotype VCF file containing the variant to individual relations
 | Person  | HetVariantToPerson |
 | | HomVariantToPerson |
 
-### AnnotationParser ###
+### AnnotationParser 
 This parses the annotation file produced by the Variant Effect Predictor in the JSON format (VCF format to be supported soon).
 
 | Nodes | Relationships |
@@ -40,14 +41,14 @@ This parses the annotation file produced by the Variant Effect Predictor in the 
 | Transcript | TranscriptVariantToConsequenceTerm |
 | Gene | |
 
-### GeneParser ###
+### GeneParser 
 This parses the OMIM-HPO file which links genes to the HPO terms to which they are associate.
 
 | Nodes | Relationships |
 | --- | --- |
 | | GeneToTerm |
 
-### PersonParser ###
+### PersonParser 
 This parses the phenotype file which links individuals to their HPO terms.
 
 | Nodes | Relationships |
@@ -55,7 +56,7 @@ This parses the phenotype file which links individuals to their HPO terms.
 | Person | PersonToObservedTerm |
 |  | PersonToNonObservedTerm |
 
-### TermParser ###
+### TermParser 
 This loads the HPO ontology which links HPO terms to other HPO terms. The relationships are produced; TermToParentTerm simply links a Term to its Parent Term, and TermToDescendantTerms produces all the descendant Terms for a specific Term, e.g. querying for HP:0000001 will output every single term since it is the root node.
    
 | Nodes | Relationships |
@@ -63,8 +64,8 @@ This loads the HPO ontology which links HPO terms to other HPO terms. The relati
 | Term | TermToParentTerm |
 |  | TermToDescendantTerms |
 
-### TranscriptParser ###
-
+### TranscriptParser 
+This loads the Gencode gene-to-transcript file.
 | Nodes | Relationships |
 | --- | --- |
 | Transcript | TranscriptToGene |
@@ -107,8 +108,5 @@ For the relevant Node or Relationship (e.g. GeneticVariant, GeneToTerm), specify
 | 5,025 | 4,086,921 | 8,832,245 | 486,827,321 | 296,355,931 | 20,781 |
 
 
-## Application Details
-* Files are read line-by-line using BufferedReader, as opposed to loading all the data into memory
-* Use Guava's EventBus to decouple the reading of input data and the writing of output data
-* Input beans are mapped to Output beans using reflection, and are written out using super-csv
+
 
