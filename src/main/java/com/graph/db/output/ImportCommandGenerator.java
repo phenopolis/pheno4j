@@ -54,7 +54,7 @@ public class ImportCommandGenerator {
 	}
 
 	private Multimap<String, String> getNeoTypeToManualFiles(PropertiesConfiguration config) {
-		Multimap<String,String> neoTypeToManualFiles = HashMultimap.create();
+		Multimap<String,String> result = HashMultimap.create();
 		Iterator<String> keys = config.getKeys("manualUpload");
 		while (keys.hasNext()) {
 			String key = keys.next();
@@ -62,11 +62,11 @@ public class ImportCommandGenerator {
 			if (StringUtils.isNotEmpty(propertyValue)) {
 				String[] split = propertyValue.split(COMMA);
 				for (String s : split) {
-					neoTypeToManualFiles.put(StringUtils.remove(key, "manualUpload."), s);
+					result.put(StringUtils.remove(key, "manualUpload."), s);
 				}
 			}
 		}
-		return neoTypeToManualFiles;
+		return result;
 	}
 	
 	public String[] execute() {
@@ -168,7 +168,7 @@ public class ImportCommandGenerator {
 		if (neoTypeToManualFiles.containsKey(neo4jMapping.toString())) {
 			Collection<String> collection = neoTypeToManualFiles.get(neo4jMapping.toString());
 			StringJoiner stringJoiner = new StringJoiner(COMMA, COMMA, EMPTY);
-			collection.stream().forEach(file -> stringJoiner.add(file));
+			collection.stream().forEach(stringJoiner::add);
 			value.append(stringJoiner.toString());
 		}
 	}
