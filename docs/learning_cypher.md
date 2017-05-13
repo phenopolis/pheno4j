@@ -79,7 +79,12 @@ WITH gv, non_retinal_dystrophy_persons_list
 // link genes, variants and persons
 UNWIND non_retinal_dystrophy_persons_list as non_retinal_dystrophy_persons
 MATCH (dominant_retinal_dystrophy_genes)-->(gv)-->(non_retinal_dystrophy_persons)
-RETURN distinct gv.variantId, gv.most_severe_consequence, gv.cadd_phred, gv.kaviar_AF, dominant_retinal_dystrophy_genes.gene_name, non_retinal_dystrophy_persons.personId ORDER BY gv.cadd_phred DESC;
+RETURN distinct gv.variantId,
+gv.most_severe_consequence,
+gv.cadd_phred, gv.kaviar_AF,
+dominant_retinal_dystrophy_genes.gene_name,
+non_retinal_dystrophy_persons.personId
+ORDER BY gv.cadd_phred DESC;
 ```
 
 
