@@ -26,7 +26,7 @@ Example datasets specified in [config.properties](https://github.com/phenopolis/
 ![](https://github.com/sajid-mughal/pheno4j/blob/master/docs/Figure_1.png?raw=true)
 
 ## Installation
-### Local Installation
+### Local Installation with Exemplar Data
 
 The local version will not be able to handle efficiently a very large dataset since it does not have access to the configuration for the page cache and jvm size.
 Hence it should be used for testing.
