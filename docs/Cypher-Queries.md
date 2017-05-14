@@ -98,7 +98,7 @@ WHERE p.termId ='HP:0000556'
 RETURN distinct r.personId, gv.variantId, gs.gene_name
 ORDER BY r.personId asc;
 ```
-### For an Individual, rank their variants by the number of occurrences in other Individuals
+## For an Individual, rank their variants by the number of occurrences in other Individuals
 ```
 MATCH (p:Person {personId:"person1"})<-[]-(gv:GeneticVariant)-[:GeneticVariantToTranscriptVariant]->(tv:TranscriptVariant)
 WHERE (gv.allele_freq < 0.1 or NOT EXISTS(gv.exac_af))
@@ -108,7 +108,7 @@ RETURN gv.variantId, size(()<-[]-(gv)) as count
 ORDER BY count asc
 LIMIT 10;
 ```
-### For a particular individual, show a list of 10 top individuals in decreasing order by the number of variants they share with the given individual, with a frequency less than 0.001 or NA in ExAC, and that appear in less than 5% of individuals
+## For a particular individual, show a list of 10 top individuals in decreasing order by the number of variants they share with the given individual, with a frequency less than 0.001 or NA in ExAC, and that appear in less than 5% of individuals
 ```
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
@@ -123,7 +123,7 @@ WITH p,q,count(gv) as c
 ORDER BY c desc LIMIT 10
 RETURN p.personId,q.personId, c;
 ```
-### As above, but show the as a percentage the common variants (i.e. the intersection) over the shared variants (the union)
+## As above, but show the as a percentage the common variants (i.e. the intersection) over the shared variants (the union)
 ```
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
@@ -144,7 +144,7 @@ WITH p, q, v, intersection
 RETURN p.personId, q.personId, intersection, size(collect(distinct v)) as unionSum, (round((intersection/toFloat(size(collect(distinct v))))*100.0*10)/10) as PercentShared
 ORDER BY PercentShared DESC;
 ```
-### Get rare damaging variants in Gene TTLL5
+## Get rare damaging variants in Gene TTLL5
 ```
 MATCH (gs:Gene {gene_name:"TTLL5"})-[:GeneToGeneticVariant]->(gv:GeneticVariant)
 WHERE gv.allele_freq < 0.001 
@@ -152,4 +152,11 @@ AND gv.cadd > 20
 WITH distinct gv
 MATCH (gv)-[]->(p:Person)-[:PersonToObservedTerm]-(t:Term)
 return gv.variantId, p.personId, t.termId, t.name;
+```
+## Use `LOAD CSV` to load in 'Relatedness' relationships
+```
+USING PERIODIC COMMIT 500
+LOAD CSV WITH HEADERS FROM "file:///C:/Users/sajid/Desktop/pheno4j/src/test/resources/relatedness.txt" AS csvLine FIELDTERMINATOR '\t'
+MATCH (person1:Person { personId: csvLine.ID1}),(person2:Person { personId: csvLine.ID2})
+CREATE (person1)-[:Relatedness { N_SNP: csvLine.N_SNP, HetHet: csvLine.HetHet, IBS0: csvLine.IBS0, Kinship: csvLine.Kinship }]->(person2)
 ```
