@@ -89,7 +89,7 @@ WHERE p.termId ='HP:0000556'
 WITH distinct gs
 MATCH (gs)-[:GeneToGeneticVariant]->(gv:GeneticVariant)
 WHERE gv.allele_freq < 0.001 
-and gv.cadd > 20 
+and gv.cadd_phred > 20 
 WITH distinct gv, gs
 MATCH (r:Person)<-[]-(gv)
 WITH distinct gv, gs, r
@@ -148,7 +148,7 @@ ORDER BY PercentShared DESC;
 ```
 MATCH (gs:Gene {gene_name:"TTLL5"})-[:GeneToGeneticVariant]->(gv:GeneticVariant)
 WHERE gv.allele_freq < 0.001 
-AND gv.cadd > 20 
+AND gv.cadd_phred > 20 
 WITH distinct gv
 MATCH (gv)-[]->(p:Person)-[:PersonToObservedTerm]-(t:Term)
 return gv.variantId, p.personId, t.termId, t.name;
