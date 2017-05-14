@@ -50,7 +50,7 @@ public enum OutputFileType {
 	TRANSCRIPT_VARIANT_TO_CONSEQUENCE_TERM(TranscriptVariantToConsequenceTermOutput.class, Neo4jMapping.TranscriptVariantToConsequenceTerm, AnnotationParser.class),
 	GENE(GeneOutput.class, Neo4jMapping.Gene, AnnotationParser.class, TranscriptParser.class),
 	TRANSCRIPT(TranscriptOutput.class, Neo4jMapping.Transcript, AnnotationParser.class, TranscriptParser.class),
-	TRANSCRIPT_TO_GENE(TranscriptToGeneOutput.class, Neo4jMapping.TranscriptToGene, TranscriptParser.class),
+	TRANSCRIPT_TO_GENE(TranscriptToGeneOutput.class, Neo4jMapping.TranscriptToGene, TranscriptParser.class),//TODO must now come from AnnotationParser
 	TERM(TermOutput.class, Neo4jMapping.Term, TermParser.class),
 	TERM_TO_PARENT_TERM(TermToParentTermOutput.class, Neo4jMapping.TermToParentTerm, TermParser.class),
 	TERM_TO_DESCENDANT_TERMS(TermToDescendantTermsOutput.class, Neo4jMapping.TermToDescendantTerms, TermParser.class),

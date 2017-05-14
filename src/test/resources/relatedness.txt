@@ -1,0 +1,13 @@
+FID1	ID1	FID2	ID2	N_SNP	HetHet	IBS0	Kinship
+person1	person1	person2	person2	2560445	0.01	0.0039	0.0345
+person1	person1	person3	person3	2540861	0.01	0.004	0.0272
+person1	person1	person4	person4	2544825	0.01	0.004	0.0307
+person2	person2	person1	person1	2543098	0.009	0.0039	0.0321
+person2	person2	person3	person3	2527084	0.009	0.004	0.0253
+person2	person2	person4	person4	2519755	0.009	0.0039	0.0253
+person3	person3	person1	person1	2541811	0.01	0.0038	0.0431
+person3	person3	person2	person2	2556261	0.009	0.004	0.024
+person3	person3	person4	person4	2545374	0.01	0.0039	0.0305
+person4	person4	person1	person1	2545374	0.01	0.0039	0.0305
+person4	person4	person2	person2	2545374	0.01	0.0039	0.0305
+person4	person4	person3	person3	2545374	0.01	0.0039	0.0305
