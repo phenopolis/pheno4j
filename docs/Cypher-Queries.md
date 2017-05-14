@@ -156,7 +156,7 @@ return gv.variantId, p.personId, t.termId, t.name;
 ## Use `LOAD CSV` to load in 'Relatedness' relationships
 ```
 USING PERIODIC COMMIT 500
-LOAD CSV WITH HEADERS FROM "file:///C:/Users/sajid/Desktop/pheno4j/src/test/resources/relatedness.txt" AS csvLine FIELDTERMINATOR '\t'
+LOAD CSV WITH HEADERS FROM "file:///absolute_path_to_file/relatedness.txt" AS csvLine FIELDTERMINATOR '\t'
 MATCH (person1:Person { personId: csvLine.ID1}),(person2:Person { personId: csvLine.ID2})
 CREATE (person1)-[:Relatedness { N_SNP: csvLine.N_SNP, HetHet: csvLine.HetHet, IBS0: csvLine.IBS0, Kinship: csvLine.Kinship }]->(person2)
 ```
