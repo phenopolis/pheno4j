@@ -11,7 +11,7 @@ Genetic and phenotype data in JSON, VCF and CSV format and convert them into CSV
 
 ## Public datasets
 Only two publicly available datasets required:
-* [HPO ontology](http://purl.obolibrary.org/obo/hp.obo)
+* [Human Phenotype Ontology](http://purl.obolibrary.org/obo/hp.obo)
 * [OMIM HPO-Gene mapping](http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt)
 
 ## User specified datasets
