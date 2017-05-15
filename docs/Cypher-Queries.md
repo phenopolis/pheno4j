@@ -1,7 +1,7 @@
 # Examples of Cypher Queries
 
 These can be run in 3 ways:
-* using the browser interface
+* using the browser interface http://localhost:7474/ 
 * using curl
 * via the neo4j-shell ([See here for more information](http://neo4j.com/docs/operations-manual/current/tools/cypher-shell/))
 
