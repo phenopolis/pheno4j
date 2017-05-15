@@ -89,7 +89,7 @@ mvn clean package
 ```
 Copy `graph-bundle.zip` to your target server and extract it.
 #### Update config file to reference your input data ###
-In the conf folder of the extracted zip above, update `config.properties` to reference your input data.
+In the conf folder of the extracted zip above, update [config.properties](https://github.com/phenopolis/pheno4j/blob/master/src/main/resources/config.properties) to reference your input data.
 #### Run the GraphDatabaseBuilder ###
 This step will take all the input data and build csv files, which are then built into a Neo4j database using their ImportTool. Constraints and Indexes are then created.
 In the lib folder of the extracted zip above, run the following:
@@ -101,7 +101,7 @@ java -cp *:../conf/ com.graph.db.GraphDatabaseBuilder
 cd $NEO4J_HOME/data/databases
 ln -s ${output.folder}/graph-db/data/databases/graph.db graph.db 
 ```
-${output.folder} is defined in config.properties
+${output.folder} is defined in [config.properties](https://github.com/phenopolis/pheno4j/blob/master/src/main/resources/config.properties)
 ### Update Neo4j config ###
 Ideally you should hold as much of the data in memory as possible ([See here for more information](https://neo4j.com/docs/operations-manual/current/performance/))
 Set the value of `dbms.memory.pagecache.size` in ${NEO4J_HOME}/conf/neo4j.conf to the size of the files: `NEO4J_HOME/data/databases/graph.db/*store.db*`
