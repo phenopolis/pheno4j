@@ -66,7 +66,7 @@ RETURN count(s.gene_id);
 ## Find Variants which have a frequency less than 0.001 and a CADD score greater than 20
 ```
 MATCH (gv:GeneticVariant)
-WHERE gv.cadd > 20
+WHERE gv.cadd_phred > 20
 AND gv.allele_freq < 0.001
 RETURN count(gv);
 ```
@@ -74,7 +74,7 @@ RETURN count(gv);
 ```
 MATCH (p:Term)-[:TermToDescendantTerms]->(q:Term)
 where p.termId ='HP:0000505'
-return q
+return q;
 ```
 ## Find all Individuals with a specific Term (and any of its descendants)
 ```
