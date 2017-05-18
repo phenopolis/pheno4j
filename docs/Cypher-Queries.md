@@ -17,6 +17,19 @@ MATCH (gv:GeneticVariant)-[]->(p:Person)
 WHERE gv.variantId ='22-51171497-G-A'
 RETURN p.personId;
 ```
+
+## Variants shared exclusively by 2 Individuals
+```
+MATCH
+(p1:Person)--(v:GeneticVariant)--(p2:Person)
+WHERE
+p1.personId='person1'
+AND
+p2.personId='person2'
+AND v.allele_freq<=.001
+RETURN v.variantId;
+```
+
 ## Find Variants shared by a list of Individuals
 ```
 WITH ["person1","person2"] as persons
