@@ -60,7 +60,7 @@ WHERE p.personId IN individuals
 WITH v, count(*) as c, individuals
 WHERE c = size(individuals)
 with v, individuals
-where size((v)-[]-(:Person)) = size(individuals)
+where size((v)-[:HetVariantToPerson|HomVariantToPerson]-()) = size(individuals)
 RETURN v.variantId;
 ```
 ## Individuals who have a Term
