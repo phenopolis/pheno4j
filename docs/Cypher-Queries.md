@@ -112,7 +112,7 @@ LIMIT 10;
 ```
 MATCH (k:Person)
 WITH count(k) as numberOfPeople
-MATCH (p:Person {personId:"WebsterURMD_Sample_GV4344"})<-[]-(gv:GeneticVariant)
+MATCH (p:Person {personId:"person1"})<-[]-(gv:GeneticVariant)
 WHERE (gv.allele_freq < 0.001 or NOT EXISTS(gv.exac_af))
 WITH size(()<-[]-(gv)) as count , gv, p, numberOfPeople
 WHERE count > 1 
