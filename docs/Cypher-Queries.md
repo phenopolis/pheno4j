@@ -60,8 +60,7 @@ WHERE p.personId IN individuals
 WITH v, count(*) as c, individuals
 WHERE c = size(individuals)
 with v, individuals
-MATCH (v:GeneticVariant)
-where size((v)-[]-()) = size(individuals)
+where size((v)-[]-(:Person)) = size(individuals)
 RETURN v.variantId;
 ```
 ## Individuals who have a Term
