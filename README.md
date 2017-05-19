@@ -36,24 +36,21 @@ Hence it should be used for testing.
 - Maven 3
 
 #### Build Graph and Start up Neo4j on test data ###
-This will build the database and load the test data referenced in [config.properties](https://github.com/phenopolis/pheno4j/blob/master/src/main/resources/config.properties).
+Download the code, build the database, load the test data referenced in [config.properties](https://github.com/phenopolis/pheno4j/blob/master/src/main/resources/config.properties) and start the server on port 7474:
 
-First clone the repository:
 ```
 git clone https://github.com/phenopolis/pheno4j.git
-```
-Then run the following in the checkout directory:
-```
+cd pheno4j
 mvn clean compile -P build-graph,run-neo4j
 ```
-This should load the test data and start the server on port 7474.
+
 Once the server is running, it can be queried either by going to the web interface on http://localhost:7474/ or using [curl](https://curl.haxx.se/)
 to do http requests from the command line (see next section).
 
 #### Run Example Queries with curl
 The curl http queries return data in JSON format and so the response can be parsed using [jq](https://stedolan.github.io/jq/).
 
-Get count of variants shared between person1 and person2:
+For example, get count of variants shared between person1 and person2:
 ```
 curl -H "Content-Type: application/json" -d '{
 "query": "WITH [$p1,$p2] AS persons MATCH (p:Person)<-[]-(v:GeneticVariant) WHERE p.personId IN persons WITH v, count(*) as c, persons WHERE c = size(persons) RETURN count(v.variantId);",
@@ -68,6 +65,7 @@ curl -H "Content-Type: application/json" -d '{
 "params":{"var":"22-51171497-G-A"}
 }' http://localhost:7474/db/data/cypher
 ```
+
 More cypher queries are available [here](https://github.com/phenopolis/pheno4j/blob/master/docs/Cypher-Queries.md).
 
 #### Running Pheno4J on your own data
@@ -87,24 +85,29 @@ Run the following in the checkout directory, which will generate a zip file, "gr
 ```
 mvn clean package
 ```
-Copy `graph-bundle.zip` to your target server and extract it.
+Copy `graph-bundle.zip` to your target server and unzip it.
+
 #### Update config file to reference your input data ###
-In the conf folder of the extracted zip above, update [config.properties](https://github.com/phenopolis/pheno4j/blob/master/src/main/resources/config.properties) to reference your input data.
+In the `conf` folder of the extracted zip above, update [config.properties](https://github.com/phenopolis/pheno4j/blob/master/src/main/resources/config.properties) to reference your input data.
+
 #### Run the GraphDatabaseBuilder ###
-This step will take all the input data and build csv files, which are then built into a Neo4j database using their ImportTool. Constraints and Indexes are then created.
+This step will take all the input data and build csv files, which are then built into a Neo4j database using their ImportTool.
+Constraints and Indexes are then created.
 In the lib folder of the extracted zip above, run the following:
 ```
 java -cp *:../conf/ com.graph.db.GraphDatabaseBuilder
 ```
-#### Link the generated database above to your Neo4j installation #
+#### Link the generated database above to your Neo4j installation
 ```
 cd $NEO4J_HOME/data/databases
 ln -s ${output.folder}/graph-db/data/databases/graph.db graph.db 
 ```
 ${output.folder} is defined in [config.properties](https://github.com/phenopolis/pheno4j/blob/master/src/main/resources/config.properties)
-### Update Neo4j config ###
+
+### Update Neo4j config
 Ideally you should hold as much of the data in memory as possible ([See here for more information](https://neo4j.com/docs/operations-manual/current/performance/))
 Set the value of `dbms.memory.pagecache.size` in ${NEO4J_HOME}/conf/neo4j.conf to the size of the files: `NEO4J_HOME/data/databases/graph.db/*store.db*`
+
 #### Start Neo4j
 ```
 cd $NEO4J_HOME/bin
@@ -119,7 +122,8 @@ OPTIONAL MATCH (n)-[r]->()
 RETURN count(n.prop) + count(r.prop);
 ```
 #### Additional Steps
-If you would like to connect to your instance from your application tier to handle incoming database requests, you can change the password to the Neo4j instance with the following; the port is the value of `dbms.connector.http.listen_address` in `$NEO4J_HOME/conf/neo4j.conf`, the password with the following will be set to `1`.
+If you would like to connect to your instance from your application tier to handle incoming database requests, you can change the password to the Neo4j instance with the following; the port is the value of `dbms.connector.http.listen_address` in `$NEO4J_HOME/conf/neo4j.conf`.
+The following command will the password to `1`:
 ```
 curl -H "Content-Type: application/json" -X POST -d '{"password":"1"}' -u neo4j:neo4j http://**{HOST}**:**{PORT}**/user/neo4j/password
 ```
