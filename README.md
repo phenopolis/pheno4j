@@ -5,6 +5,7 @@
 -->
 
 # Pheno4j: a graph based HPO to NGS database
+Author: Sajid Mughal
 
 ## Purpose
 Genetic and phenotype data in JSON, VCF and CSV format and convert them into CSV files that represent Nodes and Relationships that can then be used to populate Pheno4J using [the neo4j bulk CSV import tool](https://neo4j.com/docs/operations-manual/current/tutorial/import-tool/).
