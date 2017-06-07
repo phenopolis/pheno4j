@@ -13,7 +13,7 @@ file of genotypes produces a tab delimited file showing the kinship relation bet
 The Cypher query language can then be used to directly load this file as relationships between persons. The “Relatedness” relationships are annotated with the following attributes N_SNP, HetHet, IBS0 and Kinship.
 Here is the Cypher command to do the import:
  
-``cypher
+```cypher
 USING PERIODIC COMMIT 500
 LOAD CSV WITH HEADERS FROM "file://<absolute_path_to_file/relatedness.txt>" AS csvLine FIELDTERMINATOR '\t'
 MATCH (person1:Person { personId: csvLine.ID1}),(person2:Person { personId: csvLine.ID2})
@@ -29,14 +29,14 @@ For example tissue expression data can be downloaded from Gene tissue expression
 The data can be integrated using the following commands.
 Load the Tissue Nodes:
  
- ``cypher
+ ```cypher
 USING PERIODIC COMMIT 500
 LOAD CSV WITH HEADERS FROM "file://<absolute_path_to_file/Transcript2Tissue.csv>" AS csvLine 
 MERGE (tissue:Tissue { name: csvLine.Tissue })
  ```
  
 Load the TranscriptToTissue relationships:
- ``cypher
+ ```cypher
 USING PERIODIC COMMIT 500
 LOAD CSV WITH HEADERS FROM "file://<absolute_path_to_file/Transcript2Tissue.csv>" AS csvLine 
 MATCH (transcript:Transcript { transcript_id: csvLine.Transcript}),(tissue:Tissue { name: csvLine.Tissue})
