@@ -180,8 +180,9 @@ for l in infile:
         continue
     if 'transcript_consequences' not in d:
         #eprint(d['variant_id']+' NOT CODING')
-        print('ERROR:',d['variantId']+' NOT CODING')
-        continue
+        d['transcript_consequences']=[]
+        print(d['variantId']+' NOT CODING')
+        #continue
     clean(d,'cadd')
     clean(d,'kaviar')
     clean(d,'exac_nfe')
