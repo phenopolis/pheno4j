@@ -14,19 +14,22 @@ def eprint(*args, **kwargs): print(*args, file=sys.stderr, **kwargs)
 
 # Takes the output of VEP and reformats
 
+
+header_types=dict({tuple(x.split(':')) for x in open('GeneticVariant-header.csv','r').read().strip().split(',') if 2==len(x.split(':'))})
+del header_types['variantId']
+
 parser=argparse.ArgumentParser(description='Arguments to annotation_importer.py')
 parser.add_argument('--file', required=True)
-parser.add_argument('--basename', required=False)
+#parser.add_argument('--basename', required=False)
 parser.add_argument('--importdir', required=True)
-
 
 args=parser.parse_args()
 if not args.file:
     infile=sys.stdin
-    basename=args.basename
+    #basename=args.basename
 else:
     filename=args.file
-    basename=filename.split('.')[0]
+    #basename=filename.split('.')[0]
     if filename.endswith('.gz'):
         infile=gzip.open(filename,'r')
     else:
@@ -103,11 +106,6 @@ def clean(d,field):
                 continue
             ref,alt,=id.split('>')
             if alt!=d['ALT']: continue
-            try:
-                cons[field]=float(num)
-            except:
-                #eprint(num)
-                print('ERROR:', 'not a number', num, id)
 
 def freq_cleanup(d):
     for cons in d['transcript_consequences']:
@@ -208,10 +206,14 @@ for l in infile:
     cadd(d)
     # try convert str which have a decimal point to number
     for k in d:
+        if k not in header_types: continue
+        #print(d['variantId'])
+        #print(k)
+        #print(d[k])
         try:
-            d[k] = float(d[k])
+            d[k] = {'float':float,'int':int}[header_types[k]](d[k])
         except:
-            continue
+            d[k]=''
     print(','.join([str(d.get(h,'')) for h in GeneticVariant_headers]),file=GeneticVariant_file)
     for cons in d['transcript_consequences']:
         if 'hgvsc' not in cons: continue
