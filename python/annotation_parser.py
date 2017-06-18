@@ -216,13 +216,13 @@ for l in infile:
             d[k]=''
     print(','.join([str(d.get(h,'')) for h in GeneticVariant_headers]),file=GeneticVariant_file)
     for cons in d['transcript_consequences']:
-        if 'hgvsc' not in cons: continue
         if 'consequence_terms' in cons: cons['consequence_terms']=cons['consequence_terms'][0]
         print(','.join([str(cons.get(h,'')) for h in TranscriptVariant_headers]),file=TranscriptVariant_file)
         print(cons['transcript_id'],file=Transcript_file)
         print(cons['gene_id'],cons['gene_symbol'],sep=',',file=Gene_file)
         print(cons['transcript_id'],cons['gene_id'],sep=',',file=TranscriptToGene_file)
         print(d['variantId'],cons['gene_id'],sep=',',file=GeneticVariantToGene_file)
+        if 'hgvsc' not in cons: continue
         print(d['variantId'],cons['hgvsc'],sep=',',file=GeneticVariantToTranscriptVariant_file)
 
 
