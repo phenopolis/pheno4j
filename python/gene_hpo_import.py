@@ -1,6 +1,8 @@
 #! /bin/env python
 from __future__ import print_function
 import sys
+import py2neo
+import requests
 
 
 py2neo.authenticate("bigtop:57474", "neo4j", "1")
@@ -22,8 +24,7 @@ for l in p.split('\n'):
     CREATE (g)-[r:Causes]->(t)
     RETURN r
     """
-    print(s)
-    print(graph.run(s,gene=gene_symbol,hpo_id=hpo_term_id))
-    break
+    print(gene_symbol,hpo_term_id)
+    print(graph.run(s,gene_symbol=gene_symbol,hpo_id=hpo_term_id))
 
 
