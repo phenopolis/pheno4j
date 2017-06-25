@@ -7,13 +7,13 @@ These can be run in 3 ways:
 
 ## All Variants for an individual
 ```
-MATCH (gv:GeneticVariant)-[]->(p:Person)
+MATCH (gv:GeneticVariant)--(p:Person)
 WHERE p.personId ='person1'
 RETURN count(gv);
 ```
 ## Individuals who have a particular variant
 ```
-MATCH (gv:GeneticVariant)-[]->(p:Person)
+MATCH (gv:GeneticVariant)--(p:Person)
 WHERE gv.variantId ='22-51171497-G-A'
 RETURN p.personId;
 ```
@@ -156,9 +156,9 @@ WITH p, q, v, intersection
 RETURN p.personId, q.personId, intersection, size(collect(distinct v)) as unionSum, (round((intersection/toFloat(size(collect(distinct v))))*100.0*10)/10) as PercentShared
 ORDER BY PercentShared DESC;
 ```
-## Get rare damaging variants in Gene TTLL5
+## Get rare damaging variants in Gene 
 ```
-MATCH (gs:Gene {gene_name:"TTLL5"})-[:GeneToGeneticVariant]->(gv:GeneticVariant)
+MATCH (gs:Gene {gene_name:"TTLL5"})--(gv:GeneticVariant)
 WHERE gv.allele_freq < 0.001 
 AND gv.cadd_phred > 20 
 WITH distinct gv
