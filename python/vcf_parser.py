@@ -126,8 +126,8 @@ for l in infile:
     if '/' in VARIANT_ID: continue
     for i, g in enumerate(GENOTYPES):
         if g==1:
-            print(VARIANT_ID,SAMPLES[i],sep=',',file=hom_variant_file)
-        elif g==2:
             print(VARIANT_ID,SAMPLES[i],sep=',',file=het_variant_file)
+        elif g==2:
+            print(VARIANT_ID,SAMPLES[i],sep=',',file=hom_variant_file)
 
 
