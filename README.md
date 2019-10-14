@@ -7,7 +7,9 @@
 # Pheno4j: a graph based HPO to NGS database
 Author: Sajid Mughal
 
-Paper published here: https://www.ncbi.nlm.nih.gov/pubmed/28633344
+Paper published:
+https://www.ncbi.nlm.nih.gov/pubmed/28633344
+
 Presentation videos:
 * https://skillsmatter.com/skillscasts/10611-pheno4j-a-gene-to-phenotype-graph-database
 * https://www.youtube.com/watch?v=257GarPLym4
